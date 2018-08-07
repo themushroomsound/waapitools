@@ -1,0 +1,372 @@
+body, input, select {
+    font-size: 11px;
+    font-family: 'Roboto Mono', monospace;
+    color: #999;
+    background-color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #FFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    position: relative;
+    height: 120px;
+    background-color: #999;
+    background-image: url("../images/elk-48320_960_720.png");
+    background-repeat: no-repeat;
+    background-position: top -40px right 51px;
+    padding: 0 15px 10px;
+    background-size: 308px;
+}
+
+header h1 {
+    position: absolute;
+    bottom: 10px;
+    margin: 0;
+    font-family: 'Alice', serif;
+    font-weight: normal;
+    font-size: 38px;
+    color: #333;
+}
+
+nav, section {
+    margin: 10px 10px;
+}
+
+nav {
+    clear: both;
+    padding-left: 10px;
+}
+
+section {
+    border: 1px solid #999;
+    padding-bottom: 10px;
+    display: none;
+    margin-top: 20px;
+    min-height: 300px;
+}
+
+section h2 {
+    color: #333;
+    background-color: #999;
+    padding: 2px 3px 3px 6px;
+    margin: 0 0 5px 0;
+    text-transform: uppercase;
+}
+
+p, section h3, section table, section > div {
+    margin: 10px 10px 0;
+}
+
+table {
+    cell-spacing: 0;
+}
+
+td {
+    padding-left: 10px;
+}
+
+select, input {
+    border: 1px solid #999;
+    background: transparent;
+    color: white;
+}
+
+.name, .value {
+    color: white;
+}
+
+.dummyContent::after {
+    display: block;
+    color: #666;
+    content:">> nothing to see here <<";
+    text-align:center;
+    line-height:100px;
+}
+
+/* BATCH ATTENUATIONS EDITOR */
+
+#batchAttEditor {
+    /*overflow: hidden;*/
+    min-height: 615px;
+}
+
+#displayOptions {
+    float: left;
+    margin-bottom: 15px;
+    min-width: 770px;
+}
+
+#editors {
+    float: right;
+    margin-right: 0;
+    max-width: 730px;
+}
+
+#interpolationErrors {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 2px solid #b93333;
+    color: white;
+    background-color: #583232;
+    display: none;
+    clear: left;
+}
+
+#interpolationErrors span {
+    font-weight: bold;
+}
+
+#pointTooltip {
+    position: absolute;
+    display: none;
+    padding: 5px;
+    margin: 15px 25px;
+    border: 1px solid #999;
+    background: #333;
+}
+
+#attenuationsList {
+    position: relative;
+    /*overflow: hidden;*/
+    top: 60px;
+}
+
+#attenuationsList.list {
+    top: 0;
+    clear: both;
+}
+
+.btn_showCurve, .btn_display, .btn_addStep, .btn_removeStep {
+    padding: 0 2px;
+}
+.btn_showCurve[href="#VolumeDryUsage"] {
+    background-color: #b93333;
+}
+.btn_showCurve[href="#VolumeWetGameUsage"] {
+    background-color: #b1702e;
+}
+.btn_showCurve[href="#VolumeWetUserUsage"] {
+    background-color: #6d4c2b;
+}
+.btn_showCurve[href="#LowPassFilterUsage"] {
+    background-color: #397292;
+}
+.btn_showCurve[href="#HighPassFilterUsage"] {
+    background-color: #58a8d6;
+}
+.btn_showCurve[href="#SpreadUsage"] {
+    background-color: #8fca00;
+}
+.btn_showCurve[href="#FocusUsage"] {
+    background-color: #5a8000;
+}
+.btn_display, .btn_addStep, .btn_removeStep {
+    background-color: #737373;
+}
+
+.attenuationView {
+    margin-right: 10px;
+    width: 50%;
+}
+
+.attenuationView p.metadata {
+    margin-top: 0;
+}
+
+/* attenuation metadata hidden by default */
+.attenuationView .metadata {
+    opacity: 0;
+}
+
+.attenuationView .metadata span {
+    padding: 0 2px;
+    background-color: #333;
+}
+
+/* always shown on 1st/last attenuation */
+.attenuationView.first .metadata,
+.attenuationView.last .metadata {
+    opacity: 1.0;
+}
+
+/* always shown in simple list view */
+#attenuationsList.list .attenuationView .metadata {
+    opacity: 1.0;
+}
+
+/* always shown on hover too */
+.attenuationView:hover .metadata {
+    opacity: 1.0;
+}
+
+.attenuationView svg {
+    margin-top: 10px;
+    border: 1px solid #999;
+    /*width: 50%;*/
+    /*height: 235px;*/
+    transform: scaleY(-1);
+    background: rgba(128,128,128,0.05);
+}
+
+.attenuationView svg.uncommitted {
+    opacity: 0.3;
+}
+
+.attenuationView:hover svg.uncommitted {
+    opacity: 1.0;
+}
+
+.attenuationView svg polyline, .attenuationView svg path {
+    stroke: orange;
+    stroke-width: 3px;
+    fill: transparent;
+}
+
+.attenuationView svg path.VolumeDryUsage {
+    stroke: #b93333;
+}
+.attenuationView svg path.VolumeWetGameUsage {
+    stroke: #b1702e;
+}
+.attenuationView svg path.VolumeWetUserUsage {
+    stroke: #6d4c2b;
+}
+.attenuationView svg path.LowPassFilterUsage {
+    stroke: #397292;
+}
+.attenuationView svg path.HighPassFilterUsage {
+    stroke: #58a8d6;
+}
+.attenuationView svg path.SpreadUsage {
+    stroke: #8fca00;
+}
+.attenuationView svg path.FocusUsage {
+    stroke: #5a8000;
+}
+
+.attenuationView svg circle {
+    stroke: #333;
+    fill: #999;
+    cursor: pointer;
+}
+
+#pointTooltip .value {
+    text-align: right;
+}
+
+/* settings editors */
+
+#editors > div, #editors > a {
+    margin-right: 10px;
+}
+
+#interpolationStepsEditor, #interpolationShapesEditor {
+    float: right;
+    border: 1px solid #999;
+    /*display: none;*/
+    z-index: 99;
+}
+
+.btn_commit {
+    float: right;
+    font-size: 20px;
+    padding: 5px 10px;
+    background-color: #b93333;
+    display: none;
+}
+
+.step, .point {
+    margin-right: 10px;
+    margin-bottom: 2px;
+}
+
+.step input, .point select {
+    text-align: right;
+}
+
+.step input {
+    border: none;
+    margin-right: 5px;
+    width: 20px;
+}
+
+.point select {
+    background-repeat: no-repeat;
+    background-size: 18px;
+    background-position-x: 88px;
+    background-position-y: -1px;
+}
+
+.point select {
+    width: 125px;
+}
+
+.point option {
+    background-color: #EEE;
+    color: #333;
+}
+
+.point select.easeInCubic {
+    background-image: url("../images/easing/easeInCubic.svg");
+}
+
+.point select.easeInOutCubic {
+    background-image: url("../images/easing/easeInOutCubic.svg");
+}
+
+.point select.easeInOutQuad {
+    background-image: url("../images/easing/easeInOutQuad.svg");
+}
+
+.point select.easeInOutQuart {
+    background-image: url("../images/easing/easeInOutQuart.svg");
+}
+
+.point select.easeInOutQuint {
+    background-image: url("../images/easing/easeInOutQuint.svg");
+}
+
+.point select.easeInQuad {
+    background-image: url("../images/easing/easeInQuad.svg");
+}
+
+.point select.easeInQuart {
+    background-image: url("../images/easing/easeInQuart.svg");
+}
+
+.point select.easeInQuint {
+    background-image: url("../images/easing/easeInQuint.svg");
+}
+
+.point select.easeOutCubic {
+    background-image: url("../images/easing/easeOutCubic.svg");
+}
+
+.point select.easeOutQuad {
+    background-image: url("../images/easing/easeOutQuad.svg");
+}
+
+.point select.easeOutQuart {
+    background-image: url("../images/easing/easeOutQuart.svg");
+}
+
+.point select.easeOutQuint {
+    background-image: url("../images/easing/easeOutQuint.svg");
+}
+
+.point select.linear {
+    background-image: url("../images/easing/linear.svg");
+}
+
+.step .btn_addStep, .step .btn_removeStep {
+    margin-left: 5px;
+}

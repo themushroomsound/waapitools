@@ -1,0 +1,165 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Waapitools</title>
+        <link rel="stylesheet" href="resources/css/styles.css?v=1.0">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alice|Roboto+Mono">
+    </head>
+
+    <body>
+        <!-- Templates -->
+        <template id="template_inclusionRow">
+            <tr>
+                <td class="name soundbankName"></td>
+                <td>
+                    <span class="inclusionType"></span>
+                    <span class="name inclusionObjectName"></span>
+                </td>
+            </tr>
+        </template>
+
+        <template id="template_attenuationView">
+            <div class="attenuationView">
+                <h3 class="metadata"><span>Attenuation: <span class="name">none</span></span></h3>
+                <p class="metadata"><span>GUID: <span class="guid">pending</span></span></p>
+                <p class="metadata"><span>Radius max: <span class="RadiusMax">unknown</span></span></p>
+                <svg class="attenuationCurves" preserveAspectRatio="none" viewBox="0 0 2000 2000"></svg>
+            </div>
+        </template>
+
+        <template id="template_interpolationError_MultipleSimilarRadiiError">
+            <li class="errorMsg"><span class="attName">Gen_3D_Auto_1m</span>: another attenuation already has a max radius of <span class="radius">100</span>m in the selected folder or WWU.</li>
+        </template>
+
+        <template id="template_interpolationError_InconsistentPointsNbError">
+            <li class="errorMsg"><span class="attName">Gen_3D_Auto_1m</span>: the <span class="curveType">VolumeDryUsage</span> curve has <span class="foundNbPoints">3</span> points instead of <span class="correctNbPoints">2</span>.</li>
+        </template>
+
+        <template id="template_interpolationError_EmptyFolderError">
+            <li class="errorMsg">the selected folder or WWU contains no attenuations</li>
+        </template>
+
+        <template id="template_interpolationError_LessThan2AttsError">
+            <li class="errorMsg">the selected folder or WWU needs to contain at least 2 attenuations to enable interpolation</li>
+        </template>
+
+        <template id="template_interpolationError_MissingValidSuffixError">
+            <li class="errorMsg">The name <span class="attName">Gen_3D_Auto_1m</span> is missing a valid suffix: it should end with "<span class="radius">100</span>m".</li>
+        </template>
+
+        <template id="template_interpolationError_InvalidPrefixError">
+            <li class="errorMsg">The name <span class="attName">Gen_3D_Auto_1m</span> is invalid: it should be something like "<span class="correctPrefix">Gen_Auto_</span><span class="radius">100</span>m".</li>
+        </template>
+
+        <template id="template_interpolationStep">
+            <li class="step">above <input class="threshold" type="text" value="0" />m, every <input class="stepLength" type="text" value="1"/>m <a href="#" class="btn_addStep">+</a><a href="#" class="btn_removeStep">-</a></li>
+        </template>
+
+        <template id="template_interpolationShapePoint">
+            <li class="point">Point <span class="index">1</span>:
+                <select class="linear">
+                    <option value="linear">Linear</option>
+                    <option value="easeInQuad">In Quad</option>
+                    <option value="easeOutQuad">Out Quad</option>
+                    <option value="easeInOutQuad">In/Out Quad</option>
+                    <option value="easeInCubic">In Cubic</option>
+                    <option value="easeOutCubic">Out Cubic</option>
+                    <option value="easeInOutCubic">In/Out Cubic</option>
+                    <option value="easeInQuart">In Quart</option>
+                    <option value="easeOutQuart">Out Quart</option>
+                    <option value="easeInOutQuart">In/Out Quart</option>
+                    <option value="easeInQuint">In Quint</option>
+                    <option value="easeOutQuint">Out Quint</option>
+                    <option value="easeInOutQuint">In/Out Quint</option>
+                </select>
+                <!--<img src="resources/images/easing/linear.svg" />-->
+            </li>
+        </template>
+
+        <!-- Visible body -->
+        <header>
+            <h1>Waapitools: <span class="name">no connected wwise project</span></h1>
+        </header>
+
+        <nav>
+            <a href="#home" class="btnNav">home</a> |
+            <a href="#eventSoundbankFinder" class="btnNav">event soundbank finder</a> |
+            <a href="#batchAttEditor" class="btnNav">batch attenuations editor</a>
+        </nav>
+
+        <section id="home">
+            <h2>home</h2>
+            <h3>Tools:</h3>
+            <ul>
+                <li><a href="#eventSoundbankFinder" class="btnNav">Event Soundbank Finder</a>: find out in which soundbank(s) an event is included, even indirectly through a parent folder or WWU</li>
+                <li><a href="#batchAttEditor" class="btnNav">Batch Attenuations Editor</a>: create or edit a batch of related attenuations over different maximum distances</li>
+            </ul>
+        </section>
+
+        <section id="eventSoundbankFinder">
+            <h2>event soundbank finder</h2>
+            <h3>Selected event: <span class="name">none</span></h3>
+            <h3>Referenced in <span class="nbInclusions"></span> soundbank(s):</h3>
+            <table class="soundbankInclusions"><tr><td>none</td></tr></table>
+        </section>
+
+        <section id="batchAttEditor">
+            <h2>batch attenuations editor</h2>
+            <h3>Selected folder or WWU: <span class="name">none</span></h3>
+
+            <div id="displayOptions">
+                <p>Show curves:
+                    <a class="btn_showCurve" href="#VolumeDryUsage">Output Bus vol.</a>
+                    <a class="btn_showCurve" href="#VolumeWetGameUsage">Aux. send vol. (Game-defined)</a>
+                    <a class="btn_showCurve" href="#VolumeWetUserUsage">Aux. send vol. (User-defined)</a>
+                    <a class="btn_showCurve" href="#LowPassFilterUsage">LPF</a>
+                    <a class="btn_showCurve" href="#HighPassFilterUsage">HPF</a>
+                    <a class="btn_showCurve" href="#SpreadUsage">Spread</a>
+                    <a class="btn_showCurve" href="#FocusUsage">Focus</a>
+                </p>
+                <p>Display:
+                    <a class="btn_display" href="#cascadeEqual">Cascade (equal spacing)</a>
+                    <a class="btn_display" href="#cascadeProportional">Cascade (proportional spacing)</a>
+                    <a class="btn_display" href="#list">List</a>
+                </p>
+            </div>
+
+            <div id="editors">
+                <div id="interpolationStepsEditor">
+                    <h2>Create attenuations:</h2>
+                    <ul id="stepsList" />
+                </div>
+                <div id="interpolationShapesEditor" class="VolumeDryUsage">
+                    <h2>Interpolation shapes</h2>
+                    <h3 class="curveType">VolumeDryUsage</h3>
+                    <ul id="pointsList" />
+                </div>
+                <a href="#" class="btn_commit">COMMIT TO WWISE</a>
+            </div>
+
+            <div id="interpolationErrors">
+                <h3>Interpolation is disabled. The following errors have been found:</h3>
+                <ul id="interpolationErrorsList"></ul>
+            </div>
+            <div id="attenuationsList"></div>
+            <div id="pointTooltip">
+                Point <span class="ptIndex">1</span><br />
+                x: <span class="value coordX">15m</span><br />
+                y: <span class="value coordY">-9dB</span>
+            </div>
+        </section>
+
+        <!-- scripts at bottom -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="3rdparty/ak/js/waapi.js"></script>
+        <script src="3rdparty/crossbario/js/autobahn.js"></script>
+        <script src="resources/js/views/genericView.js"></script>
+        <script src="resources/js/views/wwiseObjectView.js"></script>
+        <script src="resources/js/views/eventSoundbankFinderView.js"></script>
+        <script src="resources/js/views/batchAttenuationsEditorView.js"></script>
+        <script src="resources/js/waapi.js"></script>
+        <script src="resources/js/main.js"></script>
+    </body>
+</html>
