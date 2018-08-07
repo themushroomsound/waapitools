@@ -240,11 +240,6 @@ class WwiseAttenuationsFolder extends WwiseObject
         return longest;
     }
 
-    getShortestPrefix()
-    {
-
-    }
-
     getInterpolationErrors()
     {
         let errors = [];
@@ -335,7 +330,7 @@ class WwiseAttenuationsFolder extends WwiseObject
                 }
             }
         }
-        console.log(errors);
+
         return errors;
     }
 
@@ -407,8 +402,6 @@ class WwiseAttenuation extends WwiseObject
             "SpreadUsage",
             "FocusUsage"
         ];
-
-        console.log(this.unserializeInterpolationShapes());
     }
 
     fetchWwiseData()

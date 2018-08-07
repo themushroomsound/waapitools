@@ -25,7 +25,7 @@ class AttenuationView extends WwiseObjectView
     {
         super.refresh();
         $(this.htmlElement).find(".RadiusMax").text(this.wwiseObject.RadiusMax + "m");
-        $(this.htmlElement).find(".guid").text(this.wwiseObject.guid ? this.wwiseObject.guid : "pending");
+        $(this.htmlElement).find(".guid").text(this.wwiseObject.guid ? this.wwiseObject.guid : "pending commit");
         if( !this.wwiseObject.guid )
             $(this.svg).addClass("uncommitted");
 
@@ -339,11 +339,6 @@ class InterpolationShapesEditorView extends WwiseObjectView
     }
 }
 
-class PrefixEditorView extends GenericView
-{
-
-}
-
 class BatchAttenuationsEditorView extends WwiseObjectView
 {
     constructor(htmlElement)
@@ -358,9 +353,6 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         // interpolation shapes
         this.interpolationShapesEditorView = new InterpolationShapesEditorView($(this.htmlElement).find("#interpolationShapesEditor"));
         this.interpolationShapesEditorView.batchAttenuationsEditorView = this;
-        // prefix
-        this.prefixEditorView = new PrefixEditorView($(this.htmlElement).find("#prefixEditor"));
-        this.prefixEditorView.batchAttenuationsEditorView = this;
         // interpolation errors
         this.interpolationErrorsView = new GenericView($(this.htmlElement).find("#interpolationErrors"));
 
@@ -509,7 +501,7 @@ class BatchAttenuationsEditorView extends WwiseObjectView
     interpolate()
     {
         this.wwiseObject.removeUncommittedAttenuations();
-        this.folderPrefix = this.getCommonPrefix();
+        this.folderPrefix = this.wwiseObject.getShortest().getNamePrefix();
 
         let srcRadius = this.wwiseObject.getShortest()["RadiusMax"];
         let tgtRadius = this.wwiseObject.getLongest()["RadiusMax"];
@@ -538,27 +530,6 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         }
 
         this.wwiseObject.sortChildrenByRadius();
-    }
-
-    getCommonPrefix()
-    {
-        // TODO: UI to choose
-        //return "Gen_3D_Auto_";
-
-        /* oldschool shitty method
-        let attNames = [];
-        for( let i=0; i < this.wwiseObject.attenuations.length; i++ )
-            attNames.push( this.wwiseObject.attenuations[i].name );
-
-        var A= attNames.concat().sort(),
-        a1= A[0], a2= A[A.length-1], L= a1.length, i= 0;
-        while(i<L && a1.charAt(i)=== a2.charAt(i)) i++;
-        return a1.substring(0, i);
-        */
-
-        let str = this.wwiseObject.attenuations[0].name;
-        let matchIndex = this.wwiseObject.attenuations[0].name.match(/\d+m$/).index;
-        return str.substring(0, matchIndex);
     }
 
     getStep(radius)
