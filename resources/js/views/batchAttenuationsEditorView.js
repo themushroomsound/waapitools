@@ -28,7 +28,8 @@ class AttenuationView extends WwiseObjectView
         $(this.htmlElement).find(".guid").text(this.wwiseObject.guid ? this.wwiseObject.guid : "pending commit");
         if( !this.wwiseObject.guid )
             $(this.svg).addClass("uncommitted");
-
+        else
+            $(this.svg).removeClass("uncommitted");
         this.drawCurve(this.displayCurveType);
     }
 

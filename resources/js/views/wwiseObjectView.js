@@ -8,6 +8,7 @@ class WwiseObjectView extends GenericView
     setWwiseObject(wwiseObject)
     {
         this.wwiseObject = wwiseObject;
+        this.wwiseObject.views.push(this);
         this.refresh();
     }
 

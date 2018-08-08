@@ -10,6 +10,13 @@ class WwiseObject
 
         this.waapiJS = waapiJS;
         this.parent = undefined;
+        this.views = [];
+    }
+
+    refreshViews()
+    {
+        for(let i=0; i < this.views.length; i++)
+            this.views[i].refresh();
     }
 
     fetchWwiseData()
@@ -191,6 +198,7 @@ class WwiseAttenuationsFolder extends WwiseObject
         console.log("Building Wwise Attenuations Folder " + this.guid + " - " + this.name);
 
         this.childrenToFetch = [];
+        this.childrenToCommit = [];
         this.attenuations = [];
     }
 
@@ -219,6 +227,7 @@ class WwiseAttenuationsFolder extends WwiseObject
                 return wwiseAttenuationsFolder.fetchNextChildAttenuation();
             })
         }
+        // TODO: CHECK IF NECESSARY
         return wwiseAttenuationsFolder.fetchNextChildAttenuation();
     }
 
@@ -387,11 +396,31 @@ class WwiseAttenuationsFolder extends WwiseObject
 
     commit()
     {
-        console.log("committing to wwise");
-        let today = new Date();
-        this.commitNotes();
-        for( let i=0; i < this.attenuations.length; i++ )
-            this.attenuations[i].commit();
+        console.log("committing attenuation folder to wwise");
+        let wwiseAttenuationsFolder = this;
+
+        // commit wwise object, then...
+        return super.commit().then(function() {
+            // commit notes, then...
+            return wwiseAttenuationsFolder.commitNotes().then(function() {
+                // commit child attenuations
+                wwiseAttenuationsFolder.childrenToCommit = wwiseAttenuationsFolder.attenuations;
+                return wwiseAttenuationsFolder.commitNextChildAttenuation();
+            });
+        })
+    }
+
+    commitNextChildAttenuation()
+    {
+        if( this.childrenToCommit.length < 1) {
+            console.log("All attenuations committed for " + this.name);
+            return;
+        }
+        let nextChildToCommit = this.childrenToCommit.shift();
+        let wwiseAttenuationsFolder = this;
+        return nextChildToCommit.commit().then(function() {
+            return wwiseAttenuationsFolder.commitNextChildAttenuation();
+        });
     }
 }
 
@@ -403,8 +432,7 @@ class WwiseAttenuation extends WwiseObject
         console.log("Building Wwise Attenuation " + this.guid + " - " + this.name);
 
         this.curves = {};
-
-        this.curvesToFetch = [
+        this.curveTypes = [
             "VolumeDryUsage",
             "VolumeWetGameUsage",
             "VolumeWetUserUsage",
@@ -413,6 +441,9 @@ class WwiseAttenuation extends WwiseObject
             "SpreadUsage",
             "FocusUsage"
         ];
+
+        this.curvesToFetch = [];
+        this.curvesToCommit = [];
     }
 
     fetchWwiseData()
@@ -428,6 +459,7 @@ class WwiseAttenuation extends WwiseObject
             return wwiseAttenuation.waapiJS.queryObjects(query, options).then(function(res) {
                 console.log("fetchWwiseAttData", res);
                 wwiseAttenuation.RadiusMax = res.kwargs.return[0]["@RadiusMax"];
+                wwiseAttenuation.curvesToFetch = wwiseAttenuation.curveTypes;
                 return wwiseAttenuation.fetchNextAttenuationCurve();
             });
         });
@@ -510,7 +542,23 @@ class WwiseAttenuation extends WwiseObject
         }).then(function() {
             console.log("radius " + wwiseAttenuation.RadiusMax + " committed for attenuation " + wwiseAttenuation.name);
         }).then(function() {
-            return wwiseAttenuation.commitCurves();
+            //return wwiseAttenuation.commitCurves();
+            wwiseAttenuation.curvesToCommit = wwiseAttenuation.curveTypes;
+            return wwiseAttenuation.commitNextCurve();
+        });
+    }
+
+    commitNextCurve()
+    {
+        if( this.curvesToCommit.length < 1 ) {
+            console.log("All curves committed for " + this.name);
+            this.refreshViews();
+            return;
+        }
+        let nextCurve = this.curves[ this.curvesToCommit.shift() ];
+        let wwiseAttenuation = this;
+        return nextCurve.commit().then(function(){
+            return wwiseAttenuation.commitNextCurve();
         });
     }
 
