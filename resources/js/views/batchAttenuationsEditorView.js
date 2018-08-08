@@ -301,7 +301,7 @@ class InterpolationShapesEditorView extends WwiseObjectView
 
         this.displayCurveType = "VolumeDryUsage";
 
-        this.curveTypeElement = $(this.htmlElement).find(".curveType");
+        this.curveTypeElement = $(this.htmlElement).find("#curveType");
         this.pointsListElement = $(this.htmlElement).find("#pointsList");
         this.batchAttenuationsEditorView = undefined;
     }
@@ -309,6 +309,9 @@ class InterpolationShapesEditorView extends WwiseObjectView
     refresh()
     {
         super.refresh();
+        
+        this.curveTypeElement.removeClass();
+        this.curveTypeElement.addClass(this.displayCurveType);
         this.curveTypeElement.text(this.displayCurveType);
 
         let points = this.wwiseObject.getShortest().curves[ this.displayCurveType ].points;

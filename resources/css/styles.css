@@ -46,6 +46,10 @@ nav {
     padding-left: 10px;
 }
 
+.btnNav.active {
+    text-decoration: underline;
+}
+
 section {
     border: 1px solid #999;
     padding-bottom: 10px;
@@ -285,11 +289,19 @@ select, input {
     text-align: right;
 }
 
+/* settings editors: interpolation steps editor */
+
 .step input {
     border: none;
     margin-right: 5px;
     width: 20px;
 }
+
+.step .btn_addStep, .step .btn_removeStep {
+    margin-left: 5px;
+}
+
+/* settings editors: interpolation shapes editor */
 
 .point select {
     background-repeat: no-repeat;
@@ -359,8 +371,30 @@ select, input {
     background-image: url("../images/easing/linear.svg");
 }
 
-.step .btn_addStep, .step .btn_removeStep {
-    margin-left: 5px;
+h3#curveType {
+    color: white;
+}
+
+h3#curveType.VolumeDryUsage {
+    background-color: #b93333;
+}
+h3#curveType.VolumeWetGameUsage {
+    background-color: #b1702e;
+}
+h3#curveType.VolumeWetUserUsage {
+    background-color: #6d4c2b;
+}
+h3#curveType.LowPassFilterUsage {
+    background-color: #397292;
+}
+h3#curveType.HighPassFilterUsage {
+    background-color: #58a8d6;
+}
+h3#curveType.SpreadUsage {
+    background-color: #8fca00;
+}
+h3#curveType.FocusUsage {
+    background-color: #5a8000;
 }
 
 #btn_commit {

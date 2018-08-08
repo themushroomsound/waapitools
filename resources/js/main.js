@@ -26,6 +26,8 @@ function wwiseObjLink_onClick(e) {
 }
 
 function displayActiveView() {
+    $('.btnNav').removeClass("active");
+    $('.btnNav[href="' + activeView + '"]').addClass("active");
     $("section").hide();
     $(activeView).show(300);
 }
