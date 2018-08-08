@@ -356,6 +356,8 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         this.interpolationShapesEditorView.batchAttenuationsEditorView = this;
         // interpolation errors
         this.interpolationErrorsView = new GenericView($(this.htmlElement).find("#interpolationErrors"));
+        // commit button
+        this.commitButton = new GenericButton($(this.htmlElement).find("#btn_commit"));
 
         // prefix for folder attenuations, TODO: edition
         this.folderPrefix = "";
@@ -375,7 +377,7 @@ class BatchAttenuationsEditorView extends WwiseObjectView
             return false;
         });
 
-        $(this.htmlElement).find(".btn_commit").click(function(e) {
+        this.commitButton.setClick(function(e) {
             batchAttenuationsEditorView.onBtnCommitClicked(e);
             return false;
         });
@@ -397,8 +399,8 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         this.interpolationErrorsView.hide();
         this.interpolationStepsEditorView.hide();
         this.interpolationShapesEditorView.hide();
+        this.commitButton.hide();
         $(this.htmlElement).find("#attenuationsList").empty();
-        $(this.htmlElement).find(".btn_commit").hide();
 
         if( !this.wwiseObject)
             return;
@@ -407,9 +409,9 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         if( this.checkForErrors() )
         {
             // show interface
-            $(this.htmlElement).find(".btn_commit").show();
             this.interpolationStepsEditorView.show();
             this.interpolationShapesEditorView.show();
+            this.commitButton.show();
 
             // create in-between attenuations
             this.interpolate();
@@ -420,6 +422,7 @@ class BatchAttenuationsEditorView extends WwiseObjectView
             this.addAttenuationView(i, this.wwiseObject.attenuations[i]);
 
         $(this.htmlElement).find("#attenuationsList").attr("class", this.displayOption);
+        this.commitButton.enable();
     }
 
     addAttenuationView(index, attenuation)
@@ -473,6 +476,7 @@ class BatchAttenuationsEditorView extends WwiseObjectView
     onBtnCommitClicked(e)
     {
         this.wwiseObject.commit();
+        this.commitButton.disable();
     }
 
     checkForErrors()

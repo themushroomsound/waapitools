@@ -276,14 +276,6 @@ select, input {
     z-index: 99;
 }
 
-.btn_commit {
-    float: right;
-    font-size: 20px;
-    padding: 5px 10px;
-    background-color: #b93333;
-    display: none;
-}
-
 .step, .point {
     margin-right: 10px;
     margin-bottom: 2px;
@@ -369,4 +361,26 @@ select, input {
 
 .step .btn_addStep, .step .btn_removeStep {
     margin-left: 5px;
+}
+
+#btn_commit {
+    float: right;
+    font-size: 20px;
+    padding: 5px 10px;
+    background-color: #b93333;
+}
+
+#btn_commit.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+#btn_commit.enabled {
+    pointer-events: auto;
+}
+
+#btn_commit.enabled:hover {
+    color: #b93333;
+    background-color: white;
+    text-decoration: none;
 }

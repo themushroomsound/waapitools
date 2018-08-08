@@ -404,7 +404,8 @@ class WwiseAttenuationsFolder extends WwiseObject
             // commit notes, then...
             return wwiseAttenuationsFolder.commitNotes().then(function() {
                 // commit child attenuations
-                wwiseAttenuationsFolder.childrenToCommit = wwiseAttenuationsFolder.attenuations;
+                for(let i=0; i < wwiseAttenuationsFolder.attenuations.length; i++)
+                    wwiseAttenuationsFolder.childrenToCommit.push(wwiseAttenuationsFolder.attenuations[i]);
                 return wwiseAttenuationsFolder.commitNextChildAttenuation();
             });
         })
