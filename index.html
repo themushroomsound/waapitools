@@ -9,7 +9,7 @@
     </head>
 
     <body>
-        <!-- Templates -->
+        <!-- Templates Event Soundbank Finder -->
         <template id="template_inclusionRow">
             <tr>
                 <td class="name soundbankName"></td>
@@ -20,6 +20,7 @@
             </tr>
         </template>
 
+        <!-- Templates Batch Attenuations Editor -->
         <template id="template_attenuationView">
             <div class="attenuationView">
                 <h3 class="metadata"><span>Attenuation: <span class="name">none</span></span></h3>
@@ -27,30 +28,6 @@
                 <p class="metadata"><span>Radius max: <span class="RadiusMax">unknown</span></span></p>
                 <svg class="attenuationCurves" preserveAspectRatio="none" viewBox="0 0 2000 2000"></svg>
             </div>
-        </template>
-
-        <template id="template_interpolationError_MultipleSimilarRadiiError">
-            <li class="errorMsg"><span class="attName">Gen_3D_Auto_1m</span>: another attenuation already has a max radius of <span class="radius">100</span>m in the selected folder or WWU.</li>
-        </template>
-
-        <template id="template_interpolationError_InconsistentPointsNbError">
-            <li class="errorMsg"><span class="attName">Gen_3D_Auto_1m</span>: the <span class="curveType">VolumeDryUsage</span> curve has <span class="foundNbPoints">3</span> points instead of <span class="correctNbPoints">2</span>.</li>
-        </template>
-
-        <template id="template_interpolationError_EmptyFolderError">
-            <li class="errorMsg">the selected folder or WWU contains no attenuations</li>
-        </template>
-
-        <template id="template_interpolationError_LessThan2AttsError">
-            <li class="errorMsg">the selected folder or WWU needs to contain at least 2 attenuations to enable interpolation</li>
-        </template>
-
-        <template id="template_interpolationError_MissingValidSuffixError">
-            <li class="errorMsg">The name <span class="attName">Gen_3D_Auto_1m</span> is missing a valid suffix: it should end with "<span class="radius">100</span>m".</li>
-        </template>
-
-        <template id="template_interpolationError_InvalidPrefixError">
-            <li class="errorMsg">The name <span class="attName">Gen_3D_Auto_1m</span> is invalid: it should be something like "<span class="correctPrefix">Gen_Auto_</span><span class="radius">100</span>m".</li>
         </template>
 
         <template id="template_interpolationStep">
@@ -74,9 +51,33 @@
                     <option value="easeOutQuint">Out Quint</option>
                     <option value="easeInOutQuint">In/Out Quint</option>
                 </select>
-                <!--<img src="resources/images/easing/linear.svg" />-->
             </li>
         </template>
+
+        <!-- Templates Batch Attenuations Editor: error messages -->
+        <template id="template_interpolationError_MultipleSimilarRadiiError">
+            <li class="errorMsg"><span class="attName">Gen_3D_Auto_1m</span>: another attenuation already has a max radius of <span class="radius">100</span>m in the selected folder or WWU.</li>
+        </template>
+
+        <template id="template_interpolationError_InconsistentPointsNbError">
+            <li class="errorMsg"><span class="attName">Gen_3D_Auto_1m</span>: the <span class="curveType">VolumeDryUsage</span> curve has <span class="foundNbPoints">3</span> points instead of <span class="correctNbPoints">2</span>.</li>
+        </template>
+
+        <template id="template_interpolationError_EmptyFolderError">
+            <li class="errorMsg">the selected folder or WWU contains no attenuations</li>
+        </template>
+
+        <template id="template_interpolationError_LessThan2AttsError">
+            <li class="errorMsg">the selected folder or WWU needs to contain at least 2 attenuations to enable interpolation</li>
+        </template>
+
+        <template id="template_interpolationError_MissingValidSuffixError">
+            <li class="errorMsg">The name <span class="attName">Gen_3D_Auto_1m</span> is missing a valid suffix: it should end with "<span class="radius">100</span>m".</li>
+        </template>
+
+        <template id="template_interpolationError_InvalidPrefixError">
+            <li class="errorMsg">The name <span class="attName">Gen_3D_Auto_1m</span> is invalid: it should be something like "<span class="correctPrefix">Gen_Auto_</span><span class="radius">100</span>m".</li>
+        </template>     
 
         <!-- Visible body -->
         <header>
