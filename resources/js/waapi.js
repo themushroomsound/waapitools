@@ -240,14 +240,18 @@ class WwiseAttenuationsFolder extends WwiseObject
         return longest;
     }
 
+    // checks whether interpolation is possible
+    // between the shortest and longest attenuations in the folder
     getInterpolationErrors()
     {
         let errors = [];
 
+        // checks whether folder is empty
         if( this.attenuations.length < 1) {
             return [ { name: "EmptyFolderError" } ];
         }
 
+        // checks whether the minimum of 2 attenuations is present
         if( this.attenuations.length < 2) {
             let newError = {
                 name: "LessThan2AttsError",
@@ -376,9 +380,16 @@ class WwiseAttenuationsFolder extends WwiseObject
         }
     }
 
+    storeInterpolationShapes()
+    {
+        this.notes = this.getShortest().serializeInterpolationShapes();
+    }
+
     commit()
     {
         console.log("committing to wwise");
+        let today = new Date();
+        this.commitNotes();
         for( let i=0; i < this.attenuations.length; i++ )
             this.attenuations[i].commit();
     }
@@ -464,17 +475,12 @@ class WwiseAttenuation extends WwiseObject
         return curvesShapes.join("/");
     }
 
-    storeInterpolationShapes()
-    {
-        this.notes = this.serializeInterpolationShapes()
-    }
-
     unserializeInterpolationShapes()
     {
-        if( this.notes == undefined )
+        if( this.parent.notes == undefined )
             return {}
 
-        let splitCurvesSetShapes = this.notes.split("/");
+        let splitCurvesSetShapes = this.parent.notes.split("/");
         if( splitCurvesSetShapes.length < 2 )
             return {}
 

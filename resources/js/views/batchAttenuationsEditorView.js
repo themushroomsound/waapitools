@@ -334,7 +334,7 @@ class InterpolationShapesEditorView extends WwiseObjectView
     updatePointShape(index, shape)
     {
         this.wwiseObject.getShortest().curves[ this.displayCurveType ].points[ index ].interpolationShape = shape;
-        this.wwiseObject.getShortest().storeInterpolationShapes();
+        this.wwiseObject.storeInterpolationShapes();
         this.batchAttenuationsEditorView.refresh();
     }
 }
