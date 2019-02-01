@@ -1,5 +1,5 @@
 var waapiJS;
-var activeView = "#samplerKeymapper";
+var activeView = "#home";
 var eventSoundbankFinderView, batchAttenuationsEditorView, attenuationView;
 var selectedObjects = [];
 
