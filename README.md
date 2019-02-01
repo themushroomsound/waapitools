@@ -14,6 +14,6 @@ The Batch Attenuations Editor is designed to help with the creation and update o
 
 ## 3. Sampler Keymapper
 
-The Sampler Keymapper automatically sets MIDI root key and key ranger parameters on children of a blend container if their names contain a not name (eg MyPianoSample_C#3 is mapped to MIDI root key 49 and its range is set based on neighbouring samples root notes).
+The Sampler Keymapper automatically sets **MIDI root key** and **key range** parameters on children of a blend container if their names contain a note name (eg MyPianoSample_C#3 is mapped to MIDI root key 49 and its range is set based on neighbouring samples root notes).
 
 ![waapitools_keymapper](https://user-images.githubusercontent.com/5003391/52117367-d3228600-2613-11e9-87b1-a3d4137f92fb.png)
