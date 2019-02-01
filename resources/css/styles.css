@@ -96,6 +96,20 @@ select, input {
     line-height:100px;
 }
 
+.errors {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 2px solid #b93333;
+    color: white;
+    background-color: #583232;
+    display: none;
+    clear: left;
+}
+
+.errors span {
+    font-weight: bold;
+}
+
 /* BATCH ATTENUATIONS EDITOR */
 
 #batchAttEditor {
@@ -113,20 +127,6 @@ select, input {
     float: right;
     margin-right: 0;
     max-width: 730px;
-}
-
-#interpolationErrors {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 2px solid #b93333;
-    color: white;
-    background-color: #583232;
-    display: none;
-    clear: left;
-}
-
-#interpolationErrors span {
-    font-weight: bold;
 }
 
 #pointTooltip {
@@ -417,4 +417,21 @@ h3#curveType.FocusUsage {
     color: #b93333;
     background-color: white;
     text-decoration: none;
+}
+
+/* SAMPLER KEYMAPPER */
+
+.sample {
+    position: relative;
+    clear: both;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    height: 16px;
+}
+
+.range {
+    position: absolute;
+    background-color: #666;
+    color: white;
+    overflow: visible;
 }

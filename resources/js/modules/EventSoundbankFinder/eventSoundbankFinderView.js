@@ -9,12 +9,13 @@ class EventSoundbankFinderView extends WwiseObjectView
     {
         super.refresh();
 
-        var inclusions = this.wwiseObject.getSoundBankInclusions();
+        var inclusions = this.wwiseObject ? this.wwiseObject.getSoundBankInclusions() : [];
         var inclusionsTable = $(this.htmlElement).find(".soundbankInclusions");
 
         $(this.htmlElement).find(".nbInclusions").text(inclusions.length);
-        if( inclusions.length < 1 )
+        if( inclusions.length < 1 ) {
             inclusionsTable.html("<tr><td>none</td></tr>");
+        }
 
         else {
             inclusionsTable.html("");

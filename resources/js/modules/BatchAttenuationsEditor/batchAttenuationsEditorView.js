@@ -309,10 +309,13 @@ class InterpolationShapesEditorView extends WwiseObjectView
     refresh()
     {
         super.refresh();
-        
+
         this.curveTypeElement.removeClass();
         this.curveTypeElement.addClass(this.displayCurveType);
         this.curveTypeElement.text(this.displayCurveType);
+
+        if( this.wwiseObject == undefined )
+            return;
 
         let points = this.wwiseObject.getShortest().curves[ this.displayCurveType ].points;
         this.pointsListElement.empty();
@@ -362,7 +365,7 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         // commit button
         this.commitButton = new GenericButton($(this.htmlElement).find("#btn_commit"));
 
-        // prefix for folder attenuations, TODO: edition
+        // prefix for folder attenuations, TODO: edition?
         this.folderPrefix = "";
 
         this.attenuationViews = [];

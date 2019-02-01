@@ -1,4 +1,6 @@
 // requires autobahn
+
+// Base class for all wwise objects
 class WwiseObject
 {
     constructor(basicInfo, waapiJS)
@@ -145,6 +147,53 @@ class WwiseObject
 
         var wwiseObject = this;
         return this.waapiJS.query(ak.wwise.core.object.setNotes, query);
+    }
+}
+
+// Base class for all wwise objects in the actor-mixer hierarchy
+class WwiseActorMixerObject extends WwiseObject
+{
+    constructor(basicInfo, waapiJS)
+    {
+        super(basicInfo, waapiJS);
+        console.log("Building Wwise Actor-Mixer Object " + this.guid);
+
+        this.childrenToFetch = [];
+        this.childrenToCommit = [];
+        this.childrenObjects = [];
+    }
+
+    fetchWwiseData()
+    {
+        var wwiseActorMixerObject = this;
+        return super.fetchWwiseData().then(function() {
+            return wwiseActorMixerObject.getChildren().then(function(res) {
+                wwiseActorMixerObject.childrenToFetch = res.kwargs.return;
+                return wwiseActorMixerObject.fetchNextChildObject();
+            });
+        })
+    }
+
+    fetchNextChildObject()
+    {
+        if( this.childrenToFetch.length < 1 ) return;
+        let nextChild = this.childrenToFetch.shift();
+        let wwiseActorMixerObject = this;
+
+        let newActorMixerObject = new WwiseActorMixerObject(nextChild, this.waapiJS);
+        this.childrenObjects.push(newActorMixerObject);
+        return newActorMixerObject.fetchWwiseData().then(function() {
+            return wwiseActorMixerObject.fetchNextChildObject();
+        })
+    }
+}
+
+class WwiseBlendContainer extends WwiseActorMixerObject
+{
+    constructor(basicInfo, waapiJS)
+    {
+        super(basicInfo, waapiJS);
+        console.log("Building Wwise Blend Container " + this.guid + " - " + this.name);
     }
 }
 

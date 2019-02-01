@@ -5,11 +5,38 @@
         <meta charset="utf-8">
         <title>Waapitools</title>
         <link rel="stylesheet" href="resources/css/styles.css?v=1.0">
+        <link rel="stylesheet" href="resources/css/piano.css?v=1.0">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alice|Roboto+Mono">
     </head>
 
     <body>
-        <!-- Templates Event Soundbank Finder -->
+
+        <header>
+            <h1>Waapitools: <span class="name">no connected wwise project</span></h1>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <a href="#home" class="btnNav">home</a> |
+            <a href="#eventSoundbankFinder" class="btnNav">event soundbank finder</a> |
+            <a href="#batchAttEditor" class="btnNav">batch attenuations editor</a> |
+            <a href="#samplerKeymapper" class="btnNav">sampler keymapper</a>
+        </nav>
+
+        <!-- HOME -->
+        <section id="home">
+            <h2>home</h2>
+            <h3>Tools:</h3>
+            <ul>
+                <li><a href="#eventSoundbankFinder" class="btnNav">Event Soundbank Finder</a>: find out in which soundbank(s) an event is included, even indirectly through a parent folder or WWU</li>
+                <li><a href="#batchAttEditor" class="btnNav">Batch Attenuations Editor</a>: create or edit a batch of related attenuations over different maximum distances</li>
+                <li><a href="#samplerKeymapper" class="btnNav">Sampler Keymapper</a>: automatically map children of a blend container across the MIDI keyboard based on their names</li>
+            </ul>
+        </section>
+
+        <!-- EVENT SOUNDBANK FINDER -->
+
+        <!-- Templates -->
         <template id="template_inclusionRow">
             <tr>
                 <td class="name soundbankName"></td>
@@ -20,7 +47,17 @@
             </tr>
         </template>
 
-        <!-- Templates Batch Attenuations Editor -->
+        <!-- Static markup -->
+        <section id="eventSoundbankFinder">
+            <h2>event soundbank finder</h2>
+            <h3>Selected event: <span class="name">none</span></h3>
+            <h3>Referenced in <span class="nbInclusions"></span> soundbank(s):</h3>
+            <table class="soundbankInclusions"><tr><td>none</td></tr></table>
+        </section>
+
+        <!-- BATCH ATTENUATIONS EDITOR -->
+
+        <!-- Templates -->
         <template id="template_attenuationView">
             <div class="attenuationView">
                 <h3 class="metadata"><span>Attenuation: <span class="name">none</span></span></h3>
@@ -54,7 +91,7 @@
             </li>
         </template>
 
-        <!-- Templates Batch Attenuations Editor: error messages -->
+        <!-- Templates: error messages -->
         <template id="template_interpolationError_MultipleSimilarRadiiError">
             <li class="errorMsg"><span class="attName">Gen_3D_Auto_1m</span>: another attenuation already has a max radius of <span class="radius">100</span>m in the selected folder or WWU.</li>
         </template>
@@ -79,33 +116,7 @@
             <li class="errorMsg">The name <span class="attName">Gen_3D_Auto_1m</span> is invalid: it should be something like "<span class="correctPrefix">Gen_Auto_</span><span class="radius">100</span>m".</li>
         </template>
 
-        <!-- Visible body -->
-        <header>
-            <h1>Waapitools: <span class="name">no connected wwise project</span></h1>
-        </header>
-
-        <nav>
-            <a href="#home" class="btnNav">home</a> |
-            <a href="#eventSoundbankFinder" class="btnNav">event soundbank finder</a> |
-            <a href="#batchAttEditor" class="btnNav">batch attenuations editor</a>
-        </nav>
-
-        <section id="home">
-            <h2>home</h2>
-            <h3>Tools:</h3>
-            <ul>
-                <li><a href="#eventSoundbankFinder" class="btnNav">Event Soundbank Finder</a>: find out in which soundbank(s) an event is included, even indirectly through a parent folder or WWU</li>
-                <li><a href="#batchAttEditor" class="btnNav">Batch Attenuations Editor</a>: create or edit a batch of related attenuations over different maximum distances</li>
-            </ul>
-        </section>
-
-        <section id="eventSoundbankFinder">
-            <h2>event soundbank finder</h2>
-            <h3>Selected event: <span class="name">none</span></h3>
-            <h3>Referenced in <span class="nbInclusions"></span> soundbank(s):</h3>
-            <table class="soundbankInclusions"><tr><td>none</td></tr></table>
-        </section>
-
+        <!-- Static markup -->
         <section id="batchAttEditor">
             <h2>batch attenuations editor</h2>
             <h3>Selected folder or WWU: <span class="name">none</span></h3>
@@ -140,10 +151,11 @@
                 <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
             </div>
 
-            <div id="interpolationErrors">
+            <div id="interpolationErrorsView" class="errors">
                 <h3>Interpolation is disabled. The following errors have been found:</h3>
                 <ul id="interpolationErrorsList"></ul>
             </div>
+
             <div id="attenuationsList"></div>
             <div id="pointTooltip">
                 Point <span class="ptIndex">1</span><br />
@@ -152,16 +164,75 @@
             </div>
         </section>
 
+        <!-- SAMPLER KEYMAPPER -->
+
+        <!-- Templates -->
+        <template id="template_blendContainerChildRow">
+            <tr>
+                <td class="name blendContainerName"></td>
+                <td>
+                    <span class="noteDetection"></span>
+                    <span class="name detectedNoteName"></span>
+                    <span class="name detectedNoteIndex"></span>
+                </td>
+                <td class="detectedNoteIndex">
+                    (midi note <span></span>)
+                </td>
+            </tr>
+        </template>
+
+        <template id="template_pianoSample">
+            <div class="sample">
+                <div class="range"><span>Sample Name</span></div>
+            </div>
+        </template>
+
+        <!-- Templates: error messages -->
+        <template id="template_mappingError_EmptySamplerError">
+            <li class="errorMsg">The selected blend container has no children</li>
+        </template>
+
+        <template id="template_mappingError_NoNoteDetectedError">
+            <li class="errorMsg"><span class="sampleName">My Sample Name</span>: no note name was detected in this name to be used as a root key</li>
+        </template>
+
+        <!-- Static markup -->
+        <section id="samplerKeymapper">
+            <h2>sampler keymapper</h2>
+
+            <div id="editors">
+                <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
+            </div>
+
+            <h3>Selected blend container: <span class="name">none</span></h3>
+
+            <h3>Children:</h3>
+            <table class="blendContainerChildren"><tr><td>none</td></tr></table>
+            <h3>Mapping:</h3>
+
+            <div id="mappingErrorsView" class="errors">
+                <h3>Mapping is disabled. The following errors have been found:</h3>
+                <ul id="mappingErrorsList"></ul>
+            </div>
+
+            <div class="pianoKeyboard">
+            </div>
+        </section>
+
         <!-- scripts at bottom -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="3rdparty/ak/js/waapi.js"></script>
         <script src="3rdparty/crossbario/js/autobahn.js"></script>
-        <script src="resources/js/views/genericView.js"></script>
-        <script src="resources/js/views/genericButton.js"></script>
-        <script src="resources/js/views/wwiseObjectView.js"></script>
-        <script src="resources/js/views/eventSoundbankFinderView.js"></script>
-        <script src="resources/js/views/batchAttenuationsEditorView.js"></script>
-        <script src="resources/js/waapi.js"></script>
+        <script src="resources/js/utils/pitchiz.js"></script>
+        <script src="resources/js/utils/piano.js"></script>
+        <script src="resources/js/common/waapi.js"></script>
+        <script src="resources/js/common/views/genericView.js"></script>
+        <script src="resources/js/common/views/genericButton.js"></script>
+        <script src="resources/js/common/views/wwiseObjectView.js"></script>
+        <script src="resources/js/modules/EventSoundbankFinder/eventSoundbankFinderView.js"></script>
+        <script src="resources/js/modules/BatchAttenuationsEditor/batchAttenuationsEditorView.js"></script>
+        <script src="resources/js/modules/SamplerKeymapper/samplerKeymapperModel.js"></script>
+        <script src="resources/js/modules/SamplerKeymapper/samplerKeymapperView.js"></script>
         <script src="resources/js/main.js"></script>
     </body>
 </html>

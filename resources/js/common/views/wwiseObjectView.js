@@ -8,7 +8,8 @@ class WwiseObjectView extends GenericView
     setWwiseObject(wwiseObject)
     {
         this.wwiseObject = wwiseObject;
-        this.wwiseObject.views.push(this);
+        if( this.wwiseObject )
+            this.wwiseObject.views.push(this);
         this.refresh();
     }
 
@@ -16,5 +17,7 @@ class WwiseObjectView extends GenericView
     {
         if( this.wwiseObject )
             $(this.htmlElement).find(".name").html(this.wwiseObject.getObjLink());
+        else
+            $(this.htmlElement).find(".name").html("none");
     }
 }
