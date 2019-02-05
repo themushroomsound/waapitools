@@ -6,6 +6,8 @@ class SamplerKeymapperView extends WwiseObjectView
 
         var samplerKeymapperView = this;
 
+        // blend container children list
+        this.childrenTable = $(this.htmlElement).find(".blendContainerChildren");
         // piano GUI
         this.pianoKeyboardElement = $(this.htmlElement).find(".pianoKeyboard");
         this.pianoKeyboard = new Piano(this.pianoKeyboardElement);
@@ -31,18 +33,15 @@ class SamplerKeymapperView extends WwiseObjectView
         this.commitButton.hide();
         this.pianoKeyboardElement.hide();
         this.pianoKeyboardElement.find(".sample").remove();
+        this.childrenTable.html("<tr><td>none</td></tr>");
 
         if( !this.wwiseObject)
             return;
 
         var children = this.wwiseObject.childrenObjects;
-        var childrenTable = $(this.htmlElement).find(".blendContainerChildren");
-
-        if( children.length < 1 )
-            childrenTable.html("<tr><td>none</td></tr>");
-
-        else {
-            childrenTable.html("");
+        if( children.length > 0 )
+        {
+            this.childrenTable.html("");
             for(let index in children) {
                 var pitch = children[index].pitch;
 
@@ -59,7 +58,7 @@ class SamplerKeymapperView extends WwiseObjectView
                     newRow.find(".detectedNoteIndex span").append( pitch.midiNote );
                 }
 
-                newRow.appendTo(childrenTable);
+                newRow.appendTo(this.childrenTable);
             }
         }
 
@@ -70,6 +69,7 @@ class SamplerKeymapperView extends WwiseObjectView
 
             let parentTop = this.pianoKeyboardElement.position().top;
             let parentLeft = this.pianoKeyboardElement.position().left + parseInt(this.pianoKeyboardElement.css('marginLeft'));
+            let samplerKeymapperView = this;
 
             for(let index in children) {
                 let sample = children[index];
@@ -81,14 +81,49 @@ class SamplerKeymapperView extends WwiseObjectView
                 let rightPos = maxRangeKey.position().left + parseInt(maxRangeKey.css('marginLeft')) + maxRangeKey.width();
                 let width = rightPos - leftPos;
                 this.pianoKeyboardElement.append(sampleElement);
+
+                sampleElement.attr("data:rootKey", sample.MidiTrackingRootNote);
+                sampleElement.attr("data:minKey", sample.MidiKeyFilterMin);
+                sampleElement.attr("data:maxKey", sample.MidiKeyFilterMax);
+
                 sampleElement.find(".range").css("left", leftPos - parentLeft);
                 sampleElement.find(".range").css("width", width);
+
+                sampleElement.hover(function(e) {
+                    samplerKeymapperView.onSampleMouseOver(this);
+                },
+                function(e) {
+                    samplerKeymapperView.onSampleMouseOut(this);
+                });
             }
 
             this.commitButton.show();
         }
 
         this.commitButton.enable();
+    }
+
+    onSampleMouseOver(sampleElement)
+    {
+        let min = parseInt($(sampleElement).attr("data:minKey"));
+        let max = parseInt($(sampleElement).attr("data:maxKey"));
+        let root = parseInt($(sampleElement).attr("data:rootKey"));
+        for(var i=min; i<=max; i++) {
+            if( i == root )
+                this.pianoKeyboard.getKey(i).addClass("root");
+            else
+                this.pianoKeyboard.getKey(i).addClass("inRange");
+        }
+    }
+
+    onSampleMouseOut(sampleElement)
+    {
+        let min = $(sampleElement).attr("data:minKey");
+        let max = $(sampleElement).attr("data:maxKey");
+        for(var i=parseInt(min); i<=parseInt(max); i++) {
+            this.pianoKeyboard.getKey(i).removeClass("root");
+            this.pianoKeyboard.getKey(i).removeClass("inRange");
+        }
     }
 
     checkForErrors()

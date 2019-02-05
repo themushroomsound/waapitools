@@ -11,6 +11,7 @@ class Piano {
 
     build()
     {
+        var piano = this;
         for(let i=0; i<128; i++) {
             var pitch = Pitchiz.createPitchFromMIDINote(i);
             var color = [1,3,6,8,10].includes(pitch.chroma) ? "black" : "white";
@@ -18,9 +19,34 @@ class Piano {
             newKey.addClass("key");
             newKey.addClass(pitch.chromaName);
             newKey.addClass(color);
+            newKey.attr("data:noteName", pitch.chromaName + pitch.octaveName);
             $(this.htmlContainer).append(newKey);
             this.keys.push(newKey);
+
+            newKey.hover(function(e) {
+                piano.onKeyMouseOver(this);
+            },
+            function(e) {
+                piano.onKeyMouseOut(this);
+            });
         }
+
+        this.tooltip = $("<div>");
+        this.tooltip.addClass("tooltip");
+        $(this.htmlContainer).append(this.tooltip);
+    }
+
+    onKeyMouseOver(key)
+    {
+        let position = $(key).position();
+        this.tooltip.text($(key).attr("data:noteName"));
+        this.tooltip.css(position);
+        this.tooltip.show();
+    }
+
+    onKeyMouseOut(key)
+    {
+        this.tooltip.hide();
     }
 
     getKey(index)

@@ -110,6 +110,16 @@ select, input {
     font-weight: bold;
 }
 
+.tooltip {
+    position: absolute;
+    display: none;
+    padding: 5px;
+    margin: 15px 25px;
+    border: 1px solid #999;
+    background: #333;
+    z-index: 99;
+}
+
 /* BATCH ATTENUATIONS EDITOR */
 
 #batchAttEditor {
@@ -127,15 +137,6 @@ select, input {
     float: right;
     margin-right: 0;
     max-width: 730px;
-}
-
-#pointTooltip {
-    position: absolute;
-    display: none;
-    padding: 5px;
-    margin: 15px 25px;
-    border: 1px solid #999;
-    background: #333;
 }
 
 #attenuationsList {
@@ -427,11 +428,28 @@ h3#curveType.FocusUsage {
     margin-top: 4px;
     margin-bottom: 4px;
     height: 16px;
+    background-color: #3e3e3e;
 }
 
-.range {
+.sample .range {
     position: absolute;
     background-color: #666;
     color: white;
     overflow: visible;
+}
+
+.sample .range span {
+    padding-left: 3px;
+}
+
+.sample:hover .range {
+    background-color: #c5b850;
+}
+
+.pianoKeyboard .key.white.inRange, .pianoKeyboard .key.black.inRange {
+    background-color: #ffee66;
+}
+
+.pianoKeyboard .key.white.root, .pianoKeyboard .key.black.root {
+    background-color: #ff9966;
 }

@@ -1,5 +1,5 @@
 .pianoKeyboard {
-    min-width: 1000px;
+    width: 997px;
 }
 
 .pianoKeyboard .key {
@@ -17,12 +17,23 @@
 .pianoKeyboard .key.black {
     position: relative;
     background-color: black;
-    width: 10px;
+    width: 8px;
     margin-left: -6px;
     height: 35px;
     z-index: 2;
+    border: 1px solid black;
 }
 
 .key.D, .key.E, .key.G, .key.A, .key.B {
     margin-left: -5px;
+}
+
+.pianoKeyboard .tooltip {
+    background-color: #ffee66;
+    color: #674800;
+    border-color: #c5b433;
+}
+
+.pianoKeyboard .key:hover {
+    background-color: #ffee66;
 }
