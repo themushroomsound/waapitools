@@ -443,13 +443,13 @@ h3#curveType.FocusUsage {
 }
 
 .sample:hover .range {
-    background-color: #c5b850;
+    background-color: #cc9951;
 }
 
 .pianoKeyboard .key.white.inRange, .pianoKeyboard .key.black.inRange {
-    background-color: #ffee66;
+    background-color: #ffc066;
 }
 
 .pianoKeyboard .key.white.root, .pianoKeyboard .key.black.root {
-    background-color: #ff9966;
+    background-color: #ffee66;
 }
