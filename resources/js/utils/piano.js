@@ -11,15 +11,17 @@ class Piano {
 
     build()
     {
+        var wwiseKeyboardDefinition = new pitchiz.MIDIKeyboard(-1);
         var piano = this;
         for(let i=0; i<128; i++) {
-            var pitch = Pitchiz.createPitchFromMIDINote(i);
-            var color = [1,3,6,8,10].includes(pitch.chroma) ? "black" : "white";
+            //var pitch = Pitchiz.createPitchFromMIDINote(i);
+            var note = wwiseKeyboardDefinition.getKey(i).getNote();
+            var color = [1,3,6,8,10].includes(note.chroma.index) ? "black" : "white";
             var newKey = $("<div>");
             newKey.addClass("key");
-            newKey.addClass(pitch.chromaName);
+            newKey.addClass(note.chroma.toString());
             newKey.addClass(color);
-            newKey.attr("data:noteName", pitch.chromaName + pitch.octaveName);
+            newKey.attr("data:noteName", note.toString());
             $(this.htmlContainer).append(newKey);
             this.keys.push(newKey);
 

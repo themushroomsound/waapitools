@@ -45,7 +45,7 @@ class SamplerKeymapper extends WwiseBlendContainer
             let curSample = this.childrenObjects[i];
 
             // check if a note is found in name
-            if( curSample.pitch == null)
+            if( curSample.note == null)
             {
                 let newError = {
                     name: "NoNoteDetectedError",
@@ -79,6 +79,8 @@ class SamplerKeymapper extends WwiseBlendContainer
                 var prevChild = this.childrenObjects[i-1];
                 var preInterval = curChild.MidiTrackingRootNote - prevChild.MidiTrackingRootNote;
                 curChild.MidiKeyFilterMin = Math.ceil(curChild.MidiTrackingRootNote - preInterval/2);
+                if( curChild.MidiKeyFilterMin == prevChild.MidiKeyFilterMax )
+                    curChild.MidiKeyFilterMin++;
             }
 
             // find max midi key
@@ -98,7 +100,7 @@ class SamplerKeymapper extends WwiseBlendContainer
     {
         console.log("sorting");
         this.childrenObjects.sort(function(a,b) {
-            return a["pitch"]["midiNote"] - b["pitch"]["midiNote"];
+            return a["midiKey"]["index"] - b["midiKey"]["index"];
         });
     }
 
@@ -135,11 +137,13 @@ class SamplerKeymapperChild extends WwiseActorMixerObject
         super(basicInfo, waapiJS);
         console.log("Building Sampler Keymapper Child from Wwise Actor-Mixer Object " + this.guid + " - " + this.name);
 
-        this.pitch = Pitchiz.extractPitchFromString(this.name);
+        var wwiseKeyboardDef = new pitchiz.MIDIKeyboard(-1);
+        this.note = pitchiz.Note.findNoteInString(this.name);
+        this.midiKey = this.note != null ? this.note.getKey(wwiseKeyboardDef) : null;
 
         this.OverrideMidiNoteTracking = true;
         this.EnableMidiNoteTracking = true;
-        this.MidiTrackingRootNote = this.pitch != null ? this.pitch.midiNote : 48; // 48 = C3
+        this.MidiTrackingRootNote = this.midiKey != null ? this.midiKey.index : 48; // 48 = C3
         this.MidiKeyFilterMin = 0;
         this.MidiKeyFilterMax = 127;
     }

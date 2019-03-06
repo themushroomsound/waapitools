@@ -43,19 +43,20 @@ class SamplerKeymapperView extends WwiseObjectView
         {
             this.childrenTable.html("");
             for(let index in children) {
-                var pitch = children[index].pitch;
+                var note = children[index].note;
+                var midiKey = children[index].midiKey;
 
                 var newRow = $("#template_blendContainerChildRow").contents().clone();
                 newRow.find(".blendContainerName").append( children[index].getObjLink(true) );
 
-                if( pitch == null ) {
+                if( note == null ) {
                     newRow.find(".noteDetection").text( "- could not detect note from name" );
                     newRow.find(".detectedNoteIndex").hide();
                 }
                 else {
                     newRow.find(".noteDetection").text( "- detected note " );
-                    newRow.find(".detectedNoteName").append( pitch.formattedNoteName );
-                    newRow.find(".detectedNoteIndex span").append( pitch.midiNote );
+                    newRow.find(".detectedNoteName").append( note.toString() );
+                    newRow.find(".detectedNoteIndex span").append( midiKey.index );
                 }
 
                 newRow.appendTo(this.childrenTable);
