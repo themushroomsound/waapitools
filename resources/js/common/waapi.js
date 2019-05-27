@@ -203,6 +203,146 @@ class WwiseEvent extends WwiseObject
     {
         super(basicInfo, waapiJS);
         console.log("Building Wwise Event " + this.guid);
+
+        this.childrenToFetch = [];
+        this.actions = [];
+    }
+
+    fetchWwiseData()
+    {
+        var wwiseEvent = this;
+        return super.fetchWwiseData().then(function() {
+            return wwiseEvent.getChildren().then(function(res) {
+                wwiseEvent.childrenToFetch = res.kwargs.return;
+                return wwiseEvent.fetchNextChildAction();
+            });
+        });
+    }
+
+    fetchNextChildAction()
+    {
+        if( this.childrenToFetch.length < 1 ) return;
+        let nextChild = this.childrenToFetch.shift();
+        let wwiseEvent = this;
+        if( nextChild.type == "Action") {
+            let newAction = new WwiseAction(nextChild, this.waapiJS);
+            this.actions.push(newAction);
+            return newAction.fetchWwiseData().then(function() {
+                return wwiseEvent.fetchNextChildAction();
+            })
+        }
+        // TODO: CHECK IF NECESSARY
+        return wwiseEvent.fetchNextChildAction();
+    }
+}
+
+class WwiseAction extends WwiseObject
+{
+    constructor(basicInfo, waapiJS)
+    {
+        super(basicInfo, waapiJS);
+        console.log("Building Wwise Action " + this.guid + " - " + this.name);
+        console.log("action info: ", basicInfo);
+    }
+
+    fetchWwiseData()
+    {
+        var wwiseAction = this;
+        return super.fetchWwiseData().then(function() {
+            var query = {
+                from:{id:[wwiseAction.guid]}
+            };
+            var options = {
+                return: ['@Target']
+            }
+            return wwiseAction.waapiJS.queryObjects(query, options).then(function(res) {
+                console.log("fetchWwiseActionData", res);
+                wwiseAction.TargetReference = res.kwargs.return[0]["@Target"];
+                return wwiseAction.fetchTarget();
+            });
+        });
+    }
+
+    fetchTarget()
+    {
+        let wwiseAction = this;
+        let query = {
+            from:{id:[this.TargetReference.id]}
+        };
+        return this.waapiJS.queryObjects(query).then(function(res) {
+            console.log("action target", res);
+            if( res.kwargs.return.length > 0 ) {
+                if( res.kwargs.return[0].type == "Sound" )
+                    wwiseAction.target = new WwiseSound(res.kwargs.return[0], wwiseAction.waapiJS);
+                else
+                    wwiseAction.target = new WwiseObject(res.kwargs.return[0], wwiseAction.waapiJS);
+                return wwiseAction.target.fetchWwiseData();
+            }
+        });
+    }
+}
+
+class WwiseSound extends WwiseObject
+{
+    constructor(basicInfo, waapiJS)
+    {
+        super(basicInfo, waapiJS);
+        console.log("Building Wwise Sound " + this.guid + " - " + this.name);
+
+        this.childrenToFetch = [];
+        this.sources = [];
+    }
+
+    fetchWwiseData()
+    {
+        var wwiseSound = this;
+        return super.fetchWwiseData().then(function() {
+            return wwiseSound.getChildren().then(function(res) {
+                wwiseSound.childrenToFetch = res.kwargs.return;
+                return wwiseSound.fetchNextChildAudioSource();
+            });
+        });
+    }
+
+    fetchNextChildAudioSource()
+    {
+        if( this.childrenToFetch.length < 1 ) return;
+        let nextChild = this.childrenToFetch.shift();
+        let wwiseSound = this;
+        if( nextChild.type == "AudioFileSource") {
+            let newAudioFileSource = new WwiseAudioFileSource(nextChild, this.waapiJS);
+            this.sources.push(newAudioFileSource);
+            return newAudioFileSource.fetchWwiseData().then(function() {
+                return wwiseSound.fetchNextChildAudioSource();
+            })
+        }
+        // TODO: CHECK IF NECESSARY
+        return wwiseSound.fetchNextChildAudioSource();
+    }
+}
+
+class WwiseAudioFileSource extends WwiseObject
+{
+    constructor(basicInfo, waapiJS)
+    {
+        super(basicInfo, waapiJS);
+        console.log("Building Wwise Audio File Source " + this.guid + " - " + this.name);
+    }
+
+    fetchWwiseData()
+    {
+        var wwiseAudioFileSource = this;
+        return super.fetchWwiseData().then(function() {
+            var query = {
+                object: wwiseAudioFileSource.guid,
+                numPeaks: 750,
+                getCrossChannelPeaks: true
+            };
+            wwiseAudioFileSource.waapiJS.query( "ak.wwise.core.audioSourcePeaks.getMinMaxPeaksInTrimmedRegion", query ).then( function(res) {
+                console.log("Fetched minmaxpeaks for SoundBank " + wwiseAudioFileSource.guid);
+                console.log("Peaks: ", res);
+            });
+        });
     }
 }
 

@@ -361,7 +361,7 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         this.interpolationShapesEditorView = new InterpolationShapesEditorView($(this.htmlElement).find("#interpolationShapesEditor"));
         this.interpolationShapesEditorView.batchAttenuationsEditorView = this;
         // interpolation errors
-        this.interpolationErrorsView = new GenericView($(this.htmlElement).find("#interpolationErrors"));
+        this.interpolationErrorsView = new GenericView($(this.htmlElement).find("#interpolationErrorsView"));
         // commit button
         this.commitButton = new GenericButton($(this.htmlElement).find("#btn_commit"));
 

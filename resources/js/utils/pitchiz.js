@@ -78,7 +78,7 @@ pitchiz.Chroma.createFromName = function(name) {
 	var found = false;
 	var index = -1;
 	name = name.split("#").join("♯").split("b").join("♭");
-	name = name.split("D♯").join("E♭").split("A♯").join("B♭");
+	name = name.split("D♯").join("E♭").split("A♯").join("B♭").split("D♭").join("C♯").split("G♭").join("F♯").split("A♭").join("G♯");
 	while(!found && index < pitchiz.Chroma.Names.length) {
 		++index;
 		found = name == pitchiz.Chroma.Names[index];
@@ -95,6 +95,9 @@ pitchiz.Chroma.getInterval = function(chroma1,chroma2) {
 pitchiz.Chroma.prototype = {
 	addInterval: function(interval) {
 		var newIndex = (this.index + interval) % 12;
+		if(newIndex < 0) {
+			newIndex += 12;
+		}
 		return new pitchiz.Chroma(newIndex);
 	}
 	,toString: function() {
@@ -130,6 +133,37 @@ pitchiz.Note.prototype = {
 	}
 	,toString: function() {
 		return this.chroma.toString() + (this.octave | 0);
+	}
+};
+pitchiz.Scale = $hx_exports["pitchiz"]["Scale"] = function(chroma,mode) {
+	this.chroma = chroma;
+	this.mode = mode;
+};
+pitchiz.Scale.prototype = {
+	get_circle5thIndex: function() {
+		var shift = this.mode ? 0 : 3;
+		return (this.chroma.index + shift) * 7 % 12 + 1;
+	}
+	,transpose: function(transposition) {
+		return new pitchiz.Scale(this.chroma.addInterval(transposition),this.mode);
+	}
+	,toString: function() {
+		var min = this.mode ? "" : "m";
+		return this.chroma.toString() + min;
+	}
+	,equals: function(other) {
+		if(this.chroma.index == other.chroma.index) {
+			return this.mode == other.mode;
+		} else {
+			return false;
+		}
+	}
+	,isRelativeTo: function(other) {
+		if(this.get_circle5thIndex() == other.get_circle5thIndex()) {
+			return this.mode != other.mode;
+		} else {
+			return false;
+		}
 	}
 };
 pitchiz.MIDIKey = $hx_exports["pitchiz"]["MIDIKey"] = function(midiKeyboard,index) {
