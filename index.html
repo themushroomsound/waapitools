@@ -20,7 +20,8 @@
             <a href="#home" class="btnNav">home</a> |
             <a href="#eventSoundbankFinder" class="btnNav">event soundbank finder</a> |
             <a href="#batchAttEditor" class="btnNav">batch attenuations editor</a> |
-            <a href="#samplerKeymapper" class="btnNav">sampler keymapper</a>
+            <a href="#samplerKeymapper" class="btnNav">sampler keymapper</a> |
+            <a href="#notesReview" class="btnNav">notes review</a>
         </nav>
 
         <!-- HOME -->
@@ -31,6 +32,7 @@
                 <li><a href="#eventSoundbankFinder" class="btnNav">Event Soundbank Finder</a>: find out in which soundbank(s) an event is included, even indirectly through a parent folder or WWU</li>
                 <li><a href="#batchAttEditor" class="btnNav">Batch Attenuations Editor</a>: create or edit a batch of related attenuations over different maximum distances</li>
                 <li><a href="#samplerKeymapper" class="btnNav">Sampler Keymapper</a>: automatically map children of a blend container across the MIDI keyboard based on their names</li>
+                <li><a href="#notesReview" class="btnNav">Notes Review</a>: a comprehensive review of all notes in the Wwise project</li>
             </ul>
         </section>
 
@@ -219,6 +221,23 @@
             </div>
         </section>
 
+        <!-- EVENT SOUNDBANK FINDER -->
+
+        <!-- Templates -->
+        <template id="template_notesRow">
+            <tr>
+                <td class="name objectName"></td>
+                <td class="notes"></td>
+            </tr>
+        </template>
+
+        <!-- Static markup -->
+        <section id="notesReview">
+            <h2>notes review</h2>
+            <h3>Found <span class="nbNotes"></span> object(s) including notes:</h3>
+            <table class="notes"><tr><td>none</td></tr></table>
+        </section>
+
         <!-- scripts at bottom -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="3rdparty/ak/js/waapi.js"></script>
@@ -233,6 +252,8 @@
         <script src="resources/js/modules/BatchAttenuationsEditor/batchAttenuationsEditorView.js"></script>
         <script src="resources/js/modules/SamplerKeymapper/samplerKeymapperModel.js"></script>
         <script src="resources/js/modules/SamplerKeymapper/samplerKeymapperView.js"></script>
+        <script src="resources/js/modules/NotesReview/notesReviewModel.js"></script>
+        <script src="resources/js/modules/NotesReview/notesReviewView.js"></script>
         <script src="resources/js/main.js"></script>
     </body>
 </html>
