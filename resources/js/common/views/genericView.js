@@ -5,6 +5,14 @@ class GenericView
         this.htmlElement = htmlElement;
     }
 
+    setObject(object)
+    {
+        this.object = object;
+        if( this.object )
+            this.object.views.push(this);
+        this.refresh();
+    }
+
     hide()
     {
         $(this.htmlElement).hide();
@@ -13,5 +21,10 @@ class GenericView
     show()
     {
         $(this.htmlElement).show();
+    }
+
+    refresh()
+    {
+
     }
 }

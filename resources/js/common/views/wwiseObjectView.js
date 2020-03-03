@@ -8,13 +8,13 @@ class WwiseObjectView extends GenericView
     setWwiseObject(wwiseObject)
     {
         this.wwiseObject = wwiseObject;
-        if( this.wwiseObject )
-            this.wwiseObject.views.push(this);
-        this.refresh();
+        super.setObject(wwiseObject);
     }
 
     refresh()
     {
+        super.refresh();
+
         if( this.wwiseObject )
             $(this.htmlElement).find(".name").html(this.wwiseObject.getObjLink());
         else

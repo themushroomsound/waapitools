@@ -1,10 +1,12 @@
 // requires autobahn
 
 // Base class for all wwise objects
-class WwiseObject
+class WwiseObject extends GenericModel
 {
     constructor(basicInfo, waapiJS)
     {
+        super();
+
         for(let property in basicInfo)
             this[property] = basicInfo[property];
         // renaming id to guid
@@ -12,13 +14,6 @@ class WwiseObject
 
         this.waapiJS = waapiJS;
         this.parent = undefined;
-        this.views = [];
-    }
-
-    refreshViews()
-    {
-        for(let i=0; i < this.views.length; i++)
-            this.views[i].refresh();
     }
 
     fetchWwiseData()
