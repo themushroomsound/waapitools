@@ -18,6 +18,10 @@ class WwiseObject extends GenericModel
 
     fetchWwiseData()
     {
+        if(!this.waapiJS) {
+            console.error("Wwise Object models need a waapi connection manager");
+            return;
+        }        
         console.log("Initializing " + this.path);
         return this.fetchWwiseParentData();
     }

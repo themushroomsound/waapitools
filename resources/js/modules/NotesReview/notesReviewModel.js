@@ -93,14 +93,23 @@ var paths = [
 ];
 
 
-class NotesReview
+class NotesReview extends GenericModel
 {
     constructor(waapiJS)
     {
+        super();
+        console.log("Building Notes Review");
+
         this.waapiJS = waapiJS;
         this.objectsWithNotes = [];
+    }
 
-        console.log("Building Notes Review");
+    fetchData()
+    {
+        if(!this.waapiJS) {
+            console.error("Notes Review model needs a waapi connection manager");
+            return;
+        }
 
         var query = {
             from:{path:paths},
@@ -110,11 +119,15 @@ class NotesReview
         };
 
         var notesReview = this;
-        this.waapiJS.queryObjects(query).then(function(res) {
+        var waapiJS = this.waapiJS;
+        // get ALL ZE OBJECTS like a brute
+        return this.waapiJS.queryObjects(query).then(function(res) {
             var allObjects = res.kwargs.return;
-            for(var i=0; i<allObjects.length; i++) {
-                if(allObjects[i].notes != "") {
-                    var newObject = new WwiseObject(allObjects[i]);
+            var nbAllObjects = allObjects.length;
+            // keep only objects with notes
+            for( let i=0; i<nbAllObjects; i++ ) {
+                if(allObjects[i].notes != "" && !allObjects[i].path.includes("Factory Items")) {
+                    var newObject = new WwiseObject(allObjects[i], waapiJS);
                     notesReview.objectsWithNotes.push(newObject);
                 }
             }

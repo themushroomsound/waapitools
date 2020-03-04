@@ -1,6 +1,9 @@
 var waapiJS;
 var activeView = "#home";
+
+// views
 var eventSoundbankFinderView, batchAttenuationsEditorView, attenuationView;
+
 var selectedObjects = [];
 
 // on page load
@@ -12,6 +15,7 @@ $().ready(function() {
     eventSoundbankFinderView = new EventSoundbankFinderView($("#eventSoundbankFinder"));
     batchAttenuationsEditorView = new BatchAttenuationsEditorView($("#batchAttEditor"));
     samplerKeymapperView = new SamplerKeymapperView($("#samplerKeymapper"));
+    notesReviewView = new NotesReviewView($("#notesReview"));
 
     // bind buttons
     $(".btnNav").click( btnNav_onClick );
@@ -48,6 +52,13 @@ function onWaapiJSConnected() {
     });
     waapiJS.subscribeSelectionChanged(onSelectionChanged);
     onSelectionChanged();
+
+    // populate notes review
+    var notesReviewModel = new NotesReview(waapiJS);
+    notesReviewModel.fetchData().then(function() {
+        console.log("Done initializing notes review");
+        notesReviewView.setModel(notesReviewModel);
+    });
 }
 
 // on wwise selection changed
