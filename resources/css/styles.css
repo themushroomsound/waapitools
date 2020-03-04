@@ -453,3 +453,11 @@ h3#curveType.FocusUsage {
 .pianoKeyboard .key.white.root, .pianoKeyboard .key.black.root {
     background-color: #ffee66;
 }
+
+
+/* NOTES REVIEW */
+
+table.notes td.notes span.todo {
+    color: #FFF;
+    background-color: #b93333;
+}

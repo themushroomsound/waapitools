@@ -26,7 +26,8 @@ class NotesReviewView extends GenericView
             for(let index in objectsWithNotes ) {
                 var newRow = $("#template_notesRow").contents().clone();
                 newRow.find(".objectName").append( objectsWithNotes[index].getObjLink(true) );
-                newRow.find(".notes").text( objectsWithNotes[index].notes );
+                var notes = objectsWithNotes[index].notes.replace("TODO", '<span class="todo">TODO</span>');
+                newRow.find(".notes").html( notes );
                 newRow.appendTo(this.childrenTable);
             }
         }
