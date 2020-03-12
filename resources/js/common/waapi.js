@@ -21,7 +21,7 @@ class WwiseObject extends GenericModel
         if(!this.waapiJS) {
             console.error("Wwise Object models need a waapi connection manager");
             return;
-        }        
+        }
         console.log("Initializing " + this.path);
         return this.fetchWwiseParentData();
     }
@@ -41,13 +41,24 @@ class WwiseObject extends GenericModel
         });
     }
 
-    getChildren()
+    getChildren(recursive = false)
+    {
+        var filter = recursive ? "descendants" : "children";
+        var query = {
+            from:{id:[this.guid]},
+            transform:[{select:[filter]}]
+        };
+        return this.waapiJS.queryObjects(query).then(function(res) {
+            return res;
+        });
+    }
+
+    getReferences()
     {
         var query = {
             from:{id:[this.guid]},
-            transform:[{select:['children']}]
+            transform:[{select:['referencesTo']}]
         };
-        var wwiseObject = this;
         return this.waapiJS.queryObjects(query).then(function(res) {
             return res;
         });
@@ -162,11 +173,11 @@ class WwiseActorMixerObject extends WwiseObject
         this.childrenObjects = [];
     }
 
-    fetchWwiseData()
+    fetchWwiseData(recursiveChildren = false)
     {
         var wwiseActorMixerObject = this;
         return super.fetchWwiseData().then(function() {
-            return wwiseActorMixerObject.getChildren().then(function(res) {
+            return wwiseActorMixerObject.getChildren(recursiveChildren).then(function(res) {
                 wwiseActorMixerObject.childrenToFetch = res.kwargs.return;
                 return wwiseActorMixerObject.fetchNextChildObject();
             });
@@ -338,7 +349,7 @@ class WwiseAudioFileSource extends WwiseObject
                 getCrossChannelPeaks: true
             };
             wwiseAudioFileSource.waapiJS.query( "ak.wwise.core.audioSourcePeaks.getMinMaxPeaksInTrimmedRegion", query ).then( function(res) {
-                console.log("Fetched minmaxpeaks for SoundBank " + wwiseAudioFileSource.guid);
+                console.log("Fetched minmaxpeaks for audio source " + wwiseAudioFileSource.guid);
                 console.log("Peaks: ", res);
             });
         });

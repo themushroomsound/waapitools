@@ -13,11 +13,21 @@ class WwiseObjectView extends GenericView
 
     refresh()
     {
-        super.refresh();
+        this.reset();
+        if( !this.wwiseObject )
+            return;
+        this.populate();
+    }
 
-        if( this.wwiseObject )
-            $(this.htmlElement).find(".name").html(this.wwiseObject.getObjLink());
-        else
-            $(this.htmlElement).find(".name").html("none");
+    reset()
+    {
+        $(this.htmlElement).find(".name").html("none");
+    }
+
+    populate()
+    {
+        if( !this.wwiseObject )
+            return;
+        $(this.htmlElement).find(".name").html(this.wwiseObject.getObjLink());
     }
 }

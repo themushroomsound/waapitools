@@ -24,6 +24,7 @@ class SamplerKeymapperView extends WwiseObjectView
         this.refresh();
     }
 
+    // TODO: reset/populate instead of refresh
     refresh()
     {
         super.refresh();

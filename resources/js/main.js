@@ -2,7 +2,11 @@ var waapiJS;
 var activeView = "#home";
 
 // views
-var eventSoundbankFinderView, batchAttenuationsEditorView, attenuationView;
+var eventSoundbankFinderView,
+    batchAttenuationsEditorView,
+    attenuationView,
+    notesReviewView,
+    renamerView;
 
 var selectedObjects = [];
 
@@ -16,6 +20,7 @@ $().ready(function() {
     batchAttenuationsEditorView = new BatchAttenuationsEditorView($("#batchAttEditor"));
     samplerKeymapperView = new SamplerKeymapperView($("#samplerKeymapper"));
     notesReviewView = new NotesReviewView($("#notesReview"));
+    renamerView = new RenamerView($("#renamer"));
 
     // bind buttons
     $(".btnNav").click( btnNav_onClick );
@@ -104,6 +109,19 @@ function onSelectionChanged(args, kwargs, details) {
                 samplerKeyMapper.fetchWwiseData().then(function() {
                     console.log("Done initializing " + samplerKeyMapper.path);
                     samplerKeymapperView.setWwiseObject(samplerKeyMapper);
+                });
+            }
+        }
+
+        // Active view is Sampler Keymapper
+        else if( activeView == "#renamer" )
+        {
+            if( res[0].category == "Actor-Mixer Hierarchy")
+            {
+                var renamer = new Renamer(res[0], waapiJS);
+                renamer.fetchWwiseData().then(function() {
+                    console.log("Done initializing " + renamer.path);
+                    renamerView.setWwiseObject(renamer);
                 });
             }
         }

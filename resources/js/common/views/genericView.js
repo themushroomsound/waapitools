@@ -3,6 +3,7 @@ class GenericView
     constructor(htmlElement)
     {
         this.htmlElement = htmlElement;
+        //this.refresh();
     }
 
     setObject(object)
@@ -24,6 +25,17 @@ class GenericView
     }
 
     refresh()
+    {
+        reset();
+        populate();
+    }
+
+    reset()
+    {
+
+    }
+
+    populate()
     {
 
     }

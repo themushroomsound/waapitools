@@ -3,6 +3,7 @@ class NotesReviewView extends GenericView
     constructor(htmlElement)
     {
         super(htmlElement);
+        // TODO: rename childrenTable, these are not children
         this.childrenTable = $(this.htmlElement).find(".notes");
     }
 

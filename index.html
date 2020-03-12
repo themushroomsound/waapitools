@@ -21,7 +21,8 @@
             <a href="#eventSoundbankFinder" class="btnNav">event soundbank finder</a> |
             <a href="#batchAttEditor" class="btnNav">batch attenuations editor</a> |
             <a href="#samplerKeymapper" class="btnNav">sampler keymapper</a> |
-            <a href="#notesReview" class="btnNav">notes review</a>
+            <a href="#notesReview" class="btnNav">notes review</a> |
+            <a href="#renamer" class="btnNav">renamer</a>
         </nav>
 
         <!-- HOME -->
@@ -221,7 +222,7 @@
             </div>
         </section>
 
-        <!-- EVENT SOUNDBANK FINDER -->
+        <!-- NOTES REVIEW -->
 
         <!-- Templates -->
         <template id="template_notesRow">
@@ -236,6 +237,33 @@
             <h2>notes review</h2>
             <h3>Found <span class="nbNotes"></span> object(s) including notes:</h3>
             <table class="notes"><tr><td>none</td></tr></table>
+        </section>
+
+
+        <!-- RENAMER -->
+
+        <!-- Templates -->
+        <template id="template_wwiseObjectRow">
+            <tr>
+                <td class="type"></td>
+                <td class="name objectName"></td>
+            </tr>
+        </template>
+
+        <!-- Static markup -->
+        <section id="renamer">
+            <h2>renamer</h2>
+            <h3>Selected object: <span class="name">none</span></h3>
+            <p id="findReplaceInputs">
+                <label for="find">Find: </label>
+                <input type="text" name="find" />
+                <label for="find">Replace with: </label>
+                <input type="text" name="replace" />
+            </p>
+            <h3>Events:</h3>
+            <table id="references"><tr><td>none</td></tr></table>
+            <h3>Children:</h3>
+            <table id="children"><tr><td>none</td></tr></table>
         </section>
 
         <!-- scripts at bottom -->
@@ -255,6 +283,8 @@
         <script src="resources/js/modules/SamplerKeymapper/samplerKeymapperView.js"></script>
         <script src="resources/js/modules/NotesReview/notesReviewModel.js"></script>
         <script src="resources/js/modules/NotesReview/notesReviewView.js"></script>
+        <script src="resources/js/modules/Renamer/renamerModel.js"></script>
+        <script src="resources/js/modules/Renamer/renamerView.js"></script>
         <script src="resources/js/main.js"></script>
     </body>
 </html>
