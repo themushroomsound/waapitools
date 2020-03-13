@@ -9,6 +9,7 @@ class WwiseObject extends GenericModel
 
         for(let property in basicInfo)
             this[property] = basicInfo[property];
+            
         // renaming id to guid
         this.guid = basicInfo.id;
 
@@ -116,6 +117,22 @@ class WwiseObject extends GenericModel
         });
     }
 
+    commitName()
+    {
+        if( !this.guid ) {
+            console.log("No wwise object " + this.name + " exist yet, can't set name");
+            return new Promise(function(resolve, reject) { reject(); });
+        }
+
+        let query = {
+            object: this.guid,
+            value: this.name
+        }
+
+        var wwiseObject = this;
+        return this.waapiJS.query(ak.wwise.core.object.setName, query);
+    }
+
     commitProperty(propertyName)
     {
         if( !this.guid ) {
@@ -157,6 +174,18 @@ class WwiseObject extends GenericModel
 
         var wwiseObject = this;
         return this.waapiJS.query(ak.wwise.core.object.setNotes, query);
+    }
+
+    searchAndReplaceInName(find, repl)
+    {
+        if(!this.hasOwnProperty('oldName'))
+            this.oldName = this.name;
+
+        if(find == "")
+            this.name = this.oldName;
+        else
+            this.name = this.oldName.replace(find, repl);
+        this.refreshViews();
     }
 }
 

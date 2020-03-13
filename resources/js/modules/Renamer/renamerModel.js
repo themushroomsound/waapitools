@@ -7,6 +7,11 @@ class Renamer extends WwiseActorMixerObject
 
         this.referencesToFetch = [];
         this.referenceObjects = [];
+
+        this.objectsToCommit = [];
+
+        // to rename self without refreshing whole renamer view:
+        this.selfObject = new WwiseActorMixerObject(basicInfo, waapiJS);
     }
 
     fetchWwiseData()
@@ -41,4 +46,43 @@ class Renamer extends WwiseActorMixerObject
         })
     }
 
+    searchAndReplaceInNames(find, repl)
+    {
+        this.selfObject.searchAndReplaceInName(find, repl);
+        for(let i=0; i<this.childrenObjects.length; i++)
+            this.childrenObjects[i].searchAndReplaceInName(find, repl);
+        for(let i=0; i<this.referenceObjects.length; i++)
+            this.referenceObjects[i].searchAndReplaceInName(find, repl);
+    }
+
+    commitNames()
+    {
+        console.log("committing selected object, its children and events to wwise");
+        let renamer = this;
+
+        // commit wwise object, then...
+        return this.selfObject.commitName().then(function() {
+            // commit its children and references
+            for(let i=0; i < renamer.childrenObjects.length; i++)
+                renamer.objectsToCommit.push(renamer.childrenObjects[i]);
+            for(let i=0; i < renamer.referenceObjects.length; i++)
+                renamer.objectsToCommit.push(renamer.referenceObjects[i]);
+            return renamer.commitNextObjectName();
+        }).then(function() {
+            console.log("all committed");
+        });;
+    }
+
+    commitNextObjectName()
+    {
+        if( this.objectsToCommit.length < 1) {
+            console.log("All objects committed for " + this.name);
+            return;
+        }
+        let nextObjectToCommit = this.objectsToCommit.shift();
+        let renamer = this;
+        return nextObjectToCommit.commitName().then(function() {
+            return renamer.commitNextObjectName();
+        });
+    }
 }

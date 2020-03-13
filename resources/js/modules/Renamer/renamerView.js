@@ -9,6 +9,8 @@ class RenamerView extends WwiseObjectView
     {
         super(htmlElement);
 
+        // mini view for wwise object name
+        this.nameView = new WwiseObjectView($(this.htmlElement).find("#selfObjectName"));
         // referencing events list
         this.referencesTable = $(this.htmlElement).find("#references tbody");
         // children list
@@ -17,7 +19,22 @@ class RenamerView extends WwiseObjectView
         this.findReplaceInputs = $(this.htmlElement).find("#findReplaceInputs");
         this.findInput = $(this.htmlElement).find("#findReplaceInputs #find");
         this.replaceInput = $(this.htmlElement).find("#findReplaceInputs #replace");
+        // commit button
+        this.commitButton = new GenericButton($(this.htmlElement).find("#btn_commit"));
+
+        let renamer = this;
+        this.commitButton.setClick(function(e) {
+            renamer.onBtnCommitClicked(e);
+            return false;
+        });
+
         this.refresh();
+    }
+
+    setWwiseObject(wwiseObject)
+    {
+        super.setWwiseObject(wwiseObject);
+        this.nameView.setWwiseObject(wwiseObject.selfObject);
     }
 
     reset()
@@ -52,8 +69,11 @@ class RenamerView extends WwiseObjectView
             var newRow = $("#template_wwiseObjectRow").contents().clone();
             newRow.find(".type").append( data[index].type );
             newRow.find(".objectName").append( data[index].getObjLink(false) );
-            newRow.find(".newObjectName").append( data[index].getObjLink(false) );
+            //newRow.find(".newObjectName").append( data[index].getObjLink(false) );
             newRow.appendTo(table);
+
+            var newPendingChangeView = new RenamerPendingChangeView(newRow.find(".pendingObject"));
+            newPendingChangeView.setWwiseObject(data[index]);
         }
     }
 
@@ -62,5 +82,13 @@ class RenamerView extends WwiseObjectView
         let findStr = this.findInput.val();
         let replStr = this.replaceInput.val();
         console.log("replacing [" + findStr + "] with [" + replStr + "]");
+
+        this.wwiseObject.searchAndReplaceInNames(findStr, replStr);
+    }
+
+    onBtnCommitClicked(e)
+    {
+        this.wwiseObject.commitNames();
+        this.commitButton.disable();
     }
 }

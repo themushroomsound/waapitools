@@ -247,14 +247,17 @@
             <tr>
                 <td class="type"></td>
                 <td class="name objectName"></td>
-                <td class="name newObjectName"><span></span></td>
+                <td class="pendingObject"><span class="name newObjectName"></span></td>
             </tr>
         </template>
 
         <!-- Static markup -->
         <section id="renamer">
             <h2>renamer</h2>
-            <h3>Selected object: <span class="name">none</span></h3>
+            <div id="editors">
+                <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
+            </div>
+            <h3 id="selfObjectName">Selected object: <span class="name">none</span></h3>
             <p id="findReplaceInputs">
                 <label for="find">Find: </label>
                 <input type="text" name="find" id="find" />
