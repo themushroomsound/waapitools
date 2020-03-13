@@ -10,16 +10,18 @@ class NotesReviewView extends GenericView
     setModel(notesReviewModel)
     {
         this.notesReviewModel = notesReviewModel;
-        this.refresh();
+        super.setObject(notesReviewModel);
     }
 
-    refresh()
+    reset()
     {
+        super.reset();
         this.childrenTable.html("<tr><td>none</td></tr>");
+    }
 
-        if( !this.notesReviewModel )
-            return;
-
+    populate()
+    {
+        super.populate();
         var objectsWithNotes = this.notesReviewModel.objectsWithNotes;
         if( objectsWithNotes.length > 0 )
         {

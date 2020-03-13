@@ -26,8 +26,10 @@ class GenericView
 
     refresh()
     {
-        reset();
-        populate();
+        this.reset();
+        if( !this.object )
+            return;
+        this.populate();
     }
 
     reset()
