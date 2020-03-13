@@ -509,6 +509,7 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         return false;
     }
 
+    // TODO: what is this doing in the view? shouldn't it be in the model?
     interpolate()
     {
         this.wwiseObject.removeUncommittedAttenuations();
