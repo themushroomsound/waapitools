@@ -247,6 +247,7 @@
             <tr>
                 <td class="type"></td>
                 <td class="name objectName"></td>
+                <td class="name newObjectName"><span></span></td>
             </tr>
         </template>
 
@@ -256,14 +257,32 @@
             <h3>Selected object: <span class="name">none</span></h3>
             <p id="findReplaceInputs">
                 <label for="find">Find: </label>
-                <input type="text" name="find" />
+                <input type="text" name="find" id="find" />
                 <label for="find">Replace with: </label>
-                <input type="text" name="replace" />
+                <input type="text" name="replace" id="replace" />
             </p>
             <h3>Events:</h3>
-            <table id="references"><tr><td>none</td></tr></table>
+            <table id="references">
+                <thead>
+                    <tr>
+                        <td>Type</td><td>Current name</td><td>Pending name</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>-</td><td>-</td><td>-</td></tr>
+                </tbody>
+            </table>
             <h3>Children:</h3>
-            <table id="children"><tr><td>none</td></tr></table>
+            <table id="children">
+                <thead>
+                    <tr>
+                        <td>Type</td><td>Current name</td><td>Pending name</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>-</td><td>-</td><td>-</td></tr>
+                </tbody>
+            </table>
         </section>
 
         <!-- scripts at bottom -->
