@@ -1,5 +1,6 @@
 var waapiJS;
 var activeView = "#home";
+var loadingScreen;
 
 // views
 var eventSoundbankFinderView,
@@ -21,6 +22,9 @@ $().ready(function() {
     samplerKeymapperView = new SamplerKeymapperView($("#samplerKeymapper"));
     notesReviewView = new NotesReviewView($("#notesReview"));
     renamerView = new RenamerView($("#renamer"));
+
+    // bind loading screen
+    loadingScreen = $("#loading");
 
     // bind buttons
     $(".btnNav").click( btnNav_onClick );
@@ -118,10 +122,12 @@ function onSelectionChanged(args, kwargs, details) {
         {
             if( res[0].category == "Actor-Mixer Hierarchy")
             {
+                loadingScreen.show();
                 var renamer = new Renamer(res[0], waapiJS);
                 renamer.fetchWwiseData().then(function() {
                     console.log("Done initializing " + renamer.path);
                     renamerView.setWwiseObject(renamer);
+                    loadingScreen.hide();
                 });
             }
         }

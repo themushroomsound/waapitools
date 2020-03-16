@@ -120,6 +120,27 @@ select, input {
     z-index: 99;
 }
 
+/* LOADING OVERLAY */
+
+#loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.5);
+    display: none;
+}
+
+#loading p {
+    font-family: 'Alice', serif;
+    font-size: 4em;
+    color: black;
+    text-align: center;
+    margin-top: 50vh; /* poussé de la moitié de hauteur de viewport */
+    transform: translateY(-50%); /* tiré de la moitié de sa propre hauteur */
+}
+
 /* BATCH ATTENUATIONS EDITOR */
 
 #batchAttEditor {
