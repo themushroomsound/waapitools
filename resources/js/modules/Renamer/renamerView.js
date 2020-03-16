@@ -43,6 +43,7 @@ class RenamerView extends WwiseObjectView
         this.findReplaceInputs.hide();
         this.childrenTable.html("<tr><td>-</td><td>-</td><td>-</td></tr>");
         this.referencesTable.html("<tr><td>-</td><td>-</td><td>-</td></tr>");
+        this.commitButton.disable();
     }
 
     populate()
@@ -56,6 +57,8 @@ class RenamerView extends WwiseObjectView
 
         this.populateTable(this.childrenTable, this.wwiseObject.childrenObjects);
         this.populateTable(this.referencesTable, this.wwiseObject.referenceObjects);
+
+        this.commitButton.enable();
     }
 
     populateTable(table, data)

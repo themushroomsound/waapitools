@@ -6,15 +6,30 @@ class WwiseObject extends GenericModel
     constructor(basicInfo, waapiJS)
     {
         super();
+        this.waapiJS = waapiJS;
+        this.init(basicInfo);
+    }
 
+    init(basicInfo)
+    {
         for(let property in basicInfo)
             this[property] = basicInfo[property];
-            
-        // renaming id to guid
-        this.guid = basicInfo.id;
 
-        this.waapiJS = waapiJS;
+        this.guid = basicInfo.id // renaming id to guid
         this.parent = undefined;
+    }
+
+    reset()
+    {
+        var query = {from:{id:[this.guid]}};
+        let wwiseObject = this;
+        return this.waapiJS.queryObjects(query).then(function(res) {
+            // TODO: manage query failure
+            wwiseObject.init(res.kwargs.return[0]);
+            return wwiseObject.fetchWwiseData().then(function() {
+                wwiseObject.refreshViews();
+            });
+        });
     }
 
     fetchWwiseData()
@@ -23,7 +38,7 @@ class WwiseObject extends GenericModel
             console.error("Wwise Object models need a waapi connection manager");
             return;
         }
-        console.log("Initializing " + this.path);
+        console.log("Fetching wwise data " + this.path);
         return this.fetchWwiseParentData();
     }
 
@@ -196,7 +211,11 @@ class WwiseActorMixerObject extends WwiseObject
     {
         super(basicInfo, waapiJS);
         console.log("Building Wwise Actor-Mixer Object " + this.guid);
+    }
 
+    init(basicInfo)
+    {
+        super.init(basicInfo);
         this.childrenToFetch = [];
         this.childrenToCommit = [];
         this.childrenObjects = [];

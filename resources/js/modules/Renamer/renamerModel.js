@@ -4,14 +4,23 @@ class Renamer extends WwiseActorMixerObject
     {
         super(basicInfo, waapiJS);
         console.log("Building Renamer from Wwise Object " + this.guid + " - " + this.name);
+    }
 
+    init(basicInfo)
+    {
+        super.init(basicInfo);
         this.referencesToFetch = [];
         this.referenceObjects = [];
-
         this.objectsToCommit = [];
 
         // to rename self without refreshing whole renamer view:
         this.selfObject = new WwiseActorMixerObject(basicInfo, waapiJS);
+    }
+
+    reset()
+    {
+        super.reset();
+        this.selfObject.reset();
     }
 
     fetchWwiseData()
@@ -70,6 +79,7 @@ class Renamer extends WwiseActorMixerObject
             return renamer.commitNextObjectName();
         }).then(function() {
             console.log("all committed");
+            renamer.reset();
         });;
     }
 
