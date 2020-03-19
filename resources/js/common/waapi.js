@@ -32,6 +32,28 @@ class WwiseObject extends GenericModel
         });
     }
 
+    fetchParents(/* recursive = true*/)
+    {
+        var query = {
+            from:{id:[this.guid]},
+            transform:[{select:['parent']}]
+        };
+        var wwiseObject = this;
+        return this.waapiJS.queryObjects(query).then(function(res) {
+            if( res.kwargs.return.length > 0 ) {
+                wwiseObject.parent = new WwiseObject(res.kwargs.return[0], wwiseObject.waapiJS);
+                return wwiseObject.parent.fetchParents();
+                /*
+                if(recursive)
+                    return wwiseObject.parent.fetchWwiseData();
+                else
+                    return new Promise(function(resolve, reject) { resolve(); });
+                */
+            }
+        });
+    }
+
+/*
     fetchWwiseData()
     {
         if(!this.waapiJS) {
@@ -79,7 +101,7 @@ class WwiseObject extends GenericModel
             return res;
         });
     }
-
+*/
     getSoundBankInclusions()
     {
         // get soundbanks directly referencing this object
