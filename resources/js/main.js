@@ -97,7 +97,7 @@ function onSelectionChanged(args, kwargs, details) {
             if( res[0].category == "Attenuations" && ( res[0].type == "Folder" || res[0].type == "WorkUnit" ))
             {
                 var folder = new WwiseAttenuationsFolder(res[0], waapiJS);
-                folder.fetchWwiseData().then(function() {
+                folder.fetchChildren().then(function() {
                     console.log("Done initializing " + folder.path);
                     batchAttenuationsEditorView.setWwiseObject(folder);
                 });

@@ -426,55 +426,54 @@ class WwiseAttenuationsFolder extends WwiseObject
 
         console.log("Building Wwise Attenuations Folder " + this.guid + " - " + this.name);
 
-        this.childrenToFetch = [];
         this.childrenToCommit = [];
-        this.attenuations = [];
     }
 
-    fetchWwiseData()
+    fetchChildren()
     {
         var wwiseAttenuationsFolder = this;
-        return super.fetchWwiseData().then(function() {
-            return wwiseAttenuationsFolder.getChildren().then(function(res) {
-                wwiseAttenuationsFolder.childrenToFetch = res.kwargs.return;
-                return wwiseAttenuationsFolder.fetchNextChildAttenuation();
-            });
-        }).then(function() {
+        return super.fetchChildren().then(function() {
             return wwiseAttenuationsFolder.sortChildrenByRadius();
-        });
+        })
     }
 
-    fetchNextChildAttenuation()
+    // override to allow fetching each attenuation parents & data before fetching next
+    fetchNextChildObject()
     {
         if( this.childrenToFetch.length < 1 ) return;
         let nextChild = this.childrenToFetch.shift();
+        let newAttenuation = this.makeChildObject(nextChild);
+        this.childrenObjects.push(newAttenuation);
+
         let wwiseAttenuationsFolder = this;
-        if( nextChild.type == "Attenuation") {
-            let newAttenuation = new WwiseAttenuation(nextChild, this.waapiJS);
-            this.attenuations.push(newAttenuation);
-            return newAttenuation.fetchWwiseData().then(function() {
-                return wwiseAttenuationsFolder.fetchNextChildAttenuation();
-            })
-        }
-        // TODO: CHECK IF NECESSARY
-        return wwiseAttenuationsFolder.fetchNextChildAttenuation();
+        return newAttenuation.fetchParents().then(function() {
+            return newAttenuation.fetchWwiseData();
+        }).then(function() {
+            return wwiseAttenuationsFolder.fetchNextChildObject();
+        })
+    }
+
+    // override makeChildObject to create WwiseAttenuations
+    makeChildObject(wwiseObject)
+    {
+        return new WwiseAttenuation(wwiseObject, this.waapiJS);
     }
 
     getShortest()
     {
         let shortest = undefined;
-        for( let i=0; i < this.attenuations.length; i++ )
-            if( shortest == undefined || this.attenuations[i]["RadiusMax"] < shortest["RadiusMax"] )
-                shortest = this.attenuations[i];
+        for( let i=0; i < this.childrenObjects.length; i++ )
+            if( shortest == undefined || this.childrenObjects[i]["RadiusMax"] < shortest["RadiusMax"] )
+                shortest = this.childrenObjects[i];
         return shortest;
     }
 
     getLongest()
     {
         let longest = undefined;
-        for( let i=0; i < this.attenuations.length; i++ )
-            if( longest == undefined || this.attenuations[i]["RadiusMax"] > longest["RadiusMax"] )
-                longest = this.attenuations[i];
+        for( let i=0; i < this.childrenObjects.length; i++ )
+            if( longest == undefined || this.childrenObjects[i]["RadiusMax"] > longest["RadiusMax"] )
+                longest = this.childrenObjects[i];
         return longest;
     }
 
@@ -485,12 +484,12 @@ class WwiseAttenuationsFolder extends WwiseObject
         let errors = [];
 
         // checks whether folder is empty
-        if( this.attenuations.length < 1) {
+        if( this.childrenObjects.length < 1) {
             return [ { name: "EmptyFolderError" } ];
         }
 
         // checks whether the minimum of 2 attenuations is present
-        if( this.attenuations.length < 2) {
+        if( this.childrenObjects.length < 2) {
             let newError = {
                 name: "LessThan2AttsError",
             }
@@ -517,9 +516,9 @@ class WwiseAttenuationsFolder extends WwiseObject
         }
 
         // check each attenuation
-        for( let i=0; i < this.attenuations.length; i++ )
+        for( let i=0; i < this.childrenObjects.length; i++ )
         {
-            let curAtt = this.attenuations[i];
+            let curAtt = this.childrenObjects[i];
 
             // check name has a valid suffix
             if( curAtt.checkNameRadiusSuffixIndex() < 0)
@@ -579,24 +578,24 @@ class WwiseAttenuationsFolder extends WwiseObject
     sortChildrenByRadius()
     {
         console.log("sorting");
-        this.attenuations.sort(function(a,b) {
+        this.childrenObjects.sort(function(a,b) {
             return a["RadiusMax"] - b["RadiusMax"];
         });
     }
 
     existsInFolder(attName)
     {
-        for( let i=0; i < this.attenuations.length; i++ )
-            if( this.attenuations[i].name == attName )
+        for( let i=0; i < this.childrenObjects.length; i++ )
+            if( this.childrenObjects[i].name == attName )
                 return true;
         return false;
     }
 
     getAttenuationByName(attName)
     {
-        for( let i=0; i < this.attenuations.length; i++ )
-            if( this.attenuations[i].name == attName )
-                return this.attenuations[i];
+        for( let i=0; i < this.childrenObjects.length; i++ )
+            if( this.childrenObjects[i].name == attName )
+                return this.childrenObjects[i];
         return undefined;
     }
 
@@ -604,16 +603,16 @@ class WwiseAttenuationsFolder extends WwiseObject
     {
         let newAtt = new WwiseAttenuation(object, this.waapiJS);
         newAtt.parent = this;
-        this.attenuations.push(newAtt);
+        this.childrenObjects.push(newAtt);
         return newAtt;
     }
 
     removeUncommittedAttenuations()
     {
-        let i = this.attenuations.length;
+        let i = this.childrenObjects.length;
         while( i-- ) {
-            if( !this.attenuations[i].guid ) {
-                this.attenuations.splice(i, 1);
+            if( !this.childrenObjects[i].guid ) {
+                this.childrenObjects.splice(i, 1);
             }
         }
     }
@@ -678,20 +677,18 @@ class WwiseAttenuation extends WwiseObject
 
     fetchWwiseData()
     {
+        var query = {
+            from:{id:[this.guid]}
+        };
+        var options = {
+            return: ['@RadiusMax'] // TODO: fetch cone attenuation parameters
+        }
         var wwiseAttenuation = this;
-        return super.fetchWwiseData().then(function() {
-            var query = {
-                from:{id:[wwiseAttenuation.guid]}
-            };
-            var options = {
-                return: ['@RadiusMax'] // TODO: fetch cone attenuation parameters
-            }
-            return wwiseAttenuation.waapiJS.queryObjects(query, options).then(function(res) {
-                console.log("fetchWwiseAttData", res);
-                wwiseAttenuation.RadiusMax = res.kwargs.return[0]["@RadiusMax"];
-                wwiseAttenuation.curvesToFetch = wwiseAttenuation.curveTypes;
-                return wwiseAttenuation.fetchNextAttenuationCurve();
-            });
+        return this.waapiJS.queryObjects(query, options).then(function(res) {
+            console.log("fetchWwiseAttData", res);
+            wwiseAttenuation.RadiusMax = res.kwargs.return[0]["@RadiusMax"];
+            wwiseAttenuation.curvesToFetch = wwiseAttenuation.curveTypes;
+            return wwiseAttenuation.fetchNextAttenuationCurve();
         });
     }
 

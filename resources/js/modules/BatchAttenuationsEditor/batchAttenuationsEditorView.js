@@ -424,8 +424,8 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         }
 
         // display attenuation views
-        for( let i=0; i < this.wwiseObject.attenuations.length; i++ )
-            this.addAttenuationView(i, this.wwiseObject.attenuations[i]);
+        for( let i=0; i < this.wwiseObject.childrenObjects.length; i++ )
+            this.addAttenuationView(i, this.wwiseObject.childrenObjects[i]);
 
         $(this.htmlElement).find("#attenuationsList").attr("class", this.displayOption);
         this.commitButton.enable();
@@ -441,7 +441,7 @@ class BatchAttenuationsEditorView extends WwiseObjectView
         this.attenuationViews.push(newAttenuationView);
 
         if( index == 0 ) newElement.addClass("first");
-        if( index == this.wwiseObject.attenuations.length-1 ) newElement.addClass("last");
+        if( index == this.wwiseObject.childrenObjects.length-1 ) newElement.addClass("last");
 
         // set attenuation views positions according to display option
         if( this.displayOption == "list" )
@@ -452,8 +452,8 @@ class BatchAttenuationsEditorView extends WwiseObjectView
             let left, top;
             if( this.displayOption == "cascadeEqual" )
             {
-                left = index * (49 / this.wwiseObject.attenuations.length);
-                top = index * (150 / this.wwiseObject.attenuations.length);
+                left = index * (49 / this.wwiseObject.childrenObjects.length);
+                top = index * (150 / this.wwiseObject.childrenObjects.length);
             }
             else // this.displayOption == "cascadeProportional"
             {
