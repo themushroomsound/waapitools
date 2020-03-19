@@ -34,12 +34,8 @@ class WwiseObject extends GenericModel
 
     fetchParents(/* recursive = true*/)
     {
-        var query = {
-            from:{id:[this.guid]},
-            transform:[{select:['parent']}]
-        };
         var wwiseObject = this;
-        return this.waapiJS.queryObjects(query).then(function(res) {
+        return this.waapiJS.queryFamily(this.guid, "parent").then(function(res) {
             if( res.kwargs.return.length > 0 ) {
                 wwiseObject.parent = new WwiseObject(res.kwargs.return[0], wwiseObject.waapiJS);
                 return wwiseObject.parent.fetchParents();
@@ -53,44 +49,34 @@ class WwiseObject extends GenericModel
         });
     }
 
+    fetchChildren(recursive = false)
+    {
+        this.childrenToFetch = [];
+        this.childrenObjects = [];
+        let filter = recursive ? "descendants" : "children";
+        let wwiseObject = this;
+        return this.waapiJS.queryFamily(this.guid, filter).then(function(res) {
+            wwiseObject.childrenToFetch = res.kwargs.return;
+            return wwiseObject.fetchNextChildObject();
+        });
+    }
+
+    fetchNextChildObject()
+    {
+        if( this.childrenToFetch.length < 1 ) return;
+        let nextChild = this.childrenToFetch.shift();
+        let newWwiseObject = this.makeChildObject(nextChild);
+        this.childrenObjects.push(newWwiseObject);
+        return this.fetchNextChildObject();
+    }
+
+    // to be overriden by classes that need a specific class of child objects
+    makeChildObject(wwiseObject)
+    {
+        return new WwiseObject(wwiseObject, this.waapiJS);
+    }
+
 /*
-    fetchWwiseData()
-    {
-        if(!this.waapiJS) {
-            console.error("Wwise Object models need a waapi connection manager");
-            return;
-        }
-        console.log("Fetching wwise data " + this.path);
-        return this.fetchWwiseParentData();
-    }
-
-    fetchWwiseParentData()
-    {
-        var query = {
-            from:{id:[this.guid]},
-            transform:[{select:['parent']}]
-        };
-        var wwiseObject = this;
-        return this.waapiJS.queryObjects(query).then(function(res) {
-            if( res.kwargs.return.length > 0 ) {
-                wwiseObject.parent = new WwiseObject(res.kwargs.return[0], wwiseObject.waapiJS);
-                return wwiseObject.parent.fetchWwiseData();
-            }
-        });
-    }
-
-    getChildren(recursive = false)
-    {
-        var filter = recursive ? "descendants" : "children";
-        var query = {
-            from:{id:[this.guid]},
-            transform:[{select:[filter]}]
-        };
-        return this.waapiJS.queryObjects(query).then(function(res) {
-            return res;
-        });
-    }
-
     getReferences()
     {
         var query = {
@@ -238,33 +224,7 @@ class WwiseActorMixerObject extends WwiseObject
     init(basicInfo)
     {
         super.init(basicInfo);
-        this.childrenToFetch = [];
         this.childrenToCommit = [];
-        this.childrenObjects = [];
-    }
-
-    fetchWwiseData(recursiveChildren = false)
-    {
-        var wwiseActorMixerObject = this;
-        return super.fetchWwiseData().then(function() {
-            return wwiseActorMixerObject.getChildren(recursiveChildren).then(function(res) {
-                wwiseActorMixerObject.childrenToFetch = res.kwargs.return;
-                return wwiseActorMixerObject.fetchNextChildObject();
-            });
-        })
-    }
-
-    fetchNextChildObject()
-    {
-        if( this.childrenToFetch.length < 1 ) return;
-        let nextChild = this.childrenToFetch.shift();
-        let wwiseActorMixerObject = this;
-
-        let newActorMixerObject = new WwiseActorMixerObject(nextChild, this.waapiJS);
-        this.childrenObjects.push(newActorMixerObject);
-        return newActorMixerObject.fetchWwiseData().then(function() {
-            return wwiseActorMixerObject.fetchNextChildObject();
-        })
     }
 }
 
@@ -1111,6 +1071,15 @@ class WaapiJS
                 options.return.push( minReturnFields[i] );
 
         return this.query(ak.wwise.core.object.get, query, options);
+    }
+
+    queryFamily(guid, selectType)
+    {
+        var query = {
+            from:{id:[guid]},
+            transform:[{select:[selectType]}]
+        };
+        return this.queryObjects(query)
     }
 
     querySelectedObjects()

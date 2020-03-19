@@ -6,27 +6,18 @@ class SamplerKeymapper extends WwiseBlendContainer
         console.log("Building Sampler Keymapper from Wwise Blend Container " + this.guid + " - " + this.name);
     }
 
-    fetchWwiseData()
+    fetchChildren()
     {
         var samplerKeymapper = this;
-        return super.fetchWwiseData().then(function() {
+        return super.fetchChildren().then(function() {
             samplerKeymapper.attemptMapping();
         })
     }
 
-    // override fetchNextChildObject to create SamplerKeymapperChildren
-    // instead of the more generic WwiseActorMixerObjects
-    fetchNextChildObject()
+    // override makeChildObject to create SamplerKeymapperChildren
+    makeChildObject(wwiseObject)
     {
-        if( this.childrenToFetch.length < 1 ) return;
-        let nextChild = this.childrenToFetch.shift();
-        let samplerKeymapper = this;
-
-        let newSamplerKeymapperChild = new SamplerKeymapperChild(nextChild, this.waapiJS);
-        this.childrenObjects.push(newSamplerKeymapperChild);
-        return newSamplerKeymapperChild.fetchWwiseData().then(function() {
-            return samplerKeymapper.fetchNextChildObject();
-        })
+        return new SamplerKeymapperChild(wwiseObject, this.waapiJS);
     }
 
     // checks whether mapping is possible

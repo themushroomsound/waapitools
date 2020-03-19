@@ -110,7 +110,7 @@ function onSelectionChanged(args, kwargs, details) {
             if( res[0].category == "Actor-Mixer Hierarchy" && ( res[0].type == "BlendContainer" ))
             {
                 var samplerKeyMapper = new SamplerKeymapper(res[0], waapiJS);
-                samplerKeyMapper.fetchWwiseData().then(function() {
+                samplerKeyMapper.fetchChildren().then(function() {
                     console.log("Done initializing " + samplerKeyMapper.path);
                     samplerKeymapperView.setWwiseObject(samplerKeyMapper);
                 });
