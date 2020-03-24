@@ -32,19 +32,16 @@ class WwiseObject extends GenericModel
         });
     }
 
-    fetchParents(/* recursive = true*/)
+    fetchParents(recursive = false)
     {
         var wwiseObject = this;
         return this.waapiJS.queryFamily(this.guid, "parent").then(function(res) {
             if( res.kwargs.return.length > 0 ) {
                 wwiseObject.parent = new WwiseObject(res.kwargs.return[0], wwiseObject.waapiJS);
-                return wwiseObject.parent.fetchParents();
-                /*
                 if(recursive)
-                    return wwiseObject.parent.fetchWwiseData();
+                    return wwiseObject.parent.fetchParents(recursive);
                 else
                     return new Promise(function(resolve, reject) { resolve(); });
-                */
             }
         });
     }
@@ -632,8 +629,8 @@ class WwiseAttenuationsFolder extends WwiseObject
             // commit notes, then...
             return wwiseAttenuationsFolder.commitNotes().then(function() {
                 // commit child attenuations
-                for(let i=0; i < wwiseAttenuationsFolder.attenuations.length; i++)
-                    wwiseAttenuationsFolder.childrenToCommit.push(wwiseAttenuationsFolder.attenuations[i]);
+                for(let i=0; i < wwiseAttenuationsFolder.childrenObjects.length; i++)
+                    wwiseAttenuationsFolder.childrenToCommit.push(wwiseAttenuationsFolder.childrenObjects[i]);
                 return wwiseAttenuationsFolder.commitNextChildAttenuation();
             });
         })
