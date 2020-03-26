@@ -60,7 +60,7 @@ class WwiseObject extends GenericModel
         });
     }
 
-    // override if reference object needs a particular initialization
+    // to be overriden if parent object needs a particular initialization
     processNewParentObject(parentObject)
     {
         this.parent = this.makeParentObject(parentObject);
@@ -120,7 +120,7 @@ class WwiseObject extends GenericModel
         });
     }
 
-    // override if reference object needs a particular initialization
+    // to be overriden if reference object needs a particular initialization
     processNewReferenceObject(refObject)
     {
         let newWwiseObject = this.makeReferenceObject(refObject);
@@ -243,11 +243,6 @@ class WwiseObject extends GenericModel
 // Base class for all wwise objects in the actor-mixer hierarchy
 class WwiseActorMixerObject extends WwiseObject
 {
-    constructor(basicInfo, waapiJS, debug = false)
-    {
-        super(basicInfo, waapiJS, debug);
-    }
-
     init(basicInfo)
     {
         super.init(basicInfo);
@@ -265,14 +260,6 @@ class WwiseBlendContainer extends WwiseActorMixerObject
 
 class WwiseEvent extends WwiseObject
 {
-    constructor(basicInfo, waapiJS, debug = false)
-    {
-        super(basicInfo, waapiJS, debug);
-
-        //this.childrenToFetch = [];
-        //this.actions = [];
-    }
-
 /*  Child actions not currently used
     fetchWwiseData()
     {
@@ -305,11 +292,6 @@ class WwiseEvent extends WwiseObject
 
 class WwiseAction extends WwiseObject
 {
-    constructor(basicInfo, waapiJS, debug = false)
-    {
-        super(basicInfo, waapiJS, debug);
-    }
-
     fetchWwiseData()
     {
         var wwiseAction = this;
@@ -387,11 +369,6 @@ class WwiseSound extends WwiseObject
 
 class WwiseAudioFileSource extends WwiseObject
 {
-    constructor(basicInfo, waapiJS, debug = false)
-    {
-        super(basicInfo, waapiJS, debug);
-    }
-
     fetchWwiseData()
     {
         var wwiseAudioFileSource = this;
