@@ -15,7 +15,7 @@ class WwiseObject extends GenericModel
     {
         let id = this.guid == undefined ? "{pending ID}" : this.guid;
         let name = this.name == undefined ? "no name" : this.name;
-        console.log("Building " + this.type + " object " + id + " - " + name);
+        console.log("Building " + this.type + " object " + id + " - " + name + " (as " + this.constructor.name + ")");
     }
 
     init(basicInfo)
@@ -47,16 +47,30 @@ class WwiseObject extends GenericModel
 
     fetchParents(recursive = false)
     {
-        var wwiseObject = this;
+        var self = this;
         return this.waapiJS.queryFamily(this.guid, "parent").then(function(res) {
             if( res.kwargs.return.length > 0 ) {
-                wwiseObject.parent = new WwiseObject(res.kwargs.return[0], wwiseObject.waapiJS);
-                if(recursive)
-                    return wwiseObject.parent.fetchParents(recursive);
-                else
-                    return new Promise(function(resolve, reject) { resolve(); });
+                return self.processNewParentObject(res.kwargs.return[0]).then(function() {
+                    if(recursive)
+                        return self.parent.fetchParents(recursive);
+                    else
+                        return new Promise(function(resolve, reject) { resolve(); });
+                });
             }
         });
+    }
+
+    // override if reference object needs a particular initialization
+    processNewParentObject(parentObject)
+    {
+        this.parent = this.makeParentObject(parentObject);
+        return new Promise(function(resolve, reject) { resolve(); });
+    }
+
+    // to be overriden by classes that need a specific class of parent object
+    makeParentObject(wwiseObject)
+    {
+        return new WwiseObject(wwiseObject, this.waapiJS);
     }
 
     fetchChildren(recursive = false)
@@ -86,37 +100,41 @@ class WwiseObject extends GenericModel
         return new WwiseObject(wwiseObject, this.waapiJS);
     }
 
-/*
-    getReferences()
+    fetchReferences()
     {
-        var query = {
-            from:{id:[this.guid]},
-            transform:[{select:['referencesTo']}]
-        };
-        return this.waapiJS.queryObjects(query).then(function(res) {
-            return res;
+        this.referencesToFetch = [];
+        this.referenceObjects = [];
+        let self = this;
+        return this.waapiJS.queryFamily(this.guid, "referencesTo").then(function(res) {
+            self.referencesToFetch = res.kwargs.return;
+            return self.fetchNextReferenceObject();
         });
     }
-*/
-    getSoundBankInclusions()
+
+    fetchNextReferenceObject()
     {
-        // get soundbanks directly referencing this object
-        var soundbankInclusions = [];
-        for( var soundBankID in waapiJS.soundbanks ) {
-            var curSoundBank = waapiJS.soundbanks[ soundBankID ];
-            if( curSoundBank.includesObjectID( this.guid ) ) {
-                soundbankInclusions.push({
-                    "soundbank" : curSoundBank,
-                    "object" : this
-                });
-            }
-        }
+        if( this.referencesToFetch.length < 1 ) return;
+        let self = this;
+        return this.processNewReferenceObject(this.referencesToFetch.shift()).then(function() {
+            return self.fetchNextReferenceObject();
+        });
+    }
 
-        // add soundbanks referencing this object's parent, recursively
-        if( this.parent != undefined )
-            soundbankInclusions = soundbankInclusions.concat( this.parent.getSoundBankInclusions() );
+    // override if reference object needs a particular initialization
+    processNewReferenceObject(refObject)
+    {
+        let newWwiseObject = this.makeReferenceObject(refObject);
+        this.referenceObjects.push({
+            "source" : newWwiseObject, // the reference (soundbank, event, etc)
+            "target" : this // the referenced object (because it can be aggregated at a child/parent object level)
+        });
+        return new Promise(function(resolve, reject) { resolve(); });
+    }
 
-        return soundbankInclusions;
+    // to be overriden by classes that need a specific class of reference objects
+    makeReferenceObject(wwiseObject)
+    {
+        return new WwiseObject(wwiseObject, this.waapiJS, false);
     }
 
     getObjLink(fullPath = false)
@@ -1011,9 +1029,6 @@ class WaapiJS
         this.connection.onclose = function(reason, details) { waapiJS.onConnectionClose(reason, details); }
         this.connection.onopen = function(session) { waapiJS.onConnectionOpen(session); }
         this.connection.open();
-
-        // DATA
-        this.soundbanks = {};
     }
 
     onConnectionClose(reason, details)
@@ -1036,7 +1051,6 @@ class WaapiJS
             }
         );
         this.onConnected();
-        this.initSoundBanks();
     }
 
     onCallError(error, query = {})
@@ -1135,22 +1149,5 @@ class WaapiJS
                 console.error(error);
             }
         );
-    }
-
-    initSoundBanks()
-    {
-        var query = {
-            from:{ofType:['SoundBank']},
-        };
-
-        var waapiJS = this;
-        this.queryObjects(query).then(function(res) {
-            var sbks = res.kwargs.return;
-            var nbSbk = sbks.length;
-            for( let i=0; i<nbSbk; i++ ) {
-                //var noBracketsID = sbks[i].id.slice(1, -1);
-                waapiJS.soundbanks[ sbks[i].id ] = new WwiseSoundbank(sbks[i], waapiJS);
-            }
-        });
     }
 }

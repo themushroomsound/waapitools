@@ -85,7 +85,6 @@ function onSelectionChanged(args, kwargs, details) {
             {
                 var event = new EventSoundbankFinder(res[0], waapiJS, true);
                 event.fetchData().then(function() {
-                    console.log("Done initializing " + event.path);
                     eventSoundbankFinderView.setWwiseObject(event);
                 });
             }

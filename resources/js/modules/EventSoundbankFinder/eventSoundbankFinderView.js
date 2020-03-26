@@ -29,13 +29,13 @@ class EventSoundbankFinderView extends WwiseObjectView
         for( let i=0; i < inclusions.length; i++ )
         {
             var newRow = $("#template_inclusionRow").contents().clone();
-            newRow.find(".soundbankName").append( inclusions[i].soundbank.getObjLink(true) );
+            newRow.find(".soundbankName").append( inclusions[i].source.getObjLink(true) );
 
-            if( inclusions[i].object.guid == this.wwiseObject.guid )
+            if( inclusions[i].target.guid == this.wwiseObject.guid )
                 newRow.find(".inclusionType").text( "direct inclusion" );
             else {
                 newRow.find(".inclusionType").text( "included via " );
-                newRow.find(".inclusionObjectName").append( inclusions[i].object.getObjLink(true) );
+                newRow.find(".inclusionObjectName").append( inclusions[i].target.getObjLink(true) );
             }
 
             newRow.appendTo(this.inclusionsTable);
