@@ -1,8 +1,8 @@
 class Renamer extends WwiseActorMixerObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
+        super(basicInfo, waapiJS, debug);
         console.log("Building Renamer from Wwise Object " + this.guid + " - " + this.name);
     }
 

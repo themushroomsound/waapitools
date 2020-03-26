@@ -83,8 +83,8 @@ function onSelectionChanged(args, kwargs, details) {
         {
             if( res[0].type == "Event" )
             {
-                var event = new WwiseEvent(res[0], waapiJS);
-                event.fetchParents(true).then(function() {
+                var event = new EventSoundbankFinder(res[0], waapiJS, true);
+                event.fetchData().then(function() {
                     console.log("Done initializing " + event.path);
                     eventSoundbankFinderView.setWwiseObject(event);
                 });

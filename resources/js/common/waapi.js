@@ -3,11 +3,19 @@
 // Base class for all wwise objects
 class WwiseObject extends GenericModel
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
         super();
         this.waapiJS = waapiJS;
         this.init(basicInfo);
+        if(debug) this.debugCreation();
+    }
+
+    debugCreation()
+    {
+        let id = this.guid == undefined ? "{pending ID}" : this.guid;
+        let name = this.name == undefined ? "no name" : this.name;
+        console.log("Building " + this.type + " object " + id + " - " + name);
     }
 
     init(basicInfo)
@@ -16,7 +24,7 @@ class WwiseObject extends GenericModel
             this[property] = basicInfo[property];
 
         this.guid = basicInfo.id // renaming id to guid
-        this.parent = undefined;
+//        this.parent = undefined; now in fetchParents method, obsolete ?
     }
 
     reset()
@@ -30,6 +38,11 @@ class WwiseObject extends GenericModel
                 wwiseObject.refreshViews();
             });
         });
+    }
+
+    fetchData()
+    {
+        return new Promise(function(resolve, reject) { resolve(); });
     }
 
     fetchParents(recursive = false)
@@ -212,10 +225,9 @@ class WwiseObject extends GenericModel
 // Base class for all wwise objects in the actor-mixer hierarchy
 class WwiseActorMixerObject extends WwiseObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
-        console.log("Building Wwise Actor-Mixer Object " + this.guid);
+        super(basicInfo, waapiJS, debug);
     }
 
     init(basicInfo)
@@ -227,24 +239,23 @@ class WwiseActorMixerObject extends WwiseObject
 
 class WwiseBlendContainer extends WwiseActorMixerObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
-        console.log("Building Wwise Blend Container " + this.guid + " - " + this.name);
+        super(basicInfo, waapiJS, debug);
     }
 }
 
 class WwiseEvent extends WwiseObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
-        console.log("Building Wwise Event " + this.guid);
+        super(basicInfo, waapiJS, debug);
 
-        this.childrenToFetch = [];
-        this.actions = [];
+        //this.childrenToFetch = [];
+        //this.actions = [];
     }
 
+/*  Child actions not currently used
     fetchWwiseData()
     {
         var wwiseEvent = this;
@@ -271,15 +282,14 @@ class WwiseEvent extends WwiseObject
         // TODO: CHECK IF NECESSARY
         return wwiseEvent.fetchNextChildAction();
     }
+*/
 }
 
 class WwiseAction extends WwiseObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
-        console.log("Building Wwise Action " + this.guid + " - " + this.name);
-        console.log("action info: ", basicInfo);
+        super(basicInfo, waapiJS, debug);
     }
 
     fetchWwiseData()
@@ -321,10 +331,9 @@ class WwiseAction extends WwiseObject
 
 class WwiseSound extends WwiseObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
-        console.log("Building Wwise Sound " + this.guid + " - " + this.name);
+        super(basicInfo, waapiJS, debug);
 
         this.childrenToFetch = [];
         this.sources = [];
@@ -360,10 +369,9 @@ class WwiseSound extends WwiseObject
 
 class WwiseAudioFileSource extends WwiseObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
-        console.log("Building Wwise Audio File Source " + this.guid + " - " + this.name);
+        super(basicInfo, waapiJS, debug);
     }
 
     fetchWwiseData()
@@ -385,11 +393,10 @@ class WwiseAudioFileSource extends WwiseObject
 
 class WwiseSoundbank extends WwiseObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
+        super(basicInfo, waapiJS, debug);
 
-        console.log("Building Wwise SoundBank " + this.guid + " - " + this.name);
         this.inclusionsIDs = [];
 
         var query = {
@@ -417,11 +424,9 @@ class WwiseSoundbank extends WwiseObject
 
 class WwiseAttenuationsFolder extends WwiseObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
-
-        console.log("Building Wwise Attenuations Folder " + this.guid + " - " + this.name);
+        super(basicInfo, waapiJS, debug);
 
         this.childrenToCommit = [];
     }
@@ -652,10 +657,9 @@ class WwiseAttenuationsFolder extends WwiseObject
 
 class WwiseAttenuation extends WwiseObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
-        console.log("Building Wwise Attenuation " + this.guid + " - " + this.name);
+        super(basicInfo, waapiJS, debug);
 
         this.curves = {};
         this.curveTypes = [
@@ -821,7 +825,6 @@ class WwiseAttenuationCurve
 {
     constructor(parentAttenuation, object)
     {
-        //console.log("Building Wwise Attenuation Curve " + object.curveType);
         this.curveType = object.curveType;
 
         // get the curve's points' interpolation shapes from unserialized attenuation notes

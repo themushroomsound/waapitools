@@ -1,8 +1,8 @@
 class SamplerKeymapper extends WwiseBlendContainer
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
+        super(basicInfo, waapiJS, debug);
         console.log("Building Sampler Keymapper from Wwise Blend Container " + this.guid + " - " + this.name);
     }
 
@@ -123,9 +123,9 @@ class SamplerKeymapper extends WwiseBlendContainer
 
 class SamplerKeymapperChild extends WwiseActorMixerObject
 {
-    constructor(basicInfo, waapiJS)
+    constructor(basicInfo, waapiJS, debug = false)
     {
-        super(basicInfo, waapiJS);
+        super(basicInfo, waapiJS, debug);
         console.log("Building Sampler Keymapper Child from Wwise Actor-Mixer Object " + this.guid + " - " + this.name);
 
         var wwiseKeyboardDef = new pitchiz.MIDIKeyboard(-1);
