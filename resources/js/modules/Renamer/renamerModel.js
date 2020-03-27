@@ -64,11 +64,6 @@ class Renamer extends WwiseActorMixerObject
         });
     }
 
-    getReferenceEvents()
-    {
-        return [];
-    }
-
     searchAndReplaceInNames(find, repl)
     {
         this.selfObject.searchAndReplaceInName(find, repl);
