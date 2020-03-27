@@ -34,7 +34,7 @@ class WwiseObject extends GenericModel
         return this.waapiJS.queryObjects(query).then(function(res) {
             // TODO: manage query failure
             wwiseObject.init(res.kwargs.return[0]);
-            return wwiseObject.fetchWwiseData().then(function() {
+            return wwiseObject.fetchData().then(function() {
                 wwiseObject.refreshViews();
             });
         });
@@ -47,7 +47,7 @@ class WwiseObject extends GenericModel
 
     fetchParents(recursive = false)
     {
-        var self = this;
+        let self = this;
         return this.waapiJS.queryFamily(this.guid, "parent").then(function(res) {
             if( res.kwargs.return.length > 0 ) {
                 return self.processNewParentObject(res.kwargs.return[0]).then(function() {
@@ -78,20 +78,27 @@ class WwiseObject extends GenericModel
         this.childrenToFetch = [];
         this.childrenObjects = [];
         let filter = recursive ? "descendants" : "children";
-        let wwiseObject = this;
+        let self = this;
         return this.waapiJS.queryFamily(this.guid, filter).then(function(res) {
-            wwiseObject.childrenToFetch = res.kwargs.return;
-            return wwiseObject.fetchNextChildObject();
+            self.childrenToFetch = res.kwargs.return;
+            return self.fetchNextChildObject();
         });
     }
 
     fetchNextChildObject()
     {
         if( this.childrenToFetch.length < 1 ) return;
-        let nextChild = this.childrenToFetch.shift();
-        let newWwiseObject = this.makeChildObject(nextChild);
-        this.childrenObjects.push(newWwiseObject);
-        return this.fetchNextChildObject();
+        let self = this;
+        return this.processNewChildObject(this.childrenToFetch.shift()).then(function() {
+            return self.fetchNextChildObject();
+        });
+    }
+
+    // to be overriden if child object needs a particular initialization
+    processNewChildObject(childObject)
+    {
+        this.childrenObjects.push(this.makeChildObject(childObject));
+        return new Promise(function(resolve, reject) { resolve(); });
     }
 
     // to be overriden by classes that need a specific class of child objects

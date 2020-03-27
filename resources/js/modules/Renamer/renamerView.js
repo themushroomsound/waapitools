@@ -56,7 +56,7 @@ class RenamerView extends WwiseObjectView
         this.replaceInput.on('input', function() { renamer.onInputChange(); });
 
         this.populateTable(this.childrenTable, this.wwiseObject.childrenObjects);
-        this.populateTable(this.referencesTable, this.wwiseObject.referenceObjects);
+        this.populateTable(this.referencesTable, this.wwiseObject.referenceEventObjects);
 
         this.commitButton.enable();
     }

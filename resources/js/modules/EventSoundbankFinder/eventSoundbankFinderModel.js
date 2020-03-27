@@ -26,7 +26,6 @@ class EventSoundbankFinder extends WwiseEvent
 
     getSoundBankInclusions()
     {
-        // get soundbanks directly referencing this object
         var soundbankInclusions = [];
         for(let i=0; i<this.referenceObjects.length; i++)
         {

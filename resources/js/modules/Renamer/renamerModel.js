@@ -1,18 +1,9 @@
 class Renamer extends WwiseActorMixerObject
 {
-    constructor(basicInfo, waapiJS, debug = false)
-    {
-        super(basicInfo, waapiJS, debug);
-        console.log("Building Renamer from Wwise Object " + this.guid + " - " + this.name);
-    }
-
     init(basicInfo)
     {
         super.init(basicInfo);
-        this.referencesToFetch = [];
-        this.referenceObjects = [];
         this.objectsToCommit = [];
-
         // to rename self without refreshing whole renamer view:
         this.selfObject = new WwiseActorMixerObject(basicInfo, waapiJS);
     }
@@ -23,36 +14,59 @@ class Renamer extends WwiseActorMixerObject
         this.selfObject.reset();
     }
 
-    fetchWwiseData()
+    fetchData()
     {
-        var renamer = this;
-        return super.fetchWwiseData(true).then(function() {
-            return renamer.getReferences().then(function(res) {
-                renamer.referencesToFetch = res.kwargs.return;
-                return renamer.fetchNextReference();
-            });
-        })
+        let self = this;
+        return this.fetchReferences().then(function() {
+            return self.fetchChildren(true);
+        }).then(function() {
+            return self.fetchReferenceEvents();
+        }).then(function() {
+            console.log("Done initializing Renamer: ", self);
+        });
     }
 
-    // TODO: promote to WwiseObject method?
-    fetchNextReference()
+    // to be overriden if child object needs a particular initialization
+    processNewChildObject(childObject)
     {
-        if( this.referencesToFetch.length < 1 )
-            return;
+        let newChildObject = this.makeChildObject(childObject);
+        let self = this;
+        return newChildObject.fetchReferences().then(function() {
+            self.childrenObjects.push(newChildObject);
+            self.referenceObjects = self.referenceObjects.concat(newChildObject.referenceObjects);
+        });
+    }
 
-        let nextRef = this.referencesToFetch.shift();
-        let renamer = this;
+    fetchReferenceEvents()
+    {
+        this.referenceEventsToFetch = [];
+        this.referenceEventObjects = [];
+        // gather play actions among references objects
+        for(let i=0; i<this.referenceObjects.length; i++)
+        {
+            let refObj = this.referenceObjects[i];
+            if(refObj.source.type == "Action")
+                this.referenceEventsToFetch.push(refObj);
+        }
+        // start fetching each action's parent
+        return this.fetchNextReferenceEvent();
+    }
 
-        // filter out references that aren't actions (e.g. soundbanks)
-        if(nextRef.type != "Action")
-            return renamer.fetchNextReference();
+    fetchNextReferenceEvent()
+    {
+        if( this.referenceEventsToFetch.length < 1 ) return;
+        let nextRef = this.referenceEventsToFetch.shift();
+        let self = this;
+        let newAction = new WwiseAction(nextRef.source, this.waapiJS);
+        return newAction.fetchParents(false).then(function() {
+            self.referenceEventObjects.push(newAction.parent);
+            return self.fetchNextReferenceEvent();
+        });
+    }
 
-        // store parent event of each action reference as the actual reference
-        let newPlayAction = new WwiseAction(nextRef, this.waapiJS);
-        return newPlayAction.fetchWwiseData().then(function() {
-            renamer.referenceObjects.push(newPlayAction.parent);
-            return renamer.fetchNextReference();
-        })
+    getReferenceEvents()
+    {
+        return [];
     }
 
     searchAndReplaceInNames(find, repl)
@@ -61,7 +75,7 @@ class Renamer extends WwiseActorMixerObject
         for(let i=0; i<this.childrenObjects.length; i++)
             this.childrenObjects[i].searchAndReplaceInName(find, repl);
         for(let i=0; i<this.referenceObjects.length; i++)
-            this.referenceObjects[i].searchAndReplaceInName(find, repl);
+            this.referenceEventObjects[i].searchAndReplaceInName(find, repl);
     }
 
     commitNames()
@@ -74,8 +88,8 @@ class Renamer extends WwiseActorMixerObject
             // commit its children and references
             for(let i=0; i < renamer.childrenObjects.length; i++)
                 renamer.objectsToCommit.push(renamer.childrenObjects[i]);
-            for(let i=0; i < renamer.referenceObjects.length; i++)
-                renamer.objectsToCommit.push(renamer.referenceObjects[i]);
+            for(let i=0; i < renamer.referenceEventObjects.length; i++)
+                renamer.objectsToCommit.push(renamer.referenceEventObjects[i]);
             return renamer.commitNextObjectName();
         }).then(function() {
             console.log("all committed");

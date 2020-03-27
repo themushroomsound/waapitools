@@ -122,9 +122,8 @@ function onSelectionChanged(args, kwargs, details) {
             if( res[0].category == "Actor-Mixer Hierarchy")
             {
                 loadingScreen.show();
-                var renamer = new Renamer(res[0], waapiJS);
-                renamer.fetchWwiseData().then(function() {
-                    console.log("Done initializing " + renamer.path);
+                var renamer = new Renamer(res[0], waapiJS, true);
+                renamer.fetchData().then(function() {
                     renamerView.setWwiseObject(renamer);
                     loadingScreen.hide();
                 });
