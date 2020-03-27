@@ -259,10 +259,7 @@ class WwiseActorMixerObject extends WwiseObject
 
 class WwiseBlendContainer extends WwiseActorMixerObject
 {
-    constructor(basicInfo, waapiJS, debug = false)
-    {
-        super(basicInfo, waapiJS, debug);
-    }
+
 }
 
 class WwiseEvent extends WwiseObject
@@ -297,6 +294,8 @@ class WwiseEvent extends WwiseObject
 */
 }
 
+
+// TODO: refactor using the fetchData system
 class WwiseAction extends WwiseObject
 {
     fetchWwiseData()
@@ -426,13 +425,6 @@ class WwiseSoundbank extends WwiseObject
 
 class WwiseAttenuationsFolder extends WwiseObject
 {
-    constructor(basicInfo, waapiJS, debug = false)
-    {
-        super(basicInfo, waapiJS, debug);
-
-        this.childrenToCommit = [];
-    }
-
     fetchChildren()
     {
         var wwiseAttenuationsFolder = this;
@@ -629,18 +621,15 @@ class WwiseAttenuationsFolder extends WwiseObject
     commit()
     {
         console.log("committing attenuation folder to wwise");
-        let wwiseAttenuationsFolder = this;
-
-        // commit wwise object, then...
+        this.childrenToCommit = [];
+        let self = this;
         return super.commit().then(function() {
-            // commit notes, then...
-            return wwiseAttenuationsFolder.commitNotes().then(function() {
-                // commit child attenuations
-                for(let i=0; i < wwiseAttenuationsFolder.childrenObjects.length; i++)
-                    wwiseAttenuationsFolder.childrenToCommit.push(wwiseAttenuationsFolder.childrenObjects[i]);
-                return wwiseAttenuationsFolder.commitNextChildAttenuation();
-            });
-        })
+            return self.commitNotes();
+        }).then(function() {
+            for(let i=0; i < self.childrenObjects.length; i++)
+                self.childrenToCommit.push(self.childrenObjects[i]);
+            return self.commitNextChildAttenuation();
+        });
     }
 
     commitNextChildAttenuation()
@@ -686,12 +675,12 @@ class WwiseAttenuation extends WwiseObject
         var options = {
             return: ['@RadiusMax'] // TODO: fetch cone attenuation parameters
         }
-        var wwiseAttenuation = this;
+        var self = this;
         return this.waapiJS.queryObjects(query, options).then(function(res) {
             console.log("fetchWwiseAttData", res);
-            wwiseAttenuation.RadiusMax = res.kwargs.return[0]["@RadiusMax"];
-            wwiseAttenuation.curvesToFetch = wwiseAttenuation.curveTypes;
-            return wwiseAttenuation.fetchNextAttenuationCurve();
+            self.RadiusMax = res.kwargs.return[0]["@RadiusMax"];
+            self.curvesToFetch = self.curveTypes;
+            return self.fetchNextAttenuationCurve();
         });
     }
 
@@ -699,7 +688,7 @@ class WwiseAttenuation extends WwiseObject
     fetchNextAttenuationCurve()
     {
         if( this.curvesToFetch.length < 1 ) return;
-        let wwiseAttenuation = this;
+        let self = this;
         let nextCurveName = this.curvesToFetch.shift();
         let query = {
             object: this.guid,
@@ -707,8 +696,8 @@ class WwiseAttenuation extends WwiseObject
         };
         return this.waapiJS.query( "ak.wwise.core.object.getAttenuationCurve", query ).then( function(res) {
             //console.log("Fetched curve " + nextCurveName + " for Attenuation " + wwiseAttenuation.path);
-            wwiseAttenuation.curves[nextCurveName] = new WwiseAttenuationCurve(wwiseAttenuation, res.kwargs);
-            return wwiseAttenuation.fetchNextAttenuationCurve();
+            self.curves[nextCurveName] = new WwiseAttenuationCurve(self, res.kwargs);
+            return self.fetchNextAttenuationCurve();
         });
     }
 
