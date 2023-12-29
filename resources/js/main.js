@@ -29,8 +29,6 @@ $().ready(function() {
     // bind buttons
     $(".btnNav").click( btnNav_onClick );
     $("body").on( "click", ".wwiseObjLink", wwiseObjLink_onClick );
-
-    displayActiveView();
 });
 
 // on navigation buttons click
@@ -46,14 +44,6 @@ function wwiseObjLink_onClick(e) {
     return false;
 }
 
-// displays the active view and hides the others
-function displayActiveView() {
-    $('.btnNav').removeClass("active");
-    $('.btnNav[href="' + activeView + '"]').addClass("active");
-    $("section").hide();
-    $(activeView).show(300);
-}
-
 // on waapi connected
 function onWaapiJSConnected() {
     waapiJS.getProjectName().then(function(projectName) {
@@ -61,17 +51,11 @@ function onWaapiJSConnected() {
     });
     waapiJS.subscribeSelectionChanged(onSelectionChanged);
     onSelectionChanged();
-
-    // populate notes review
-    var notesReviewModel = new NotesReview(waapiJS);
-    notesReviewModel.fetchData().then(function() {
-        console.log("Done initializing notes review");
-        notesReviewView.setModel(notesReviewModel);
-    });
+    displayActiveView();
 }
 
-// on wwise selection changed
-function onSelectionChanged(args, kwargs, details) {
+function updateActiveView()
+{
     waapiJS.querySelectedObjects().then(function(res) {
 
         console.log("Selected objects", res);
@@ -116,6 +100,17 @@ function onSelectionChanged(args, kwargs, details) {
             }
         }
 
+        // Active view is Notes Review
+        else if( activeView == "#notesReview")
+        {
+            // populate notes review
+            var notesReviewModel = new NotesReview(waapiJS);
+            notesReviewModel.fetchData().then(function() {
+                console.log("Done initializing notes review");
+                notesReviewView.setModel(notesReviewModel);
+            });
+        }
+
         // Active view is Sampler Keymapper
         else if( activeView == "#renamer" )
         {
@@ -130,4 +125,18 @@ function onSelectionChanged(args, kwargs, details) {
             }
         }
     });
+}
+
+// on wwise selection changed
+function onSelectionChanged(args, kwargs, details) {
+    updateActiveView();
+}
+
+// displays the active view and hides the others
+function displayActiveView() {
+    $('.btnNav').removeClass("active");
+    $('.btnNav[href="' + activeView + '"]').addClass("active");
+    $("section").hide();
+    updateActiveView();
+    $(activeView).show(300);
 }
