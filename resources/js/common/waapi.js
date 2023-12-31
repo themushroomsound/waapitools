@@ -42,7 +42,7 @@ class WwiseObject extends GenericModel
 
     fetchData()
     {
-        return new Promise(function(resolve, reject) { resolve(); });
+        return Promise.resolve();
     }
 
     fetchParents(recursive = false)
@@ -54,7 +54,7 @@ class WwiseObject extends GenericModel
                     if(recursive)
                         return self.parent.fetchParents(recursive);
                     else
-                        return new Promise(function(resolve, reject) { resolve(); });
+                        return Promise.resolve();
                 });
             }
         });
@@ -64,7 +64,7 @@ class WwiseObject extends GenericModel
     processNewParentObject(parentObject)
     {
         this.parent = this.makeParentObject(parentObject);
-        return new Promise(function(resolve, reject) { resolve(); });
+        return Promise.resolve();
     }
 
     // to be overriden by classes that need a specific class of parent object
@@ -98,7 +98,7 @@ class WwiseObject extends GenericModel
     processNewChildObject(childObject)
     {
         this.childrenObjects.push(this.makeChildObject(childObject));
-        return new Promise(function(resolve, reject) { resolve(); });
+        return Promise.resolve();
     }
 
     // to be overriden by classes that need a specific class of child objects
@@ -135,7 +135,7 @@ class WwiseObject extends GenericModel
             "source" : newWwiseObject, // the reference (soundbank, event, etc)
             "target" : this // the referenced object (because it can be aggregated at a child/parent object level)
         });
-        return new Promise(function(resolve, reject) { resolve(); });
+        return Promise.resolve();
     }
 
     // to be overriden by classes that need a specific class of reference objects
@@ -157,9 +157,7 @@ class WwiseObject extends GenericModel
     {
         if( this.guid ) {
             console.log("wwise object " + this.name + " already exists with guid " + this.guid);
-            return new Promise(function(resolve, reject) {
-                resolve();
-            });
+            return Promise.resolve();
         }
 
         console.log( "creating wwise object " + this.name );
@@ -179,7 +177,7 @@ class WwiseObject extends GenericModel
     {
         if( !this.guid ) {
             console.log("No wwise object " + this.name + " exist yet, can't set name");
-            return new Promise(function(resolve, reject) { reject(); });
+            return Promise.reject();
         }
 
         let query = {
@@ -195,12 +193,12 @@ class WwiseObject extends GenericModel
     {
         if( !this.guid ) {
             console.log("No wwise object " + this.name + " exists yet, can't set property " + propertyName);
-            return new Promise(function(resolve, reject) { reject(); });
+            return Promise.reject();
         }
 
         if( !this[propertyName] ) {
             console.log("No property " + propertyName + " exists on wwise object " + this.name);
-            return new Promise(function(resolve, reject) { resolve(); });
+            return Promise.resolve();
         }
 
         let query = {
@@ -217,12 +215,12 @@ class WwiseObject extends GenericModel
     {
         if( !this.guid ) {
             console.log("No wwise object " + this.name + " exists yet, can't set notes");
-            return new Promise(function(resolve, reject) { reject(); });
+            return Promise.reject();
         }
 
         if( !this["notes"] ) {
             console.log("No notes exist on wwise object " + this.name);
-            return new Promise(function(resolve, reject) { resolve(); });
+            return Promise.resolve();
         }
 
         let query = {
