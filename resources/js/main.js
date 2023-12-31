@@ -16,13 +16,6 @@ $().ready(function() {
     console.log("document ready");
     waapiJS = new WaapiJS(onWaapiJSConnected);
 
-    // create views
-    eventSoundbankFinderView = new EventSoundbankFinderView($("#eventSoundbankFinder"));
-    batchAttenuationsEditorView = new BatchAttenuationsEditorView($("#batchAttEditor"));
-    samplerKeymapperView = new SamplerKeymapperView($("#samplerKeymapper"));
-    notesReviewView = new NotesReviewView($("#notesReview"));
-    renamerView = new RenamerView($("#renamer"));
-
     // bind loading screen
     loadingScreen = $("#loading");
 
@@ -54,6 +47,20 @@ function onWaapiJSConnected() {
     displayActiveView();
 }
 
+// on wwise selection changed
+function onSelectionChanged(args, kwargs, details) {
+    updateActiveView();
+}
+
+// displays the active view and hides the others
+function displayActiveView() {
+    $('.btnNav').removeClass("active");
+    $('.btnNav[href="' + activeView + '"]').addClass("active");
+    $("section").hide();
+    updateActiveView();
+    $(activeView).show(300);
+}
+
 function updateActiveView()
 {
     waapiJS.querySelectedObjects().then(function(res) {
@@ -69,6 +76,7 @@ function updateActiveView()
             {
                 var eventSoundbankFinder = new EventSoundbankFinder(res[0], waapiJS, true);
                 eventSoundbankFinder.fetchData().then(function() {
+                    eventSoundbankFinderView = new EventSoundbankFinderView($("#eventSoundbankFinder"));
                     eventSoundbankFinderView.setWwiseObject(eventSoundbankFinder);
                 });
             }
@@ -82,6 +90,7 @@ function updateActiveView()
                 var folder = new WwiseAttenuationsFolder(res[0], waapiJS);
                 folder.fetchChildren().then(function() {
                     console.log("Done initializing " + folder.path);
+                    batchAttenuationsEditorView = new BatchAttenuationsEditorView($("#batchAttEditor"));
                     batchAttenuationsEditorView.setWwiseObject(folder);
                 });
             }
@@ -95,6 +104,7 @@ function updateActiveView()
                 var samplerKeyMapper = new SamplerKeymapper(res[0], waapiJS);
                 samplerKeyMapper.fetchChildren().then(function() {
                     console.log("Done initializing " + samplerKeyMapper.path);
+                    samplerKeymapperView = new SamplerKeymapperView($("#samplerKeymapper"));
                     samplerKeymapperView.setWwiseObject(samplerKeyMapper);
                 });
             }
@@ -107,6 +117,7 @@ function updateActiveView()
             var notesReviewModel = new NotesReview(waapiJS);
             notesReviewModel.fetchData().then(function() {
                 console.log("Done initializing notes review");
+                notesReviewView = new NotesReviewView($("#notesReview"));
                 notesReviewView.setModel(notesReviewModel);
             });
         }
@@ -119,24 +130,12 @@ function updateActiveView()
                 loadingScreen.show();
                 var renamer = new Renamer(res[0], waapiJS, true);
                 renamer.fetchData().then(function() {
+                    console.log("Done initializing renamer");
+                    renamerView = new RenamerView($("#renamer"));
                     renamerView.setWwiseObject(renamer);
                     loadingScreen.hide();
                 });
             }
         }
     });
-}
-
-// on wwise selection changed
-function onSelectionChanged(args, kwargs, details) {
-    updateActiveView();
-}
-
-// displays the active view and hides the others
-function displayActiveView() {
-    $('.btnNav').removeClass("active");
-    $('.btnNav[href="' + activeView + '"]').addClass("active");
-    $("section").hide();
-    updateActiveView();
-    $(activeView).show(300);
 }
