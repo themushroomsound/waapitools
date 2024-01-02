@@ -21,6 +21,7 @@ class GenericButton extends GenericView
 
     setClick(func)
     {
+        this.htmlElement.unbind('click');
         this.htmlElement.click(func);
     }
 }

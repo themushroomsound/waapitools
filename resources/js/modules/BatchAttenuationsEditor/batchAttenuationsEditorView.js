@@ -314,7 +314,7 @@ class InterpolationShapesEditorView extends WwiseObjectView
         this.curveTypeElement.addClass(this.displayCurveType);
         this.curveTypeElement.text(this.displayCurveType);
 
-        if( this.wwiseObject == undefined )
+        if( this.wwiseObject == undefined || this.wwiseObject.childrenObjects.length < 1)
             return;
 
         let points = this.wwiseObject.getShortest().curves[ this.displayCurveType ].points;

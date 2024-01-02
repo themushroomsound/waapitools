@@ -7,12 +7,6 @@ class NotesReviewView extends GenericView
         this.childrenTable = $(this.htmlElement).find(".notes");
     }
 
-    setModel(notesReviewModel)
-    {
-        this.notesReviewModel = notesReviewModel;
-        super.setObject(notesReviewModel);
-    }
-
     reset()
     {
         super.reset();
@@ -22,7 +16,7 @@ class NotesReviewView extends GenericView
     populate()
     {
         super.populate();
-        var objectsWithNotes = this.notesReviewModel.objectsWithNotes;
+        var objectsWithNotes = this.object.objectsWithNotes;
         if( objectsWithNotes.length > 0 )
         {
             this.childrenTable.html("");

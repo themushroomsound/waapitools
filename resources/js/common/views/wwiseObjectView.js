@@ -5,6 +5,12 @@ class WwiseObjectView extends GenericView
         super(htmlElement);
     }
 
+    setObject(object)
+    {
+        this.setWwiseObject(object);
+    }
+
+    // TODO: get rid of this alias?
     setWwiseObject(wwiseObject)
     {
         this.wwiseObject = wwiseObject;

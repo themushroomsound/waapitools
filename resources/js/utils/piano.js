@@ -11,6 +11,7 @@ class Piano {
 
     build()
     {
+        $(this.htmlContainer).empty();
         var wwiseKeyboardDefinition = new pitchiz.MIDIKeyboard(-1);
         var piano = this;
         for(let i=0; i<128; i++) {

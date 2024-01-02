@@ -18,6 +18,11 @@ class WwiseObject extends GenericModel
         console.log("Building " + this.type + " object " + id + " - " + name + " (as " + this.constructor.name + ")");
     }
 
+    isValid()
+    {
+        return true;
+    }
+
     init(basicInfo)
     {
         for(let property in basicInfo)
@@ -42,7 +47,11 @@ class WwiseObject extends GenericModel
 
     fetchData()
     {
-        return Promise.resolve();
+        if(this.isValid()) {
+            return Promise.resolve();
+        } else {
+            return Promise.reject();
+        }
     }
 
     fetchParents(recursive = false)
@@ -423,6 +432,21 @@ class WwiseSoundbank extends WwiseObject
 
 class WwiseAttenuationsFolder extends WwiseObject
 {
+    isValid()
+    {
+        if( this.category == "Attenuations" && ( this.type == "Folder" || this.type == "WorkUnit" ))
+            return true;
+        return false;
+    }
+
+    fetchData()
+    {
+        var wwiseAttenuationsFolder = this;
+        return super.fetchData().then(function() {
+            return wwiseAttenuationsFolder.fetchChildren();
+        })
+    }
+
     fetchChildren()
     {
         var wwiseAttenuationsFolder = this;
@@ -571,7 +595,7 @@ class WwiseAttenuationsFolder extends WwiseObject
 
     sortChildrenByRadius()
     {
-        console.log("sorting");
+        console.log("Sorting child attenuations by radius");
         this.childrenObjects.sort(function(a,b) {
             return a["RadiusMax"] - b["RadiusMax"];
         });

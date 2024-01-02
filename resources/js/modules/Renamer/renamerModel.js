@@ -10,14 +10,23 @@ class Renamer extends WwiseActorMixerObject
 
     reset()
     {
-        super.reset();
         this.selfObject.reset();
+        super.reset();
+    }
+
+    isValid()
+    {
+        if( this.category != "Actor-Mixer Hierarchy" )
+            return false;
+        return true;
     }
 
     fetchData()
     {
         let self = this;
-        return this.fetchReferences().then(function() {
+        return super.fetchData().then(function() {
+            return self.fetchReferences();
+        }).then(function() {
             return self.fetchChildren(true);
         }).then(function() {
             return self.fetchReferenceEvents();
@@ -75,7 +84,7 @@ class Renamer extends WwiseActorMixerObject
 
     commitNames()
     {
-        console.log("committing selected object, its children and events to wwise");
+        console.log("committing selected object " + this.name + ", its children and events to wwise");
         let renamer = this;
 
         // commit wwise object, then...

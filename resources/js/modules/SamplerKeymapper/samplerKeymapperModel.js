@@ -6,6 +6,21 @@ class SamplerKeymapper extends WwiseBlendContainer
         console.log("Building Sampler Keymapper from Wwise Blend Container " + this.guid + " - " + this.name);
     }
 
+    isValid()
+    {
+        if( this.category == "Actor-Mixer Hierarchy" && ( this.type == "BlendContainer" ))
+            return true;
+        return false;
+    }
+
+    fetchData()
+    {
+        var samplerKeymapper = this;
+        return super.fetchData().then(function() {
+            return samplerKeymapper.fetchChildren();
+        })
+    }
+
     fetchChildren()
     {
         var samplerKeymapper = this;

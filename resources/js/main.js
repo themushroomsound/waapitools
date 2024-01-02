@@ -1,15 +1,18 @@
 var waapiJS;
-var activeView = "#home";
+var activeViewName = "#home";
+var currentModel,
+    currentView;
 var loadingScreen;
 
-// views
-var eventSoundbankFinderView,
-    batchAttenuationsEditorView,
-    attenuationView,
-    notesReviewView,
-    renamerView;
-
 var selectedObjects = [];
+
+var modules = {
+    "#eventSoundbankFinder":    { modelClass: EventSoundbankFinder,      viewClass: EventSoundbankFinderView },
+    "#batchAttEditor":          { modelClass: WwiseAttenuationsFolder,   viewClass: BatchAttenuationsEditorView },
+    "#samplerKeymapper":        { modelClass: SamplerKeymapper,          viewClass: SamplerKeymapperView },
+    "#notesReview":             { modelClass: NotesReview,               viewClass: NotesReviewView },
+    "#renamer":                 { modelClass: Renamer,                   viewClass: RenamerView }
+}
 
 // on page load
 $().ready(function() {
@@ -26,8 +29,8 @@ $().ready(function() {
 
 // on navigation buttons click
 function btnNav_onClick(e) {
-    activeView = $(this).attr("href");
-    displayActiveView();
+    activeViewName = $(this).attr("href");
+    switchToActiveView();
     return false;
 }
 
@@ -44,98 +47,49 @@ function onWaapiJSConnected() {
     });
     waapiJS.subscribeSelectionChanged(onSelectionChanged);
     onSelectionChanged();
-    displayActiveView();
+    switchToActiveView();
 }
 
 // on wwise selection changed
 function onSelectionChanged(args, kwargs, details) {
-    updateActiveView();
+    applySelectedObjectToActiveView();
 }
 
 // displays the active view and hides the others
-function displayActiveView() {
+function switchToActiveView() {
     $('.btnNav').removeClass("active");
-    $('.btnNav[href="' + activeView + '"]').addClass("active");
+    $('.btnNav[href="' + activeViewName + '"]').addClass("active");
     $("section").hide();
-    updateActiveView();
-    $(activeView).show(300);
+    applySelectedObjectToActiveView();
+    $(activeViewName).show(300);
 }
 
-function updateActiveView()
+// loads up wwise's currently selected object in the current tool if possible
+function applySelectedObjectToActiveView()
 {
     waapiJS.querySelectedObjects().then(function(res) {
+
+        if(activeViewName == "#home")
+            return;
 
         console.log("Selected objects", res);
         if( res.length < 1)
             return;
 
-        // Active view is Event Soundbanks Finder
-        if( activeView == "#eventSoundbankFinder" )
-        {
-            if( res[0].type == "Event" )
-            {
-                var eventSoundbankFinder = new EventSoundbankFinder(res[0], waapiJS, true);
-                eventSoundbankFinder.fetchData().then(function() {
-                    eventSoundbankFinderView = new EventSoundbankFinderView($("#eventSoundbankFinder"));
-                    eventSoundbankFinderView.setWwiseObject(eventSoundbankFinder);
-                });
+        currentModel = new modules[activeViewName]["modelClass"] (res[0], waapiJS, true);
+        loadingScreen.show();
+        currentModel.fetchData().then(
+            function() {
+                currentView = new modules[activeViewName]["viewClass"]($(activeViewName));
+                currentView.setObject(currentModel);
+                loadingScreen.hide();
+            },
+            function() {
+                console.log("selected wwise object not appropriate for this tool");
+                currentView = new modules[activeViewName]["viewClass"]($(activeViewName));
+                currentView.reset();
+                loadingScreen.hide();
             }
-        }
-
-        // Active view is Batch Attenuations Editor
-        else if( activeView == "#batchAttEditor" )
-        {
-            if( res[0].category == "Attenuations" && ( res[0].type == "Folder" || res[0].type == "WorkUnit" ))
-            {
-                var folder = new WwiseAttenuationsFolder(res[0], waapiJS);
-                folder.fetchChildren().then(function() {
-                    console.log("Done initializing " + folder.path);
-                    batchAttenuationsEditorView = new BatchAttenuationsEditorView($("#batchAttEditor"));
-                    batchAttenuationsEditorView.setWwiseObject(folder);
-                });
-            }
-        }
-
-        // Active view is Sampler Keymapper
-        else if( activeView == "#samplerKeymapper" )
-        {
-            if( res[0].category == "Actor-Mixer Hierarchy" && ( res[0].type == "BlendContainer" ))
-            {
-                var samplerKeyMapper = new SamplerKeymapper(res[0], waapiJS);
-                samplerKeyMapper.fetchChildren().then(function() {
-                    console.log("Done initializing " + samplerKeyMapper.path);
-                    samplerKeymapperView = new SamplerKeymapperView($("#samplerKeymapper"));
-                    samplerKeymapperView.setWwiseObject(samplerKeyMapper);
-                });
-            }
-        }
-
-        // Active view is Notes Review
-        else if( activeView == "#notesReview")
-        {
-            // populate notes review
-            var notesReviewModel = new NotesReview(waapiJS);
-            notesReviewModel.fetchData().then(function() {
-                console.log("Done initializing notes review");
-                notesReviewView = new NotesReviewView($("#notesReview"));
-                notesReviewView.setModel(notesReviewModel);
-            });
-        }
-
-        // Active view is Sampler Keymapper
-        else if( activeView == "#renamer" )
-        {
-            if( res[0].category == "Actor-Mixer Hierarchy")
-            {
-                loadingScreen.show();
-                var renamer = new Renamer(res[0], waapiJS, true);
-                renamer.fetchData().then(function() {
-                    console.log("Done initializing renamer");
-                    renamerView = new RenamerView($("#renamer"));
-                    renamerView.setWwiseObject(renamer);
-                    loadingScreen.hide();
-                });
-            }
-        }
+        );
     });
 }

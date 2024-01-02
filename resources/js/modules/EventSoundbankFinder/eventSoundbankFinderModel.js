@@ -1,9 +1,18 @@
 class EventSoundbankFinder extends WwiseEvent
 {
+    isValid()
+    {
+        if( this.type != "Event" )
+            return false;
+        return true;
+    }
+
     fetchData()
     {
         let self = this
-        return this.fetchParents(false).then(function() {
+        return super.fetchData().then(function() {
+            return self.fetchParents(false);
+        }).then(function() {
             return self.fetchReferences();
         }).then(function() {
             self.referenceObjects = self.referenceObjects.concat( self.parent.referenceObjects );

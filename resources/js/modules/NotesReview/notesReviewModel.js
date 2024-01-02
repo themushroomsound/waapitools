@@ -95,7 +95,7 @@ var paths = [
 
 class NotesReview extends GenericModel
 {
-    constructor(waapiJS)
+    constructor(dummyWwiseObject, waapiJS)
     {
         super();
         console.log("Building Notes Review");
