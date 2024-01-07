@@ -17,3 +17,17 @@ The Batch Attenuations Editor is designed to help with the creation and update o
 The Sampler Keymapper automatically sets **MIDI root key** and **key range** parameters on children of a blend container if their names contain a note name (eg MyPianoSample_C#3 is mapped to MIDI root key 49 and its range is set based on neighbouring samples root notes).
 
 ![waapitools_keymapper](https://user-images.githubusercontent.com/5003391/52117367-d3228600-2613-11e9-87b1-a3d4137f92fb.png)
+
+## 4. Notes Review
+
+Notes Review provides a comprehensive display of all notes in the Wwise project.
+
+## 5. Renamer
+
+The Renamer allows for easy search/replace in names of objects in the Actor-Mixer Hierarchy. In addition to the selected Actor-Mixer hierarchy object, it will apply the same renaming to:
+- all its children
+- all the events referencing it
+
+## 6. Creator
+
+The Creator helps with the batch creation of children to the currently selected object, from an object type, a list of names and a common prefix.
