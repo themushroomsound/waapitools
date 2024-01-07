@@ -30,6 +30,7 @@ class WwiseObject extends GenericModel
 
         this.guid = basicInfo.id // renaming id to guid
 //        this.parent = undefined; now in fetchParents method, obsolete ?
+        this.errors = [];
     }
 
     reset()
@@ -176,10 +177,18 @@ class WwiseObject extends GenericModel
             name: this.name
         }
 
-        var wwiseObject = this;
-        return this.waapiJS.query(ak.wwise.core.object.create, query).then(function(res) {
-            wwiseObject.guid = res.kwargs.id;
-        });
+        var self = this;
+        return this.waapiJS.query(ak.wwise.core.object.create, query).then(
+            function(res) {
+                self.guid = res.kwargs.id;
+                return Promise.resolve();
+            },
+            function(error) {
+                self.errors.push(error["kwargs"]["message"]);
+                self.refreshViews();
+                return Promise.reject(error);
+            }
+        );
     }
 
     commitName()
@@ -1051,8 +1060,8 @@ class WaapiJS
     onCallError(error, query = {})
     {
         console.error("Call error");
-        console.log(error);
-        console.log("query object:", query);
+        console.log("query:", query);
+        console.log("error:", error);
     }
 
     query(uri, query = {}, options = {})
@@ -1062,7 +1071,10 @@ class WaapiJS
         // call query
         return this.session.call(uri, [], query, options).then(
             function(res) { return res; },
-            function(error) { waapiJS.onCallError(error, query); }
+            function(error) {
+                waapiJS.onCallError(error, query);
+                return Promise.reject(error);
+            }
         );
     }
 
@@ -1097,6 +1109,12 @@ class WaapiJS
         return this.query(ak.wwise.ui.getSelectedObjects, query, options).then(function(res) {
             return res.kwargs.objects;
         });
+    }
+
+    queryObjectTypes()
+    {
+        var query = {};
+        return this.query(ak.wwise.core.object.getTypes, query);
     }
 
     getActorMixerHierarchy()
@@ -1145,4 +1163,227 @@ class WaapiJS
             }
         );
     }
+}
+
+var wwiseObjectTypes = [
+    'AcousticTexture',
+    'Action',
+    'ActionException',
+    'ActorMixer',
+    'Attenuation',
+    'AudioDevice',
+    'AudioSource',
+    'AuxBus',
+    'BlendContainer',
+    'BlendTrack',
+    'Bus',
+    'ControlSurfaceBinding',
+    'ControlSurfaceBindingGroup',
+    'ControlSurfaceSession',
+    'Conversion',
+    'Curve',
+    'CustomState',
+    'DialogueEvent',
+    'Effect',
+    'Event',
+    'ExternalSource',
+    'ExternalSourceFile',
+    'Folder',
+    'GameParameter',
+    'Language',
+    'MidiParameter',
+    'MixingSession',
+    'Modifier',
+    'ModulatorEnvelope',
+    'ModulatorLfo',
+    'ModulatorTime',
+    'MultiSwitchEntry',
+    'MusicClip',
+    'MusicClipMidi',
+    'MusicCue',
+    'MusicEventCue',
+    'MusicFade',
+    'MusicPlaylistContainer',
+    'MusicPlaylistItem',
+    'MusicSegment',
+    'MusicStinger',
+    'MusicSwitchContainer',
+    'MusicTrack',
+    'MusicTrackSequence',
+    'MusicTransition',
+    'ObjectSettingAssoc',
+    'Panner',
+    'ParamControl',
+    'Path',
+    'Platform',
+    'PluginDataSource',
+    'Position',
+    'Project',
+    'Query',
+    'RandomSequenceContainer',
+    'SearchCriteria',
+    'Sound',
+    'SoundBank',
+    'SoundcasterSession',
+    'State',
+    'StateGroup',
+    'Switch',
+    'SwitchContainer',
+    'SwitchGroup',
+    'Trigger',
+    'UserProjectSettings',
+    'WorkUnit'
+];
+
+var wwiseObjectTypesToCategorize = [
+    'Action',
+    'ActionException',
+    'AudioSource',
+    'BlendTrack',
+    'Curve',
+    'CustomState',
+    'Effect',
+    'ExternalSource',
+    'ExternalSourceFile',
+    'Folder',
+    'Language',
+    'MidiParameter',
+    'Modifier',
+    'MultiSwitchEntry',
+    'MusicClip',
+    'MusicClipMidi',
+    'MusicCue',
+    'MusicEventCue',
+    'MusicFade',
+    'MusicPlaylistItem',
+    'MusicStinger',
+    'MusicTrackSequence',
+    'MusicTransition',
+    'ObjectSettingAssoc',
+    'Panner',
+    'ParamControl',
+    'Path',
+    'Platform',
+    'PluginDataSource',
+    'Position',
+    'Project',
+    'SearchCriteria',
+    'UserProjectSettings',
+    'WorkUnit'
+];
+
+var wwiseObjectTypesByCategory = {
+    "Actor-Mixer Hierarchy": [
+        'WorkUnit',
+        'Folder',
+        'ActorMixer',
+        'SwitchContainer',
+        'RandomSequenceContainer',
+        'BlendContainer',
+        'Sound'
+    ],
+    "Master-Mixer Hierarchy": [
+        'WorkUnit',
+        'Folder',
+        'Bus',
+        'AuxBus'
+    ],
+    "Interactive Music Hierarchy": [
+        'WorkUnit',
+        'Folder',
+        'MusicSwitchContainer',
+        'MusicPlaylistContainer',
+        'MusicSegment',
+        'MusicTrack'
+    ],
+    "Events": [
+        'WorkUnit',
+        'Folder',
+        'Event'
+    ],
+    "Dynamic Dialogue": [
+        'WorkUnit',
+        'Folder',
+        'DialogueEvent'
+    ],
+    "SoundBanks": [
+        'WorkUnit',
+        'Folder',
+        'SoundBank'
+    ],
+    "Switches": [
+        'WorkUnit',
+        'Folder',
+        'Switch',
+        'SwitchGroup'
+    ],
+    "States": [
+        'WorkUnit',
+        'Folder',
+        'State',
+        'StateGroup'
+    ],
+    "Game Parameters": [
+        'WorkUnit',
+        'Folder',
+        'GameParameter'
+    ],
+    "Triggers": [
+        'WorkUnit',
+        'Folder',
+        'Trigger'
+    ],
+    "Effects": [
+        'WorkUnit',
+        'Folder'
+    ],
+    "Attenuations": [
+        'WorkUnit',
+        'Folder',
+        'Attenuation'
+    ],
+    "Conversion Settings": [
+        'WorkUnit',
+        'Folder',
+        'Conversion'
+    ],
+    "Modulators": [
+        'WorkUnit',
+        'Folder',
+        'ModulatorEnvelope',
+        'ModulatorLfo',
+        'ModulatorTime'
+    ],
+    "Audio Devices": [
+        'WorkUnit',
+        'Folder',
+        'AudioDevice'
+    ],
+    "Virtual Acoustics": [
+        'WorkUnit',
+        'Folder',
+        'AcousticTexture'
+    ],
+    "Soundcaster Sessions": [
+        'WorkUnit',
+        'Folder',
+        'SoundcasterSession'
+    ],
+    "Mixing Sessions": [
+        'WorkUnit',
+        'Folder',
+        'MixingSession'
+    ],
+    "Control Surface Sessions": [
+        'WorkUnit',
+        'Folder',
+        'ControlSurfaceBinding',
+        'ControlSurfaceBindingGroup',
+        'ControlSurfaceSession'
+    ],
+    "Queries": [
+        'WorkUnit',
+        'Folder',
+        'Query'
+    ]
 }

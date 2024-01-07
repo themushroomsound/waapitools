@@ -11,7 +11,8 @@ var modules = {
     "#batchAttEditor":          { modelClass: WwiseAttenuationsFolder,   viewClass: BatchAttenuationsEditorView },
     "#samplerKeymapper":        { modelClass: SamplerKeymapper,          viewClass: SamplerKeymapperView },
     "#notesReview":             { modelClass: NotesReview,               viewClass: NotesReviewView },
-    "#renamer":                 { modelClass: Renamer,                   viewClass: RenamerView }
+    "#renamer":                 { modelClass: Renamer,                   viewClass: RenamerView },
+    "#creator":                 { modelClass: Creator,                   viewClass: CreatorView }
 }
 
 // on page load

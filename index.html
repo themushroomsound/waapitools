@@ -23,7 +23,8 @@
             <a href="#batchAttEditor" class="btnNav">batch attenuations editor</a> |
             <a href="#samplerKeymapper" class="btnNav">sampler keymapper</a> |
             <a href="#notesReview" class="btnNav">notes review</a> |
-            <a href="#renamer" class="btnNav">renamer</a>
+            <a href="#renamer" class="btnNav">renamer</a> |
+            <a href="#creator" class="btnNav">creator</a>
         </nav>
 
         <!-- HOME -->
@@ -36,6 +37,7 @@
                 <li><a href="#samplerKeymapper" class="btnNav">Sampler Keymapper</a>: automatically map children of a blend container across the MIDI keyboard based on their names</li>
                 <li><a href="#notesReview" class="btnNav">Notes Review</a>: a comprehensive review of all notes in the Wwise project</li>
                 <li><a href="#renamer" class="btnNav">Renamer</a>: batch search/replace in an object's name, its children's names, and events referencing it or its children</li>
+                <li><a href="#creator" class="btnNav">Creator</a>: batch creates objects from a list</li>
             </ul>
         </section>
 
@@ -158,7 +160,7 @@
 
             <div id="interpolationErrorsView" class="errors">
                 <h3>Interpolation is disabled. The following errors have been found:</h3>
-                <ul id="interpolationErrorsList"></ul>
+                <ul id="interpolationErrorsList"  class="errorsList"></ul>
             </div>
 
             <div id="attenuationsList"></div>
@@ -217,7 +219,7 @@
             <h3>Mapping:</h3>
             <div id="mappingErrorsView" class="errors">
                 <h3>Mapping is disabled. The following errors have been found:</h3>
-                <ul id="mappingErrorsList"></ul>
+                <ul id="mappingErrorsList" class="errorsList"></ul>
             </div>
 
             <div class="pianoKeyboard">
@@ -290,6 +292,50 @@
             </table>
         </section>
 
+
+        <!-- CREATOR -->
+
+        <!-- Templates -->
+        <template id="template_pendingChildObjectRow">
+            <tr>
+                <td class="type"></td>
+                <td class="path objectPath"></td>
+                <td class="errorsList"></td>
+            </tr>
+        </template>
+
+        <!-- Static markup -->
+        <section id="creator">
+            <h2>creator</h2>
+            <div id="editors">
+                <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
+            </div>
+            <h3 id="selfObjectName">Selected parent object: <span class="name">none</span></h3>
+            <p>
+                <label for="type">Object type: </label>
+                <select name="type" id="type"></select>
+                <label for="prefix">Common prefix: </label>
+                <input type="text" name="prefix" id="prefix" />
+            </p>
+            <div id="creatorNamesList" class="creatorSection">
+                <h3>Names list:</h3>
+                <p>
+                    <textarea name="names" id="names">
+name_01
+name_02
+name_03</textarea>
+                </p>
+            </div>
+            <div id="creatorChildrenList" class="creatorSection">
+                <h3>Children to create:</h3>
+                <table id="pendingChildren">
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div style="clear:both;" />
+        </section>
+
         <!-- LOADING SCREEN -->
         <div id="loading">
             <p>
@@ -317,6 +363,8 @@
         <script src="resources/js/modules/NotesReview/notesReviewView.js"></script>
         <script src="resources/js/modules/Renamer/renamerModel.js"></script>
         <script src="resources/js/modules/Renamer/renamerView.js"></script>
+        <script src="resources/js/modules/Creator/creatorModel.js"></script>
+        <script src="resources/js/modules/Creator/creatorView.js"></script>
         <script src="resources/js/main.js"></script>
     </body>
 </html>

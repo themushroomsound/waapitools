@@ -78,13 +78,18 @@ td {
     padding-left: 10px;
 }
 
-select, input {
+select, input, textarea {
     border: 1px solid #999;
     background: transparent;
     color: white;
 }
 
-.name, .value {
+option {
+    background-color: #EEE;
+    color: #333;
+}
+
+.name, .path, .value {
     color: white;
 }
 
@@ -96,7 +101,7 @@ select, input {
     line-height:100px;
 }
 
-.errors {
+div.errors {
     margin-top: 20px;
     margin-bottom: 20px;
     border: 2px solid #b93333;
@@ -104,6 +109,10 @@ select, input {
     background-color: #583232;
     display: none;
     clear: left;
+}
+
+td.errorsList {
+    color: #ff4c4c;
 }
 
 .errors span {
@@ -336,7 +345,7 @@ select, input {
     width: 125px;
 }
 
-.point option {
+option {
     background-color: #EEE;
     color: #333;
 }
@@ -481,4 +490,16 @@ h3#curveType.FocusUsage {
 table.notes td.notes span.todo {
     color: #FFF;
     background-color: #b93333;
+}
+
+/* CREATOR */
+
+.creatorSection {
+    margin-left: 0;
+    float: left;
+}
+
+#creator textarea#names {
+  min-width: 493px;
+  min-height: 200px;
 }

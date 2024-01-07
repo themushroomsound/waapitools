@@ -34,6 +34,10 @@ class WwiseObjectView extends GenericView
     {
         if( !this.wwiseObject )
             return;
-        $(this.htmlElement).find(".name").html(this.wwiseObject.getObjLink());
+
+        $(this.htmlElement).find(".type").html(this.wwiseObject.type);
+        $(this.htmlElement).find(".name").html(this.wwiseObject.guid ? this.wwiseObject.getObjLink() : this.wwiseObject.name);
+        $(this.htmlElement).find(".path").html(this.wwiseObject.guid ? this.wwiseObject.getObjLink(true) : this.wwiseObject.path);
+        $(this.htmlElement).find(".errorsList").html(this.wwiseObject.errors);
     }
 }

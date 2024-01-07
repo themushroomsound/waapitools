@@ -137,7 +137,7 @@ class SamplerKeymapperView extends WwiseObjectView
             return true;
 
         // errors
-        $(this.htmlElement).find("#mappingErrorsList").empty();
+        $(this.htmlElement).find("#errorsList").empty();
         for( let i=0; i < mappingErrors.length; i++ )
         {
             let curError = mappingErrors[i];
