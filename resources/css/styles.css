@@ -70,8 +70,12 @@ p, section h3, section table, section > div {
     margin: 10px 10px 0;
 }
 
+p:last-child {
+    margin-bottom: 10px;;
+}
+
 table {
-    cell-spacing: 0;
+    border-spacing: 0;
 }
 
 td {
@@ -117,6 +121,10 @@ td.errorsList {
 
 .errors span {
     font-weight: bold;
+}
+
+#connectionError {
+    margin: 20px 10px;
 }
 
 .tooltip {

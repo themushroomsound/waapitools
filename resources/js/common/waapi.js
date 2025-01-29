@@ -1026,7 +1026,8 @@ class WaapiJS
         this.connection = new autobahn.Connection({
             url: 'ws://localhost:8080/waapi',
             realm: 'realm1',
-            protocols: ['wamp.2.json']
+            protocols: ['wamp.2.json'],
+            retry_if_unreachable: false
         });
 
         var waapiJS = this;

@@ -2,7 +2,8 @@ var waapiJS;
 var activeViewName = "#home";
 var currentModel,
     currentView;
-var loadingScreen;
+var loadingScreen,
+    connectionErrorMsg;
 
 var selectedObjects = [];
 
@@ -22,6 +23,10 @@ $().ready(function() {
 
     // bind loading screen
     loadingScreen = $("#loading");
+
+    // bind connection error message
+    connectionErrorMsg = $("#connectionError");
+    connectionErrorMsg.show()
 
     // bind buttons
     $(".btnNav").click( btnNav_onClick );
@@ -46,6 +51,7 @@ function onWaapiJSConnected() {
     waapiJS.getProjectName().then(function(projectName) {
         $("header h1 .name").text(projectName);
     });
+    connectionErrorMsg.hide();
     waapiJS.subscribeSelectionChanged(onSelectionChanged);
     onSelectionChanged();
     switchToActiveView();
