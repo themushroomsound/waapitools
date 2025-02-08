@@ -4,6 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="Content-Security-Policy" content="connect-src 'self' ws://localhost:8080">
+        <meta name="description" content="Waapitools is a set of tools aiming to provide a user-friendly interface to automate various tasks on a Wwise project.">
         <title>Waapitools</title>
         <link rel="stylesheet" href="resources/css/styles.css?v=1.0">
         <link rel="stylesheet" href="resources/css/piano.css?v=1.0">
@@ -26,12 +27,12 @@
 
         <nav class="tools">
             <a href="#home" class="btnNav">home</a> |
-            <a href="#eventSoundbankFinder" class="btnNav">event soundbank finder</a> |
-            <a href="#batchAttEditor" class="btnNav">batch attenuations editor</a> |
-            <a href="#samplerKeymapper" class="btnNav">sampler keymapper</a> |
-            <a href="#notesReview" class="btnNav">notes review</a> |
-            <a href="#renamer" class="btnNav">renamer</a> |
-            <a href="#creator" class="btnNav">creator</a>
+            <a href="#creator" class="btnNav" title="batch creates objects from a list">creator</a> |
+            <a href="#renamer" class="btnNav" title="batch search/replace in an object's name, its children's names, and events referencing it or its children">renamer</a> |
+            <a href="#notesReview" class="btnNav" title="a comprehensive review of all notes in the Wwise project">notes review</a> |
+            <a href="#eventSoundbankFinder" class="btnNav" title="find out which soundbank(s) an event is included in, even indirectly through a parent folder or WWU">event soundbank finder</a> |
+            <a href="#samplerKeymapper" class="btnNav" title="automatically map children of a blend container across the MIDI keyboard based on their names">sampler keymapper</a> |
+            <a href="#batchAttEditor" class="btnNav" title="create or edit a batch of related attenuations over different maximum distances">batch attenuations editor</a>
         </nav>
 
         <div id="connectionError" class="errors">
@@ -56,12 +57,12 @@
             <h2>home</h2>
             <h3>Tools:</h3>
             <ul>
-                <li><a href="#eventSoundbankFinder" class="btnNav">Event Soundbank Finder</a>: find out which soundbank(s) an event is included in, even indirectly through a parent folder or WWU</li>
-                <li><a href="#batchAttEditor" class="btnNav">Batch Attenuations Editor</a>: create or edit a batch of related attenuations over different maximum distances</li>
-                <li><a href="#samplerKeymapper" class="btnNav">Sampler Keymapper</a>: automatically map children of a blend container across the MIDI keyboard based on their names</li>
-                <li><a href="#notesReview" class="btnNav">Notes Review</a>: a comprehensive review of all notes in the Wwise project</li>
-                <li><a href="#renamer" class="btnNav">Renamer</a>: batch search/replace in an object's name, its children's names, and events referencing it or its children</li>
                 <li><a href="#creator" class="btnNav">Creator</a>: batch creates objects from a list</li>
+                <li><a href="#renamer" class="btnNav">Renamer</a>: batch search/replace in an object's name, its children's names, and events referencing it or its children</li>
+                <li><a href="#notesReview" class="btnNav">Notes Review</a>: a comprehensive review of all notes in the Wwise project</li>
+                <li><a href="#eventSoundbankFinder" class="btnNav">Event Soundbank Finder</a>: find out which soundbank(s) an event is included in, even indirectly through a parent folder or WWU</li>
+                <li><a href="#samplerKeymapper" class="btnNav">Sampler Keymapper</a>: automatically map children of a blend container across the MIDI keyboard based on their names</li>
+                <li><a href="#batchAttEditor" class="btnNav">Batch Attenuations Editor</a>: create or edit a batch of related attenuations over different maximum distances</li>
             </ul>
         </section>
 
@@ -71,7 +72,7 @@
             <p><a href="http://waapitools.org">Waapitools</a> is a set of tools aiming to provide a user-friendly interface to automate various tasks on a Wwise project. It is a javascript based web application that communicates with the Wwise Authoring Tool through the <a href="https://www.audiokinetic.com/en/library/edge/?source=SDK&id=waapi.html">Wwise&nbsp;Authoring&nbsp;API&nbsp;(WAAPI).</a></p>
             <p>This is a work in progress provided as-is with no warranty. It is not affiliated with <a href="https://www.audiokinetic.com/">Audiokinetic</a>.</p>
             <p><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png" width="100"/></a></p>
-            <p>© 2025 <a href="http://matthieubonneau.org">Matthieu&nbsp;Bonneau</a></p>
+            <p>© <script>document.write(new Date().getFullYear());</script> <a href="http://matthieubonneau.org">Matthieu&nbsp;Bonneau</a></p>
             <p>This work is licensed under a <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC&nbsp;BY-NC-SA</a> license. It is available for download and offline use on <a href="https://github.com/themushroomsound/waapitools">GitHub</a>.</p>
             <p>Waapitools includes code from the <a href="https://github.com/crossbario/autobahn-js">Autobahn|JS</a> open&nbsp;source project.</p>  
          
