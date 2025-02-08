@@ -135,7 +135,7 @@ td.errorsList {
     text-decoration: underline;
 }
 
-#connectionError {
+body > .errors {
     margin: 20px 10px;
 }
 

@@ -12,6 +12,8 @@
     </head>
 
     <body>
+        <!-- https://stackoverflow.com/questions/21147149/flash-of-unstyled-content-fouc-in-firefox-only-is-ff-slow-renderer -->
+        <script>0</script>
 
         <header>
             <h1>Waapitools: <span class="name">no connection to wwise project</span></h1>
@@ -41,8 +43,13 @@
                     <li id="hosted"><span id="host">http://waapitools.org</span> has been added as a valid origin in the <em>"Allow browser connections from" list.</em></li>
                 </ul>
             </p>
-            <p>Please refresh this page after checking the above potential issues.</p>
+            <p>Please <a href="javascript:window.location.href=window.location.href">refresh this page</a> after checking the above potential issues.</p>
         </div>
+
+        <div id="wwiseLockedError" class="errors">
+            <p><strong>Error:</strong> Wwise is currently locked by an open window (e.g. project settings, user preferences or some other modal window)</p>
+            <p>Please <a href="javascript:window.location.href=window.location.href">refresh this page</a> after closing that window.</p>
+        </div>        
 
         <!-- HOME -->
         <section id="home">
@@ -379,10 +386,11 @@ name_03</textarea>
         <script src="resources/js/utils/pitchiz.js"></script>
         <script src="resources/js/utils/piano.js"></script>
         <script src="resources/js/common/models/genericModel.js"></script>
-        <script src="resources/js/common/waapi.js"></script>
         <script src="resources/js/common/views/genericView.js"></script>
         <script src="resources/js/common/views/genericButton.js"></script>
         <script src="resources/js/common/views/wwiseObjectView.js"></script>
+        <script src="resources/js/common/models/waapitoolsModel.js"></script>
+        <script src="resources/js/common/views/waapitoolsView.js"></script>
         <script src="resources/js/modules/EventSoundbankFinder/eventSoundbankFinderModel.js"></script>
         <script src="resources/js/modules/EventSoundbankFinder/eventSoundbankFinderView.js"></script>
         <script src="resources/js/modules/BatchAttenuationsEditor/batchAttenuationsEditorView.js"></script>

@@ -5,7 +5,7 @@ class Renamer extends WwiseActorMixerObject
         super.init(basicInfo);
         this.objectsToCommit = [];
         // to rename self without refreshing whole renamer view:
-        this.selfObject = new WwiseActorMixerObject(basicInfo, waapiJS);
+        this.selfObject = new WwiseActorMixerObject(basicInfo, this.waapiJS);
     }
 
     reset()

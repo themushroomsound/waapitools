@@ -17,16 +17,21 @@ var modules = {
     "#creator":                 { name: "Creator",                  modelClass: Creator,                   viewClass: CreatorView,                    toolTip: "Batch create new objects" }
 }
 
-function locationType(){
-    if( window.location.protocol == 'file:' ){ return 0; }
-    if( !window.location.host.replace( /localhost|127\.0\.0\.1/i, '' ) ){ return 2; }
-    return 1;
-}
+$().ready(function() {
+    waapitools = new WaapitoolsModel();
+    waapitoolsView = new WaapitoolsView($(document.documentElement), modules);
+    waapitoolsView.setObject(waapitools);
 
-function getHost() {
-    return window.location.protocol + "//" + window.location.host;
-}
+    $(window).on("beforeunload", function() {
+        waapitools.disconnect();
+    });
 
+    $(window).on("unload", function() {
+        waapitools.disconnect();
+    });
+});
+
+/*
 // on page load
 $().ready(function() {
     console.log("document ready");
@@ -82,14 +87,6 @@ function onSelectionChanged(args, kwargs, details) {
     applySelectedObjectToActiveView();
 }
 
-// displays the active view and hides the others
-function switchToActiveView() {
-    $('.btnNav').removeClass("active");
-    $('.btnNav[href="' + activeViewName + '"]').addClass("active");
-    $("section").hide();
-    applySelectedObjectToActiveView();
-    $(activeViewName).show(300);
-}
 
 // loads up wwise's currently selected object in the current tool if possible
 function applySelectedObjectToActiveView()
@@ -119,4 +116,4 @@ function applySelectedObjectToActiveView()
             }
         );
     });
-}
+}*/
