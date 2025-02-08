@@ -38,28 +38,20 @@ class WaapitoolsModel extends GenericModel
         console.log('WAMP connection opened');
         var self = this;
         this.session = session;
-        this.session.call(ak.wwise.core.getInfo, [], {}).then(
-            function(res) {
-                self.getProjectName().then(function(projectName) {
-                    console.log(projectName)
-                    self.projectName = projectName;
-                }).then(function() {
-                    self.subscribeSelectionChanged(function(args, kwargs, details) {
-                        self.onSelectionChanged(args, kwargs, details);
-                    });
-                }).then(function() {
-                    self.querySelectedObjects().then(function(res) {
-                        self.selectedObject = res[0];
-                        console.log(self.selectedObject);
-                        self.refreshViews();
-                    });
-                });
-            },
-            function(error) {
-                self.onCallError(error);
-                return false;
-            }
-        )
+
+        return self.getProjectName().then(function(projectName) {
+            self.projectName = projectName;
+        }).then(function() {
+            return self.subscribeSelectionChanged(function(args, kwargs, details) {
+                self.onSelectionChanged(args, kwargs, details);
+            });
+        }).then(function() {
+            return self.querySelectedObjects().then(function(res) {
+                self.selectedObject = res[0];
+                console.log(self.selectedObject);
+                self.refreshViews();
+            });
+        });
     }
 
     onConnectionClose(reason, details)
