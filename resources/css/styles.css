@@ -42,8 +42,12 @@ nav, section {
 }
 
 nav {
-    clear: both;
-    padding-left: 10px;
+    /*clear: both;*/
+    padding: 0 10px;
+}
+
+nav.info {
+    float: right;
 }
 
 .btnNav.active {
@@ -64,6 +68,10 @@ section h2 {
     padding: 2px 3px 3px 6px;
     margin: 0 0 5px 0;
     text-transform: uppercase;
+}
+
+section h3 {
+    color: #999;
 }
 
 p, section h3, section table, section > div {
@@ -123,8 +131,16 @@ td.errorsList {
     font-weight: bold;
 }
 
+.errors a {
+    text-decoration: underline;
+}
+
 #connectionError {
     margin: 20px 10px;
+}
+
+#connectionError #hosted {
+    display: none;
 }
 
 .tooltip {
@@ -156,6 +172,20 @@ td.errorsList {
     text-align: center;
     margin-top: 50vh; /* poussé de la moitié de hauteur de viewport */
     transform: translateY(-50%); /* tiré de la moitié de sa propre hauteur */
+}
+
+/* ABOUT SECTION */
+
+#about h2 {
+    margin-bottom: 20px;
+}
+
+#about h3, #about p {
+    width: 400px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
 }
 
 /* BATCH ATTENUATIONS EDITOR */

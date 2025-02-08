@@ -3,6 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="connect-src 'self' ws://localhost:8080">
         <title>Waapitools</title>
         <link rel="stylesheet" href="resources/css/styles.css?v=1.0">
         <link rel="stylesheet" href="resources/css/piano.css?v=1.0">
@@ -13,11 +14,15 @@
     <body>
 
         <header>
-            <h1>Waapitools: <span class="name">no connected wwise project</span></h1>
+            <h1>Waapitools: <span class="name">no connection to wwise project</span></h1>
         </header>
 
         <!-- Navigation -->
-        <nav>
+        <nav class="info">
+            <a href="#about" class="btnNav">about</a>
+        </nav>
+
+        <nav class="tools">
             <a href="#home" class="btnNav">home</a> |
             <a href="#eventSoundbankFinder" class="btnNav">event soundbank finder</a> |
             <a href="#batchAttEditor" class="btnNav">batch attenuations editor</a> |
@@ -28,7 +33,15 @@
         </nav>
 
         <div id="connectionError" class="errors">
-            <p><strong>Error:</strong> no connected Wwise project on localhost:8080. Please open a project in Wwise and refresh this page.</p>
+            <p><strong>Error:</strong> could not connect to any Wwise project on localhost:8080.</p>
+            <p>Please make sure:
+                <ul>
+                    <li>Wwise is running and a project is open</li>
+                    <li>Wwise Authoring API is enabled in your <a href="https://www.audiokinetic.com/en/library/edge/?source=Help&id=user_preferences#user_prefs_waapi">user preferences</a></li>
+                    <li id="hosted"><span id="host">http://waapitools.org</span> has been added as a valid origin in the <em>"Allow browser connections from" list.</em></li>
+                </ul>
+            </p>
+            <p>Please refresh this page after checking the above potential issues.</p>
         </div>
 
         <!-- HOME -->
@@ -44,6 +57,18 @@
                 <li><a href="#creator" class="btnNav">Creator</a>: batch creates objects from a list</li>
             </ul>
         </section>
+
+        <!-- ABOUT -->
+        <section id="about">
+            <h2>ABOUT</h2>
+            <p><a href="http://waapitools.org">Waapitools</a> is a set of tools aiming to provide a user-friendly interface to automate various tasks on a Wwise project. It is a javascript based web application that communicates with the Wwise Authoring Tool through the <a href="https://www.audiokinetic.com/en/library/edge/?source=SDK&id=waapi.html">Wwise&nbsp;Authoring&nbsp;API&nbsp;(WAAPI).</a></p>
+            <p>This is a work in progress provided as-is with no warranty. It is not affiliated with <a href="https://www.audiokinetic.com/">Audiokinetic</a>.</p>
+            <p><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png" width="100"/></a></p>
+            <p>© 2025 <a href="http://matthieubonneau.org">Matthieu&nbsp;Bonneau</a></p>
+            <p>This work is licensed under a <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC&nbsp;BY-NC-SA</a> license. It is available for download and offline use on <a href="https://github.com/themushroomsound/waapitools">GitHub</a>.</p>
+            <p>Waapitools includes code from the <a href="https://github.com/crossbario/autobahn-js">Autobahn|JS</a> open&nbsp;source project.</p>  
+         
+        </section>        
 
         <!-- EVENT SOUNDBANK FINDER -->
 

@@ -3,17 +3,28 @@ var activeViewName = "#home";
 var currentModel,
     currentView;
 var loadingScreen,
-    connectionErrorMsg;
+    connectionErrorMsg,
+    connectionStatusMsg;
 
 var selectedObjects = [];
 
 var modules = {
-    "#eventSoundbankFinder":    { modelClass: EventSoundbankFinder,      viewClass: EventSoundbankFinderView },
-    "#batchAttEditor":          { modelClass: WwiseAttenuationsFolder,   viewClass: BatchAttenuationsEditorView },
-    "#samplerKeymapper":        { modelClass: SamplerKeymapper,          viewClass: SamplerKeymapperView },
-    "#notesReview":             { modelClass: NotesReview,               viewClass: NotesReviewView },
-    "#renamer":                 { modelClass: Renamer,                   viewClass: RenamerView },
-    "#creator":                 { modelClass: Creator,                   viewClass: CreatorView }
+    "#eventSoundbankFinder":    { name: "Event Soundbank Finder",   modelClass: EventSoundbankFinder,      viewClass: EventSoundbankFinderView,       toolTip: "Find out which soundbank(s) an event is included in" },
+    "#batchAttEditor":          { name: "Batch Attenuation Editor", modelClass: WwiseAttenuationsFolder,   viewClass: BatchAttenuationsEditorView,    toolTip: "Edit multiple attenuations at once" },
+    "#samplerKeymapper":        { name: "Sampler Keymapper",        modelClass: SamplerKeymapper,          viewClass: SamplerKeymapperView,           toolTip: "Map samples to keys" },
+    "#notesReview":             { name: "Notes Review",             modelClass: NotesReview,               viewClass: NotesReviewView,                toolTip: "Review and manage notes" },
+    "#renamer":                 { name: "Renamer",                  modelClass: Renamer,                   viewClass: RenamerView,                    toolTip: "Rename multiple objects" },
+    "#creator":                 { name: "Creator",                  modelClass: Creator,                   viewClass: CreatorView,                    toolTip: "Batch create new objects" }
+}
+
+function locationType(){
+    if( window.location.protocol == 'file:' ){ return 0; }
+    if( !window.location.host.replace( /localhost|127\.0\.0\.1/i, '' ) ){ return 2; }
+    return 1;
+}
+
+function getHost() {
+    return window.location.protocol + "//" + window.location.host;
 }
 
 // on page load
@@ -24,9 +35,18 @@ $().ready(function() {
     // bind loading screen
     loadingScreen = $("#loading");
 
+    // bind connection status message
+    connectionStatusMsg = $("header h1 .name");
+    connectionStatusMsg.text("attempting connection...");
+
     // bind connection error message
     connectionErrorMsg = $("#connectionError");
     connectionErrorMsg.show()
+
+    if(locationType() != 0) {
+        $("#connectionError #hosted #host").text(getHost());
+        $("#connectionError #hosted").show()
+    }    
 
     // bind buttons
     $(".btnNav").click( btnNav_onClick );
@@ -37,7 +57,7 @@ $().ready(function() {
 function btnNav_onClick(e) {
     activeViewName = $(this).attr("href");
     switchToActiveView();
-    return false;
+    //return false;
 }
 
 // on wwise link click
@@ -49,7 +69,7 @@ function wwiseObjLink_onClick(e) {
 // on waapi connected
 function onWaapiJSConnected() {
     waapiJS.getProjectName().then(function(projectName) {
-        $("header h1 .name").text(projectName);
+        connectionStatusMsg.text(projectName);
     });
     connectionErrorMsg.hide();
     waapiJS.subscribeSelectionChanged(onSelectionChanged);
@@ -74,10 +94,10 @@ function switchToActiveView() {
 // loads up wwise's currently selected object in the current tool if possible
 function applySelectedObjectToActiveView()
 {
-    waapiJS.querySelectedObjects().then(function(res) {
+    if(activeViewName == "#home" || activeViewName == "#about")
+        return;
 
-        if(activeViewName == "#home")
-            return;
+    waapiJS.querySelectedObjects().then(function(res) {
 
         console.log("Selected objects", res);
         if( res.length < 1)
