@@ -428,6 +428,16 @@ class BatchAttenuationsEditorView extends WwiseObjectView
             this.addAttenuationView(i, this.wwiseObject.childrenObjects[i]);
 
         $(this.htmlElement).find("#attenuationsList").attr("class", this.displayOption);
+
+        // adjust view height based on display style
+        if(this.displayOption == "list") {
+            $(this.htmlElement).css('height','auto');
+        } else {
+            let attenuationsList = $(this.htmlElement).find("#attenuationsList");
+            let lastAttenuationView = $(this.htmlElement).find("#attenuationsList .attenuationView.last");
+            $(this.htmlElement).height(attenuationsList.position().top + lastAttenuationView.position().top + lastAttenuationView.height() - 10);
+        }
+
         this.commitButton.enable();
     }
 
