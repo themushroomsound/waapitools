@@ -375,8 +375,8 @@ body > .errors {
 .point select {
     background-repeat: no-repeat;
     background-size: 18px;
-    background-position-x: 88px;
-    background-position-y: -1px;
+    background-position-x: 5px;
+    background-position-y: -2px;
 }
 
 .point select {
