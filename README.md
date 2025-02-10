@@ -1,7 +1,7 @@
 # Waapitools
 
 A collection of Javascript based tools for Wwise, using WAAPI from your browser.
-Download, unzip anywhere and open index.html to use.
+Download, unzip anywhere and open index.html to use. Alternatively available on https://waapitools.org for direct use.
 
 ## 1. Event Soundbank finder
 
