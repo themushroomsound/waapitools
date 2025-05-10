@@ -1071,7 +1071,7 @@ class WwiseAttenuationCurve
         }
 
         for( let i=0; i < startCurve.points.length; i++ ) {
-            this.points[i].interpolate(startCurve.points[i], endCurve.points[i], ratio, this.dB);
+            this.points[i].interpolate(startCurve.points[i], startCurve.parent.RadiusMax, endCurve.points[i], endCurve.parent.RadiusMax, ratio, this.parent.RadiusMax, this.dB);
             // snap last point.x of curve to attenuation max radius to avoid approx error
             if( i == startCurve.points.length-1 )
                 this.points[i].x = this.parent.RadiusMax;
@@ -1125,9 +1125,9 @@ class WwiseAttenuationCurvePoint
         this.interpolationShape = "linear";
     }
 
-    interpolate(startPoint, endPoint, ratio, dB)
-    {
-        this.x = WwiseUtils.lerp(startPoint.x, endPoint.x, ratio);
+    interpolate(startPoint, startRadiusMax, endPoint, endRadiusMax, ratio, curRadiusMax, dB)
+    {   
+        this.x = WwiseUtils.lerp(startPoint.x/startRadiusMax, endPoint.x/endRadiusMax, ratio) * curRadiusMax;
         let easedRatio = EasingFunctions[ startPoint.interpolationShape ](ratio);
         this.y = dB ? WwiseUtils.lerp_dB(startPoint.y, endPoint.y, easedRatio) : WwiseUtils.lerp(startPoint.y, endPoint.y, easedRatio);
         this.interpolationShape = startPoint.interpolationShape;
