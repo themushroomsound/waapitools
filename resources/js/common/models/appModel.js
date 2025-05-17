@@ -43,13 +43,11 @@ class AppModel extends GenericModel
             self.projectName = projectName;
         }).then(function() {
             return self.subscribeSelectionChanged(function(args, kwargs, details) {
-                self.onSelectionChanged(args, kwargs, details);
+                self.onSelectionChanged(kwargs["objects"][0]);
             });
         }).then(function() {
             return self.querySelectedObjects().then(function(res) {
-                self.selectedObject = res[0];
-                console.log(self.selectedObject);
-                self.refreshViews();
+                self.onSelectionChanged(res[0]);
             });
         });
     }
@@ -75,9 +73,9 @@ class AppModel extends GenericModel
         }
     }
 
-    onSelectionChanged(args, kwargs, details)
+    onSelectionChanged(selectedObject)
     {
-        this.selectedObject = kwargs["objects"][0];
+        this.selectedObject = selectedObject
         console.log("Selected object changed to", this.selectedObject);
         return this.refreshViews();
     }
