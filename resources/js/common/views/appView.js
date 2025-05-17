@@ -1,4 +1,4 @@
-class WaapitoolsView extends GenericView
+class AppView extends GenericView
 {
     constructor(htmlElement, modules)
     {

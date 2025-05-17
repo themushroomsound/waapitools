@@ -18,8 +18,8 @@ var modules = {
 }
 
 $().ready(function() {
-    waapitools = new WaapitoolsModel();
-    waapitoolsView = new WaapitoolsView($(document.documentElement), modules);
+    waapitools = new AppModel();
+    waapitoolsView = new AppView($(document.documentElement), modules);
     waapitoolsView.setObject(waapitools);
 
     $(window).on("beforeunload", function() {
