@@ -1,13 +1,3 @@
-var waapiJS;
-var activeViewName = "#home";
-var currentModel,
-    currentView;
-var loadingScreen,
-    connectionErrorMsg,
-    connectionStatusMsg;
-
-var selectedObjects = [];
-
 var modules = {
     "#creator":                 { name: "Creator",                 modelClass: Creator,                   viewClass: CreatorView,                   toolTip: "batch creates objects from a list" },
     "#renamer":                 { name: "Renamer",                 modelClass: Renamer,                   viewClass: RenamerView,                   toolTip: "batch search/replace in an object's name, its children's names, and events referencing it or its children" },

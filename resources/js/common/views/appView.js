@@ -67,15 +67,15 @@ class AppView extends GenericView
             return;
 
         // initialize the current tool with the current selected object
-        currentModel = new this.modules[this.activeViewName]["modelClass"] (this.object.selectedObject, this.object, true);
+        this.currentModel = new this.modules[this.activeViewName]["modelClass"] (this.object.selectedObject, this.object, true);
         this.loadingScreen.show();
 
         // TODO: Should this be in the model?
         let self = this;
-        currentModel.fetchData().then(
+        this.currentModel.fetchData().then(
             function() {
                 self.currentView = new self.modules[self.activeViewName]["viewClass"]($(self.activeViewName));
-                self.currentView.setObject(currentModel);
+                self.currentView.setObject(self.currentModel);
                 self.loadingScreen.hide();
             },
             function() {
