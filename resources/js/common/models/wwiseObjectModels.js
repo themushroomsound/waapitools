@@ -18,9 +18,11 @@ class WwiseObject extends GenericModel
         console.log("Building " + this.type + " object " + id + " - " + name + " (as " + this.constructor.name + ")");
     }
 
+    // override this for wwise object type validation
+    // (e.g. check if object is a soundbank, event, etc.)
     isValid()
     {
-        return true;
+        return this.guid != undefined;
     }
 
     init(basicInfo)
@@ -28,8 +30,9 @@ class WwiseObject extends GenericModel
         for(let property in basicInfo)
             this[property] = basicInfo[property];
 
-        this.guid = basicInfo.id // renaming id to guid
-//        this.parent = undefined; now in fetchParents method, obsolete ?
+        if(basicInfo)
+            this.guid = basicInfo.id // renaming id to guid
+
         this.errors = [];
     }
 

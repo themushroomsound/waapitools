@@ -78,11 +78,19 @@ class CreatorView extends WwiseObjectView
         this.commitButton.enable();
     }
 
+    reset()
+    {
+        super.reset();
+        this.commitButton.disable();
+    }    
+
     populate()
     {
         super.populate();
 
         this.populateTypeSelectInput(this.wwiseObject.category);
         this.populatePendingChildren();
+
+        this.commitButton.enable();
     }
 }

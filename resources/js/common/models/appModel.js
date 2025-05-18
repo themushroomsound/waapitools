@@ -8,7 +8,7 @@ class AppModel extends GenericModel
         super();
 
         this.projectName = "";
-        this.selectedObject = undefined;
+        this.selectedObjects = undefined;
         this.connectionClosedReason = "";
         this.connectionClosedDetails = "";
         this.wwiseLocked = false;
@@ -43,11 +43,11 @@ class AppModel extends GenericModel
             self.projectName = projectName;
         }).then(function() {
             return self.subscribeSelectionChanged(function(args, kwargs, details) {
-                self.onSelectionChanged(kwargs["objects"][0]);
+                self.onSelectionChanged(kwargs["objects"]);
             });
         }).then(function() {
             return self.querySelectedObjects().then(function(res) {
-                self.onSelectionChanged(res[0]);
+                self.onSelectionChanged(res);
             });
         });
     }
@@ -73,11 +73,11 @@ class AppModel extends GenericModel
         }
     }
 
-    onSelectionChanged(selectedObject)
+    onSelectionChanged(selectedObjects)
     {
-        this.selectedObject = selectedObject
-        console.log("Selected object changed to", this.selectedObject);
-        return this.refreshViews();
+        this.selectedObjects = selectedObjects
+        console.log("Selected objects changed to", this.selectedObjects);
+        this.refreshViews();
     }
 
     query(uri, query = {}, options = {})

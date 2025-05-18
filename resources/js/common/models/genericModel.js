@@ -1,9 +1,15 @@
-// Base class for all wwise objects
+// Base class for all models
 class GenericModel
 {
     constructor()
     {
         this.views = [];
+    }
+
+    // override if the view needs to be bound to a child object
+    get viewObject()
+    {
+        return this;
     }
 
     refreshViews()

@@ -1,4 +1,18 @@
-class Renamer extends WwiseActorMixerObject
+class Renamer extends GenericModel
+{
+    constructor(selectedObjects, waapiJS, debug = false)
+    {
+        super();
+        this.wwiseObject = new RenamerWwiseObject(selectedObjects[0], waapiJS, debug);
+    }
+
+    get viewObject()
+    {
+        return this.wwiseObject;
+    }
+}
+
+class RenamerWwiseObject extends WwiseActorMixerObject
 {
     init(basicInfo)
     {

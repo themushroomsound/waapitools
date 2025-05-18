@@ -1,4 +1,18 @@
-class SamplerKeymapper extends WwiseBlendContainer
+class SamplerKeymapper extends GenericModel
+{
+    constructor(selectedObjects, waapiJS, debug = false)
+    {
+        super();
+        this.wwiseObject = new SamplerKeymapperWwiseObject(selectedObjects[0], waapiJS, debug);
+    }
+
+    get viewObject()
+    {
+        return this.wwiseObject;
+    }
+}
+
+class SamplerKeymapperWwiseObject extends WwiseBlendContainer
 {
     constructor(basicInfo, waapiJS, debug = false)
     {
@@ -118,10 +132,10 @@ class SamplerKeymapper extends WwiseBlendContainer
         // commit child attenuations
         for(let i=0; i < this.childrenObjects.length; i++)
             this.childrenToCommit.push(this.childrenObjects[i]);
-        this.commitNextChilObject();
+        this.commitNextChildObject();
     }
 
-    commitNextChilObject()
+    commitNextChildObject()
     {
         if( this.childrenToCommit.length < 1) {
             console.log("All children committed for " + this.name);
@@ -131,7 +145,7 @@ class SamplerKeymapper extends WwiseBlendContainer
         let nextChildToCommit = this.childrenToCommit.shift();
         let samplerKeymapper = this;
         return nextChildToCommit.commit().then(function() {
-            return samplerKeymapper.commitNextChilObject();
+            return samplerKeymapper.commitNextChildObject();
         });
     }
 }

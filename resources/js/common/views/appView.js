@@ -63,24 +63,23 @@ class AppView extends GenericView
             return;
 
         // stop here if selected object is not known yet
-        if(!this.object.selectedObject)
+        if(!this.object.selectedObjects)
             return;
 
         // initialize the current tool with the current selected object
-        this.currentModel = new this.modules[this.activeViewName]["modelClass"] (this.object.selectedObject, this.object, true);
-        this.loadingScreen.show();
+        this.currentModel = new this.modules[this.activeViewName]["modelClass"] (this.object.selectedObjects, this.object, true);
+        this.currentView = new this.modules[this.activeViewName]["viewClass"]($(this.activeViewName));
 
         // TODO: Should this be in the model?
         let self = this;
-        this.currentModel.fetchData().then(
+        this.loadingScreen.show();
+        this.currentModel.viewObject.fetchData().then(
             function() {
-                self.currentView = new self.modules[self.activeViewName]["viewClass"]($(self.activeViewName));
-                self.currentView.setObject(self.currentModel);
+                self.currentView.setObject(self.currentModel.viewObject);
                 self.loadingScreen.hide();
             },
             function() {
                 console.log("selected wwise object not appropriate for this tool");
-                self.currentView = new self.modules[self.activeViewName]["viewClass"]($(self.activeViewName));
                 self.currentView.reset();
                 self.loadingScreen.hide();
             }

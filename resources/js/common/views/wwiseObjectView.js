@@ -17,14 +17,6 @@ class WwiseObjectView extends GenericView
         super.setObject(wwiseObject);
     }
 
-    refresh()
-    {
-        this.reset();
-        if( !this.wwiseObject )
-            return;
-        this.populate();
-    }
-
     reset()
     {
         $(this.htmlElement).find(".name").html("none");

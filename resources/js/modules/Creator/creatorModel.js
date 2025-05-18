@@ -1,4 +1,18 @@
-class Creator extends WwiseObject
+class Creator extends GenericModel
+{
+    constructor(selectedObjects, waapiJS, debug = false)
+    {
+        super();
+        this.wwiseObject = new CreatorWwiseObject(selectedObjects[0], waapiJS, debug);
+    }
+
+    get viewObject()
+    {
+        return this.wwiseObject;
+    }
+}
+
+class CreatorWwiseObject extends WwiseObject
 {
     createNewChildren(type, prefix, list)
     {

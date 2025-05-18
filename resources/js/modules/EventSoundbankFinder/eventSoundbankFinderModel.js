@@ -1,4 +1,18 @@
-class EventSoundbankFinder extends WwiseEvent
+class EventSoundbankFinder extends GenericModel
+{
+    constructor(selectedObjects, waapiJS, debug = false)
+    {
+        super();
+        this.wwiseObject = new EventSoundbankFinderWwiseObject(selectedObjects[0], waapiJS, debug);
+    }
+
+    get viewObject()
+    {
+        return this.wwiseObject;
+    }
+}
+
+class EventSoundbankFinderWwiseObject extends WwiseEvent
 {
     isValid()
     {
