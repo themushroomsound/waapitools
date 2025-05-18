@@ -1,19 +1,5 @@
 class Creator extends WwiseObject
 {
-    getObjectTypes()
-    {
-        let result = this.waapiJS.queryObjectTypes();
-    }
-
-    fetchData()
-    {
-        this.childrenObjects = [];
-        let self = this;
-        return super.fetchData().then(function() {
-            //self.getObjectTypes();
-        });
-    }
-
     createNewChildren(type, prefix, list)
     {
         this.removeChildren();

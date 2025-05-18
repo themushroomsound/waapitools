@@ -7,6 +7,8 @@ class WwiseObject extends GenericModel
         this.waapiJS = waapiJS;
         this.init(basicInfo);
         if(debug) this.debugCreation();
+        
+        this.childrenObjects = [];
     }
 
     debugCreation()
@@ -84,7 +86,6 @@ class WwiseObject extends GenericModel
     fetchChildren(recursive = false)
     {
         this.childrenToFetch = [];
-        this.childrenObjects = [];
         let filter = recursive ? "descendants" : "children";
         let self = this;
         return this.waapiJS.queryFamily(this.guid, filter).then(function(res) {
