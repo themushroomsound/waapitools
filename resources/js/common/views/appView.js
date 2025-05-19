@@ -20,6 +20,9 @@ class AppView extends GenericView
             $("#connectionError #hosted").show()
         }
 
+        this.buildHome();
+        this.buildNav();
+
         // bind buttons
         let self = this;
 
@@ -113,4 +116,38 @@ class AppView extends GenericView
         $(".view").hide();
         $(this.activeViewName).show();
     }
+
+    buildNav()
+    {
+        let nav = $("nav.tools");
+
+        // 1. Create an array of HTML links from the modules object
+        const navLinks = Object.keys(this.modules).map(hash => {
+            const module = this.modules[hash];
+            return `<a href="${hash}" class="btnNav" title="${module.toolTip}">${module.name.toLowerCase()}</a>`;
+        });
+
+        // 2. Join them with " | " separator
+        const navMenuHTML = navLinks.join(' | ');
+
+        // 3. Append to a container (e.g., a <nav> or <div>)
+        nav.append(navMenuHTML);
+    }
+
+    buildHome()
+    {
+        let toolsList = $("#home ul");
+
+        // 1. Create an array of HTML links from the modules object
+        const navLinks = Object.keys(this.modules).map(hash => {
+            const module = this.modules[hash];
+            return `<li><a href="${hash}" class="btnNav">${module.name}</a>: ${module.toolTip}</li>`;
+        });
+
+        // 2. Join them with "" separator
+        const navMenuHTML = navLinks.join("");
+
+        // 3. Append to a container (e.g., a <nav> or <div>)
+        toolsList.append(navMenuHTML);
+    }    
 }
