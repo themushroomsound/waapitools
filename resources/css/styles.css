@@ -541,3 +541,10 @@ table.notes td.notes span.todo {
   min-width: 493px;
   min-height: 200px;
 }
+
+/* NESTER */
+
+table.nestedObjects {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}

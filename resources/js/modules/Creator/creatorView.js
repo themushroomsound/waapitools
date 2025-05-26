@@ -38,7 +38,7 @@ class CreatorView extends WwiseObjectView
 
     onBtnCommitClicked(e)
     {
-        this.wwiseObject.commit();
+        this.wwiseObject.commitChildren();
         this.commitButton.disable();
     }
 

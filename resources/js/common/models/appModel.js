@@ -120,7 +120,7 @@ class AppModel extends GenericModel
     {
         var query = {};
         var options = {
-            return: ['id', 'name', 'type', 'path', 'category']
+            return: ['id', 'name', 'type', 'category', 'path', 'parent']
         };
         return this.query(ak.wwise.ui.getSelectedObjects, query, options).then(function(res) {
             return res.kwargs.objects;
@@ -181,5 +181,14 @@ class AppModel extends GenericModel
                 console.error(error);
             }
         );
+    }
+
+    moveObject(object_guid, parent_guid)
+    {
+        var query = {
+            "object": object_guid,
+            "parent": parent_guid
+        };
+        return this.query(ak.wwise.core.object.move, query);
     }
 }

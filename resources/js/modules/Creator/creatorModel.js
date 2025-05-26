@@ -44,7 +44,7 @@ class CreatorWwiseObject extends WwiseObject
         }
     }
 
-    commit()
+    commitChildren()
     {
         console.log("committing to wwise");
         this.childrenToCommit = [];
@@ -57,7 +57,7 @@ class CreatorWwiseObject extends WwiseObject
     {
         if( this.childrenToCommit.length < 1) {
             console.log("All children committed for " + this.name);
-            return;
+            return Promise.resolve();
         }
         let nextChildToCommit = this.childrenToCommit.shift();
         let self = this;
@@ -67,7 +67,7 @@ class CreatorWwiseObject extends WwiseObject
             },
             function() {
                 console.log("Failed to create child object, aborting");
-                return Promise.reject();
+                return Promise.reject("Failed to create child object, aborting");
             },
         );
     }

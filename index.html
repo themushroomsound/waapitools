@@ -357,6 +357,56 @@ name_03</textarea>
             <div style="clear:both;" />
         </section>
 
+
+        <!-- NESTER -->
+
+        <!-- Templates -->
+        <template id="template_nesterPendingChildObjectRow">
+            <tr>
+                <td class="type"></td>
+                <td class="path objectPath"></td>
+                <td class="errorsList"></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table class="nestedObjects">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </template>
+
+        <template id="template_nestedObjectRow">
+            <tr>
+                <td>&#10551;</td>
+                <td class="type"></td>
+                <td class="name"></td>
+                <td class="errorsList"></td>
+            </tr>
+        </template>        
+
+        <!-- Static markup -->
+        <section id="nester">
+            <h2>nester</h2>
+            <div id="editors">
+                <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
+            </div>
+            <h3 id="selfObjectName">Selected objects' parent: <span class="name">none</span></h3>
+            <p>
+                <label for="type">Nesting objects type: </label>
+                <select name="type" id="type"></select>
+            </p>
+            <div id="creatorChildrenList" class="creatorSection">
+                <h3>Nesting objects to create:</h3>
+                <table id="pendingChildren">
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div style="clear:both;" />
+        </section>        
+
         <!-- LOADING SCREEN -->
         <div id="loading">
             <p>
@@ -397,6 +447,8 @@ name_03</textarea>
         <script src="resources/js/modules/Renamer/renamerView.js"></script>
         <script src="resources/js/modules/Creator/creatorModel.js"></script>
         <script src="resources/js/modules/Creator/creatorView.js"></script>
+        <script src="resources/js/modules/Nester/nesterModel.js"></script>
+        <script src="resources/js/modules/Nester/nesterView.js"></script>        
 
         <!-- main -->
         <script src="resources/js/main.js"></script>

@@ -1,5 +1,6 @@
 var modules = {
     "#creator":                 { name: "Creator",                 modelClass: Creator,                         viewClass: CreatorView,                   toolTip: "batch creates objects from a list" },
+    "#nester":                  { name: "Nester",                  modelClass: Nester,                          viewClass: NesterView,                    toolTip: "creates parents for selected objects based on their names" },    
     "#renamer":                 { name: "Renamer",                 modelClass: Renamer,                         viewClass: RenamerView,                   toolTip: "batch search/replace in an object's name, its children's names, and events referencing it or its children" },
     "#notesReview":             { name: "Notes Review",            modelClass: NotesReview,                     viewClass: NotesReviewView,               toolTip: "a comprehensive review of all notes in the Wwise project" },
     "#eventSoundbankFinder":    { name: "Event Soundbank Finder",  modelClass: EventSoundbankFinder,            viewClass: EventSoundbankFinderView,      toolTip: "find out which soundbank(s) an event is included in, even indirectly through a parent folder or WWU" },
