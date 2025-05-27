@@ -21,7 +21,7 @@ The Sampler Keymapper automatically sets **MIDI root key** and **key range** par
 
 ## 4. Notes Review
 
-Notes Review provides a comprehensive display of all notes in the Wwise project.
+Notes Review provides a comprehensive display of all notes in the Wwise project. It's brutally stupid and _will_ freeze on huge projects.
 
 ## 5. Renamer
 
@@ -32,3 +32,9 @@ The Renamer allows for easy search/replace in names of objects in the Actor-Mixe
 ## 6. Creator
 
 The Creator helps with the batch creation of children to the currently selected object, from an object type, a list of names and a common prefix.
+
+## 7. Nester
+
+The Nester can 'nest' selected objects in new parents of your chosen type. The new parents will be nalmed after their children. 
+
+A typical use case would be to create random containers from a list of freshly imported sounds, each set of similarly named sounds getting their own parent.
