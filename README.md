@@ -13,7 +13,7 @@ This tool is used to find out in which soundbank(s) a wwise event is included, u
 
 The Batch Attenuations Editor is designed to help with the creation and update of large attenuation sets, by interpolating attenuation curves between a short (eg 1m) and a long (eg 100m) attenuation.
 
-![screenshot](https://user-images.githubusercontent.com/5003391/43848905-5033ffe0-9b34-11e8-8fb6-adfc5197da1f.png)
+![attenuations](https://github.com/user-attachments/assets/532c6e59-70c4-4947-a41f-a7c4ce762aff)
 
 **Usage:**
 * Create an attenuations folder or work unit
@@ -28,7 +28,7 @@ The Batch Attenuations Editor is designed to help with the creation and update o
 
 The Sampler Keymapper automatically sets **MIDI root key** and **key range** parameters on children of a blend container if their names contain a note name (eg MyPianoSample_C#3 is mapped to MIDI root key 49 and its range is set based on neighbouring samples root notes).
 
-![waapitools_keymapper](https://user-images.githubusercontent.com/5003391/52117367-d3228600-2613-11e9-87b1-a3d4137f92fb.png)
+![keymapper](https://github.com/user-attachments/assets/309c9d8b-6442-46c1-96ef-127f282f5796)
 
 **Usage:**
 * Create a blend container
@@ -50,8 +50,12 @@ The Renamer allows for easy search/replace in names of objects in the Actor-Mixe
 
 The Creator helps with the batch creation of children to the currently selected object, from an object type, a list of names and a common prefix.
 
+![creator](https://github.com/user-attachments/assets/87c3c356-41c5-43ee-a766-2cdc566bfcf8)
+
 ## 7. Nester
 
 The Nester can 'nest' selected objects in new parents of your chosen type. The new parents will be nalmed after their children. 
 
 A typical use case would be to create random containers from a list of freshly imported sounds, each set of similarly named sounds getting their own parent.
+
+![nester](https://github.com/user-attachments/assets/61d965c9-3543-4453-a2f7-af5208d95a6b)
