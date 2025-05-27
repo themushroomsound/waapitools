@@ -46,6 +46,8 @@ The Renamer allows for easy search/replace in names of objects in the Actor-Mixe
 - all its children
 - all the events referencing it
 
+![image](https://github.com/user-attachments/assets/033f2422-3a67-4d12-9179-e972c34d2096)
+
 ## 6. Creator
 
 The Creator helps with the batch creation of children to the currently selected object, from an object type, a list of names and a common prefix.
