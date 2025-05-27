@@ -32,7 +32,8 @@ The Sampler Keymapper automatically sets **MIDI root key** and **key range** par
 
 **Usage:**
 * Create a blend container
-* Inside, create the sound objects representing your sampler notes - each sound object name must end with a note name (e.g. C#3, G7, Eb2...)
+* Inside, create the sound objects representing your sampler notes 
+    * Each sound object name must end with a note name (e.g. C#3, G7, Eb2...)
 * Select the blend container
 * From Waapitools, commit the note's MIDI roots and key ranges to Wwise
 
@@ -48,11 +49,24 @@ The Renamer allows for easy search/replace in names of objects in the Actor-Mixe
 
 ![image](https://github.com/user-attachments/assets/033f2422-3a67-4d12-9179-e972c34d2096)
 
+**Usage:**
+* Select an object in the actor-mixer hierarchy
+* Edit the search and replace strings
+* Check the changes and commit them to Wwise
+
 ## 6. Creator
 
 The Creator helps with the batch creation of children to the currently selected object, from an object type, a list of names and a common prefix.
 
 ![creator](https://github.com/user-attachments/assets/87c3c356-41c5-43ee-a766-2cdc566bfcf8)
+
+**Usage:**
+* Select an parent object in your Wwise project
+* Choose an object type to create
+* Fill in the list of the names you want to give your new objects
+* Optionnally, choose a common prefix for all your new objects
+* Check the pending objects list
+* Commit the new objects to Wwise
 
 ## 7. Nester
 
@@ -61,3 +75,9 @@ The Nester can 'nest' selected objects in new parents of your chosen type. The n
 A typical use case would be to create random containers from a list of freshly imported sounds, each set of similarly named sounds getting their own parent.
 
 ![nester](https://github.com/user-attachments/assets/61d965c9-3543-4453-a2f7-af5208d95a6b)
+
+**Usage:**
+* Select multiple objects in your Wwise project
+* Check the tool groups them as desired, based on their names
+* Choose the type of object you want to create as their new parents
+* Commit the new parents to Wwise
