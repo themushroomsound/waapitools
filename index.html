@@ -177,7 +177,7 @@
                     <h3 id="curveType">VolumeDryUsage</h3>
                     <ul id="pointsList" />
                 </div>
-                <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
+                <a href="#" class="btn_action" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
             </div>
 
             <div id="interpolationErrorsView" class="errors">
@@ -230,7 +230,7 @@
             <h2>sampler keymapper</h2>
 
             <div id="editors">
-                <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
+                <a href="#" class="btn_action" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
             </div>
 
             <h3>Selected blend container: <span class="name">none</span></h3>
@@ -281,7 +281,7 @@
         <section id="renamer">
             <h2>renamer</h2>
             <div id="editors">
-                <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
+                <a href="#" class="btn_action" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
             </div>
             <h3 id="selfObjectName">Selected object: <span class="name">none</span></h3>
             <p id="findReplaceInputs">
@@ -330,7 +330,7 @@
         <section id="creator">
             <h2>creator</h2>
             <div id="editors">
-                <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
+                <a href="#" class="btn_action" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
             </div>
             <h3 id="selfObjectName">Selected parent object: <span class="name">none</span></h3>
             <p>
@@ -391,7 +391,7 @@ name_03</textarea>
         <section id="nester">
             <h2>nester</h2>
             <div id="editors">
-                <a href="#" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
+                <a href="#" class="btn_action" id="btn_commit" class="enabled">COMMIT TO WWISE</a>
             </div>
             <h3 id="selfObjectName">Selected objects' parent: <span class="name">none</span></h3>
             <p>
@@ -406,7 +406,22 @@ name_03</textarea>
                 </table>
             </div>
             <div style="clear:both;" />
-        </section>        
+        </section>     
+        
+        <!-- UTILS -->
+
+        <!-- Static markup -->
+        <section id="utils">
+            <h2>utils</h2>
+            <div id="editors">
+                <a href="#" class="btn_action enabled" id="btn_navigate" class="enabled">NAVIGATE</a>
+            </div>
+            <h3>Enter a path to navigate to:</h3>
+            <p><input class="search" type="text"></input></p>
+            <h3 id="selfObjectName">Selected object: <span class="name">none</span></h3>
+            <p>Path: <span class="path objectPath"></span></p>
+            <div style="clear:both;" />
+        </section>            
 
         <!-- LOADING SCREEN -->
         <div id="loading">
@@ -449,7 +464,9 @@ name_03</textarea>
         <script src="resources/js/modules/Creator/creatorModel.js"></script>
         <script src="resources/js/modules/Creator/creatorView.js"></script>
         <script src="resources/js/modules/Nester/nesterModel.js"></script>
-        <script src="resources/js/modules/Nester/nesterView.js"></script>        
+        <script src="resources/js/modules/Nester/nesterView.js"></script>    
+        <script src="resources/js/modules/Utils/utilsModel.js"></script>
+        <script src="resources/js/modules/Utils/utilsView.js"></script>  
 
         <!-- main -->
         <script src="resources/js/main.js"></script>

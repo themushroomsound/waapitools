@@ -466,27 +466,34 @@ h3#curveType.FocusUsage {
     background-color: #5a8000;
 }
 
-#btn_commit {
+.btn_action {
     float: right;
     font-size: 20px;
     padding: 5px 10px;
-    background-color: #b93333;
 }
 
-#btn_commit.disabled {
+.btn_action.disabled {
     pointer-events: none;
     opacity: 0.5;
 }
 
-#btn_commit.enabled {
+.btn_action.enabled {
     pointer-events: auto;
+}
+
+.btn_action.enabled:hover {
+    background-color: white;
+    text-decoration: none;
+}
+
+#btn_commit:not(:hover) {
+    background-color: #b93333;
 }
 
 #btn_commit.enabled:hover {
     color: #b93333;
-    background-color: white;
-    text-decoration: none;
 }
+
 
 /* SAMPLER KEYMAPPER */
 
@@ -530,6 +537,7 @@ table.notes td.notes span.todo {
     background-color: #b93333;
 }
 
+
 /* CREATOR */
 
 .creatorSection {
@@ -542,9 +550,25 @@ table.notes td.notes span.todo {
   min-height: 200px;
 }
 
+
 /* NESTER */
 
 table.nestedObjects {
     margin-top: 0px;
     margin-bottom: 10px;
+}
+
+
+/* LINKER */
+
+#utils input {
+    width: 90%;
+}
+
+#btn_navigate:not(:hover) {
+    background-color: #297796;
+}
+
+#btn_navigate.enabled:hover {
+    color: #297796;
 }
