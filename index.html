@@ -410,6 +410,17 @@ name_03</textarea>
         
         <!-- UTILS -->
 
+        <!-- Templates -->
+        <template id="template_utils_selectedObjectRow">
+            <tr>
+                <td class="type"></td>
+                <td><span class="guid"></span> <a href="#" class="btn_copy btn_copy_id">⧉ copy ID</a> - </td>
+                <td><span class="path objectPath"></span></td>
+                <td><a href="#" class="btn_copy btn_copy_path">⧉ copy path</a></td>
+                <td class="errorsList"></td>
+            </tr>
+        </template>        
+
         <!-- Static markup -->
         <section id="utils">
             <h2>utils</h2>
@@ -418,9 +429,11 @@ name_03</textarea>
             </div>
             <h3>Enter a path to navigate to:</h3>
             <p><input class="search" type="text"></input></p>
-            <h3 id="selfObjectName">Selected object: <span class="name">none</span></h3>
-            <p>Path: <span class="path objectPath"></span></p>
-            <div style="clear:both;" />
+            <h3>Selected objects:</h3>
+            <table id="selectedObjects">
+                <tbody>
+                </tbody>
+            </table>
         </section>            
 
         <!-- LOADING SCREEN -->

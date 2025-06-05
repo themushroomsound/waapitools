@@ -1,4 +1,4 @@
-class UtilsView extends WwiseObjectView
+class UtilsView extends GenericView
 {
     constructor(htmlElement)
     {
@@ -6,6 +6,9 @@ class UtilsView extends WwiseObjectView
 
         // input fields
         this.searchInput = $(this.htmlElement).find(".search");
+
+        // selected objects list
+        this.objectsTable = $(this.htmlElement).find("#selectedObjects tbody");        
 
         // commit button
         this.navigateButton = new GenericButton($(this.htmlElement).find("#btn_navigate"));
@@ -24,11 +27,22 @@ class UtilsView extends WwiseObjectView
         this.refresh();
     }
 
+    populate()
+    {
+        this.objectsTable.html("");
+        for(let index in this.object.wwiseObjects ) {
+            var newRow = $("#template_utils_selectedObjectRow").contents().clone();
+            var newObjectView = new WwiseObjectView(newRow);
+            newObjectView.setWwiseObject(this.object.wwiseObjects[index]);
+            newRow.appendTo(this.objectsTable);
+        }
+    }
+
     onBtnNvigateClicked(e)
     {
         let path = this.searchInput.val().trim();
         if (path.length > 0)
-            this.wwiseObject.waapiJS.findInProjectExplorer(path);
+            this.object.waapiJS.findInProjectExplorer(path);
     }
     
 }

@@ -36,6 +36,11 @@ class AppView extends GenericView
             return false;
         });
 
+        $("body").on( "click", ".btn_copy", function(e) {
+            navigator.clipboard.writeText($(this).data('tocopy'));
+            return false;
+        });        
+
         this.switchToView(document.location.hash || "#home");
     }
 
@@ -106,6 +111,10 @@ class AppView extends GenericView
     onWwiseObjLinkClicked(e) {
         this.object.findInProjectExplorer(e.target.href.slice(8));
     }
+
+    onWwiseObjLinkClicked(e) {
+        this.object.findInProjectExplorer(e.target.href.slice(8));
+    }    
 
     switchToView(activeViewName) {
         this.activeViewName = activeViewName
