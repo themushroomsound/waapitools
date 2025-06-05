@@ -6,7 +6,7 @@ var modules = {
     "#eventSoundbankFinder":    { name: "Event Soundbank Finder",   modelClass: EventSoundbankFinder,           viewClass: EventSoundbankFinderView,    toolTip: "find out which soundbank(s) an event is included in, even indirectly through a parent folder or WWU" },
     "#samplerKeymapper":        { name: "Sampler Keymapper",        modelClass: SamplerKeymapper,               viewClass: SamplerKeymapperView,        toolTip: "automatically map children of a blend container across the MIDI keyboard based on their names" },
     "#batchAttEditor":          { name: "Batch Attenuation Editor", modelClass: BatchAttenuationsEditorModel,   viewClass: BatchAttenuationsEditorView, toolTip: "create or edit a batch of related attenuations over different maximum distances" },
-    "#utils":                   { name: "Utils",                    modelClass: Utils,                          viewClass: UtilsView,                   toolTip: "share and navigate links to the wwise hierarchy" }
+    "#utils":                   { name: "Utils",                    modelClass: Utils,                          viewClass: UtilsView,                   toolTip: "display and navigate links to the wwise hierarchy" }
 }
 
 $().ready(function() {
