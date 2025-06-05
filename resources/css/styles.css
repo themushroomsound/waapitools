@@ -572,3 +572,7 @@ table.nestedObjects {
 #btn_navigate.enabled:hover {
     color: #297796;
 }
+
+.btn_copy:active {
+    text-decoration: none;
+}
