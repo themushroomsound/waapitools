@@ -128,7 +128,7 @@ class NesterCreatorWwiseObject extends CreatorWwiseObject
     {
         for(const child of this.childrenObjects)
         {
-            if (selectedObject.name.includes(child.name)) {
+            if (belongsToGroup(selectedObject.name, child.name)) {
                 return child;
             }
         }
@@ -141,7 +141,7 @@ class NesterCreatorWwiseObject extends CreatorWwiseObject
         let selectedObjectsToBeNested = [];
         for(const selectedObject of this.nester.selectedObjects)
         {
-            if( selectedObject.name.includes(child.name) ) {
+            if( belongsToGroup(selectedObject.name, child.name) ) {
                 selectedObjectsToBeNested.push(selectedObject);
             }
         }
@@ -154,24 +154,16 @@ function extractBaseNames(names) {
     const baseSet = new Set();
 
     for (const name of names) {
-        // Match the last "word" token (after space, underscore, dash, etc.)
-        const parts = name.split(/([ _-])/);  // keep delimiters
-
-        // Find the last actual content token
-        let lastTokenIndex = parts.length - 1;
-        while (lastTokenIndex >= 0 && !/\w/.test(parts[lastTokenIndex])) {
-            lastTokenIndex--;
-        }
-
-        // If the last meaningful token contains a digit, remove it and its separator (if any)
-        if (/\d/.test(parts[lastTokenIndex])) {
-            const isSeparator = /[ _-]/.test(parts[lastTokenIndex - 1]);
-            const baseParts = parts.slice(0, lastTokenIndex - (isSeparator ? 1 : 0));
-            baseSet.add(baseParts.join(''));
-        } else {
-            baseSet.add(name);
-        }
+        // Remove trailing digits and any trailing separators
+        let base = name.replace(/\d+$/, '').replace(/[ _-]+$/, '');
+        baseSet.add(base);
     }
 
     return Array.from(baseSet).sort();
+}
+
+// Check if an object name belongs to a group name
+function belongsToGroup(objectName, groupName) {
+    let base = objectName.replace(/\d+$/, '').replace(/[ _-]+$/, '');
+    return base === groupName;
 }
