@@ -81,3 +81,13 @@ A typical use case would be to create random containers from a list of freshly i
 * Check the tool groups them as desired, based on their names
 * Choose the type of object you want to create as their new parents
 * Commit the new parents to Wwise
+
+## 8. Utils
+
+The Utils tool provides utilities for navigating and inspecting Wwise objects, displaying their paths and GUIDs with easy copy-to-clipboard functionality. This makes it easy to share Wwise paths between audio team members.
+
+**Usage:**
+* Select one or more objects in your Wwise project
+* View their types, GUIDs, and paths
+* Copy GUIDs or paths to clipboard for sharing with team members
+* Enter a path in the search field and click NAVIGATE to jump to that object in the Project Explorer
