@@ -70,7 +70,7 @@ The Creator helps with the batch creation of children to the currently selected 
 
 ## 7. Nester
 
-The Nester can 'nest' selected objects in new parents of your chosen type. The new parents will be nalmed after their children. 
+The Nester can 'nest' selected objects in new parents of your chosen type. The new parents will be named after their children. 
 
 A typical use case would be to create random containers from a list of freshly imported sounds, each set of similarly named sounds getting their own parent.
 
