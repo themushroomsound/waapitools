@@ -1134,12 +1134,31 @@ var wwiseObjectTypesByCategory = {
         'BlendContainer',
         'Sound'
     ],
+    "Containers": [
+        'WorkUnit',
+        'Folder',
+        'ActorMixer',
+        'SwitchContainer',
+        'RandomSequenceContainer',
+        'BlendContainer',
+        'Sound',
+        'MusicSwitchContainer',
+        'MusicPlaylistContainer',
+        'MusicSegment',
+        'MusicTrack'        
+    ],
     "Master-Mixer Hierarchy": [
         'WorkUnit',
         'Folder',
         'Bus',
         'AuxBus'
     ],
+    "Buses": [
+        'WorkUnit',
+        'Folder',
+        'Bus',
+        'AuxBus'
+    ],    
     "Interactive Music Hierarchy": [
         'WorkUnit',
         'Folder',
